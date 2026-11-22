@@ -367,6 +367,16 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
 .gbanner.school{background:#24A06B}
 .trail.short{background:none}
 .st.special{border-color:#FF4FB0;background:#FFF0F7}
+/* spelling with handwritten letters */
+.spellrow{display:flex;justify-content:center;align-items:flex-end;gap:4px;flex-wrap:wrap;margin:10px 0 4px}
+.slet,.lbox{width:min(72px,15vw)}
+.slet svg{width:100%;height:auto;display:block;background:#fff;border-radius:10px}
+.slet{border:3px solid transparent;border-radius:14px}
+.dbox.lbox{width:min(72px,15vw);border:3px dashed var(--sun);background:#FFFBEF}
+.dbox.lbox.good{border:3px solid var(--leaf)} .dbox.lbox.bad{border:3px solid var(--red)}
+.keypad.letters{grid-template-columns:repeat(7,1fr);max-width:520px}
+.keypad.letters .btn{font-size:20px;padding:8px 0;min-height:44px}
+.spans u{color:var(--red);text-decoration:none;border-bottom:3px solid var(--red)}
 /* letter tracer & handwritten answers */
 .learntr{max-width:620px;margin:0 auto 14px}
 .trbox{background:#fff;border:2px solid var(--line);border-radius:18px;padding:6px 10px;display:flex;justify-content:center}
@@ -600,7 +610,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1037</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1127</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、跳数、认钟表、乘法入门、应用题；三年级 = 1000 以内加减、乘除法、分数、四舍五入、钱币、应用题。汉字参照部编版一至三年级常用字，英文参照 Dolch sight words（pre-primer 到 Grade 3），数学参照 BC 省课程。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -961,7 +971,7 @@ $("#enBody").addEventListener("click",e=>{
 /* ================= GAMES ================= */
 const GAMESET={
  zh:[["mole","🐹","打地鼠","听字音，敲对的地鼠","#FFE9EA"],["zh","👂","听音找字","听声音，点对的字","#FFE9EA"],["piczh","🖼️","看图选字","看图片，找汉字","#FFE9EA"],["py","bā","看拼音选字","Pinyin → 字","#FFE9EA"],["opp","↔","反义词","找相反的词","#FFE9EA"]],
- en:[["balloon","🎈","Balloon Pop","Pop the word you hear","#E6EEFE"],["en","🎧","Listen & Find","Hear it, tap it","#E6EEFE"],["picen","🖼️","Picture Words","看图选英文","#E6EEFE"],["spell","✏️","Missing Letters","补字母 · Spell it","#E6EEFE"]],
+ en:[["balloon","🎈","Balloon Pop","Pop the word you hear","#E6EEFE"],["en","🎧","Listen & Find","Hear it, tap it","#E6EEFE"],["picen","🖼️","Picture Words","看图选英文","#E6EEFE"],["spell","✏️","Missing Letters","补字母 · Spell it","#E6EEFE"],["spellw","🔤","Spelling","看图听音，手写补字母","#E6EEFE"]],
  link:[["match","🧩","中英配对","字 ↔ 图 ↔ English","#FFF2D6"],["trio","🔢","数字三兄弟","3 ↔ 三 ↔ three","#E3F5EC"],["bimath","🧮","双语算一算","中文算式，英文答案","#E3F5EC"]]
 };
 const STAGE={zh:"#zhStage",en:"#enStage",link:"#linkStage"};
@@ -1023,6 +1033,7 @@ function startGame(sub,type){
   if(type==="match"){startMatch(el);return;}
   if(type==="trio"){startTrio(el);return;}
   if(type==="mole"){startArena(el,"mole");return;}
+  if(type==="spellw"){clearArena();spellRound(el,spellPool(),{count:8});return;}
   if(type==="balloon"){startArena(el,"balloon");return;}
   const gens={zh:genZh,piczh:genPicZh,picen:genPicEn,py:genPy,opp:genOpp,en:genEn,spell:()=>fixOpts(genSpell()),bimath:genBimath};
   runQuiz(el,gens[type],{lang:()=>["en","spell","picen"].includes(type)?"en":"zh",onDone:done});
@@ -1766,6 +1777,101 @@ function digitBoxes(host,n,unit){
     empty:()=>boxes.some(b=>!b.strokes.length) };
 }
 
+/* ================= HANDWRITTEN LETTERS + SPELLING (补写字母) ================= */
+const ASC=new Set([..."bdfhklt"]), DESC=new Set([..."gjpqy"]);
+const LETTER_TPL=(()=>{ const host=svgEl("svg",{width:0,height:0}); host.style.position="absolute"; document.body.appendChild(host);
+  const sample=paths=>{const pts=[];paths.forEach((d,si)=>{const p=svgEl("path",{d});host.appendChild(p);const L=p.getTotalLength();const n=Math.max(2,Math.round(L/3));for(let i=0;i<=n;i++){const q=p.getPointAtLength(L*i/n);pts.push([q.x,q.y,si]);}p.remove();});return pts;};
+  const alt={a:["M33 47.5 A15 15 0 1 0 34 62 L35 40 L35 70"],t:["M14 18 L14 70","M5 40 L25 40"],y:["M4 40 L18 70 L32 40 L12 96"],e:["M6 55 L35 55 Q35 40 20 40 Q5 40 5 55 Q5 70 20 70 Q30 70 34 64"],
+    q:["M33 47.5 A15 15 0 1 0 33 62.5","M35 40 L35 96 L42 90"],g:["M33 47.5 A15 15 0 1 0 33 62.5","M35 40 L35 92 Q30 98 20 96"],k:["M5 10 L5 70","M30 40 L6 58","M14 53 L32 70"],l:["M8 10 L8 64 Q8 70 14 70"],u:["M5 40 L5 58 Q5 70 18 70 Q31 70 31 58 L31 40 L31 70"],
+    b:["M5 10 L5 70 L5 55 A15 15 0 1 1 5 56"],d:["M33 47.5 A15 15 0 1 0 34 62 L35 10 L35 70"],p:["M5 40 L5 96 L5 55 A15 15 0 1 1 5 56"],h:["M5 10 L5 70 L5 52 Q8 40 18 40 Q31 40 31 52 L31 70"],n:["M5 40 L5 70 L5 52 Q8 40 18 40 Q31 40 31 52 L31 70"],m:["M5 40 L5 70 L5 50 Q7 40 15 40 Q24 40 24 50 L24 70 L24 50 Q26 40 34 40 Q43 40 43 50 L43 70"],r:["M5 40 L5 70 L5 52 Q9 40 23 41"]};
+  const out=[]; for(const ch of "abcdefghijklmnopqrstuvwxyz"){ const sets=[GLYPH[ch].s,...(alt[ch]?[alt[ch]]:[])];
+    sets.forEach(st=>out.push({ch,pts:pNorm(sample(st.filter(d=>{const pe=svgEl("path",{d});host.appendChild(pe);const L=pe.getTotalLength();pe.remove();return L>=6;})))})); }
+  host.remove(); return out; })();
+function readLetter(strokes){
+  // drop tiny dot strokes (i, j) from the shape, but remember there was a dot
+  const big=strokes.filter(s=>{ let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9; s.forEach(p=>{mnx=Math.min(mnx,p[0]);mny=Math.min(mny,p[1]);mxx=Math.max(mxx,p[0]);mxy=Math.max(mxy,p[1]);}); return Math.max(mxx-mnx,mxy-mny)>7; });
+  const hasDot=big.length<strokes.length; const use=big.length?big:strokes;
+  const pts=[]; use.forEach((s,si)=>s.forEach(p=>pts.push([p[0],p[1],si]))); if(pts.length<2) return [];
+  let top=1e9,bot=-1e9,mnx=1e9,mxx=-1e9; pts.forEach(p=>{top=Math.min(top,p[1]);bot=Math.max(bot,p[1]);mnx=Math.min(mnx,p[0]);mxx=Math.max(mxx,p[0]);});
+  const asc=top<30, desc=bot>80, thin=(mxx-mnx)<(bot-top)*0.28;
+  const W=mxx-mnx||1, H=bot-top||1, sz=Math.max(W,H);
+  const stem=pts.filter(p=>p[0]>=mxx-W*0.15).length/pts.length;          // straight stem on the right: a d q g
+  const main=use.reduce((m,s)=>s.length>m.length?s:m,use[0]);
+  const gap=Math.hypot(main[0][0]-main[main.length-1][0],main[0][1]-main[main.length-1][1])/sz; // closed loop: o
+  const u=pNorm(pts); const best={};
+  LETTER_TPL.forEach(t=>{ let d=pMatch(u,t.pts);
+    const tAsc=ASC.has(t.ch), tDesc=DESC.has(t.ch);
+    if(tAsc!==asc) d*=1.35; if(tDesc!==desc) d*=1.35;
+    if((t.ch==="i"||t.ch==="j")&&!hasDot) d*=1.25; if(hasDot&&!(t.ch==="i"||t.ch==="j")) d*=1.3;
+    if(thin&&!"iljt".includes(t.ch)) d*=1.4;
+    if(stem>=0.24&&"oce".includes(t.ch)) d*=1.3; if(stem<0.12&&"adqg".includes(t.ch)) d*=1.2;
+    if(!ASC.has(t.ch)&&!DESC.has(t.ch)&&use.length===1){ if(gap<0.22&&t.ch==="c") d*=1.3; if(gap>0.35&&t.ch==="o") d*=1.3; }
+    if(best[t.ch]==null||d<best[t.ch]) best[t.ch]=d; });
+  return Object.entries(best).map(([ch,d])=>({ch,d})).sort((a,b)=>a.d-b.d);
+}
+function letterOK(ranked,target){ if(!ranked.length) return false; if(ranked[0].ch===target) return true;
+  const t=ranked.find(r=>r.ch===target); return !!t && ranked.indexOf(t)<=2 && t.d<=ranked[0].d*1.12; }
+const LGRID=`<line x1="0" y1="10" x2="60" y2="10" stroke="#9FB3D6"/><line x1="0" y1="40" x2="60" y2="40" stroke="#F0A4A7" stroke-dasharray="3 3"/><line x1="0" y1="70" x2="60" y2="70" stroke="#E0484E" stroke-width="1.5"/><line x1="0" y1="95" x2="60" y2="95" stroke="#9FB3D6"/>`;
+function letterBox(el,color){
+  const svg=el.querySelector("svg"), g=el.querySelector(".dink"); const bx={strokes:[],el};
+  svg.onpointerdown=e=>{ e.preventDefault(); svg.setPointerCapture&&svg.setPointerCapture(e.pointerId);
+    const toP=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const r=pt.matrixTransform(svg.getScreenCTM().inverse());return [r.x,r.y];};
+    const S1=[toP(e)]; bx.strokes.push(S1); const pl=svgEl("polyline",{fill:"none",stroke:color,"stroke-width":5,"stroke-linecap":"round","stroke-linejoin":"round"}); g.appendChild(pl);
+    const upd=()=>pl.setAttribute("points",S1.map(p=>p.join(",")).join(" ")); upd();
+    const mv=ev=>{S1.push(toP(ev));upd();}; const up=()=>{svg.removeEventListener("pointermove",mv);svg.removeEventListener("pointerup",up);svg.removeEventListener("pointercancel",up);};
+    svg.addEventListener("pointermove",mv); svg.addEventListener("pointerup",up); svg.addEventListener("pointercancel",up); };
+  bx.clear=()=>{bx.strokes=[];g.innerHTML="";el.querySelector(".dread").textContent="";el.classList.remove("good","bad");};
+  bx.typed=null; return bx;
+}
+/* pick the words to spell for a grade: pictures first, then sight words with a sentence hint */
+function spellPool(){
+  const g=S.grade, out=[];
+  PHONICS.filter(u=>u.gr<=g).forEach(u=>u.items.forEach(([w,e])=>out.push({w,e})));
+  if(g===1) ABC.forEach(a=>out.push({w:a[1],e:a[2]}));
+  ALLHAN.filter(h=>h.gr===g&&/^[a-z]+$/.test(h.en)).forEach(h=>out.push({w:h.en,e:h.e,zh:h.w}));
+  sightPool().filter(x=>/^[a-z]{2,}$/.test(x.w)).forEach(x=>out.push({w:x.w,s:x.s}));
+  const seen=new Set(); return out.filter(x=>x.w.length>=2&&x.w.length<=(g===1?5:8)&&!seen.has(x.w)&&seen.add(x.w));
+}
+function blanksFor(w){
+  const g=S.grade, L=w.length; let n=g===1?1:g===2?(L>=4&&Math.random()<.5?2:1):(L>=5?R(2,3):L>=3?2:1); n=Math.min(n,L-1);
+  const start=g===1&&Math.random()<.5?L-n:R(L>3?1:0,L-n); return [start,n];
+}
+function spellRound(host,items,{count=5,title="",onDone,lang="en"}={}){
+  let k=0, good=0; const order=shuffle(items).slice(0,Math.min(count,items.length)); const hero=pick(HEROES); const ok=[];
+  const one=()=>{
+    if(k>=order.length){ onDone?onDone(good,order.length):finishScreen(host,good,order.length,()=>spellRound(host,items,{count,title,onDone})); return; }
+    const it=order[k], w=it.w, [st,n]=blanksFor(w), miss=w.slice(st,st+n); let tries=0;
+    const hint=it.e?`<div class="mvis" style="font-size:80px">${it.e}</div>${it.zh?`<div class="hint">${esc(it.zh)}</div>`:""}`
+      :`<div class="hint" style="font-size:26px;color:var(--ink)">${esc((it.s||"").replace(new RegExp("\\b"+w+"\\b","i"),"_____"))}</div>`;
+    host.innerHTML=`${pathHtml(order.length,k,ok,hero[0],hero[1])}${title?`<p class="qtip">${title}</p>`:""}
+      <p class="ask">听一听，把缺的字母写在格子里<br><span class="en-ask">Listen, then write the missing letter${n>1?"s":""}.</span></p>${hint}
+      <div class="spellrow">${[...w].map((c,i)=>i>=st&&i<st+n?`<div class="dbox lbox" data-b="${i-st}"><svg viewBox="0 0 60 105">${LGRID}<g class="dink"></g></svg><b class="dread"></b></div>`:`<div class="slet"><svg viewBox="0 0 60 105">${LGRID}<text x="30" y="70" text-anchor="middle" font-size="62" font-family="Andika,sans-serif" fill="#1F2B45">${esc(c)}</text></svg></div>`).join("")}</div>
+      <p class="note" id="spSeen" style="text-align:center;min-height:22px"></p>
+      <div class="btnrow" style="justify-content:center"><button class="btn say" id="spCheck">✓ 写好了</button><button class="btn" id="spClear">擦掉重写</button><button class="btn" id="spSay">🔊 听单词</button></div>
+      <div class="keypad letters" id="spPad" hidden>${[..."abcdefghijklmnopqrstuvwxyz"].map(c=>`<button class="btn" data-l="${c}">${c}</button>`).join("")}<button class="btn" data-l="⌫">⌫</button></div>
+      <p class="note" style="text-align:center"><button class="linkbtn" id="spPadT">写不出来？用字母键 · Use letter keys</button></p>`;
+    const boxes=[...host.querySelectorAll(".lbox")].map((el,i)=>letterBox(el,RAINBOW[(k*3+i*2)%RAINBOW.length]));
+    const sayW=()=>say(w,"en"); sayW(); host.querySelector("#spSay").onclick=sayW;
+    let typed=[];
+    const showTyped=()=>boxes.forEach((b,i)=>{ b.el.querySelector(".dread").textContent=typed[i]||""; });
+    host.querySelector("#spClear").onclick=()=>{boxes.forEach(b=>b.clear());typed=[];host.querySelector("#spSeen").textContent="";};
+    host.querySelector("#spPadT").onclick=()=>{const p=host.querySelector("#spPad");p.hidden=!p.hidden;};
+    host.querySelector("#spPad").onclick=e=>{const b=e.target.closest("button");if(!b)return;const l=b.dataset.l; if(l==="⌫")typed.pop(); else if(typed.length<n) typed.push(l); showTyped();};
+    host.querySelector("#spCheck").onclick=()=>{
+      let res;
+      if(typed.length){ if(typed.length<n){toast("每一格都要填一个字母哦");return;} res=typed.map((c,i)=>({ch:c,ok:c===miss[i]})); }
+      else { if(boxes.some(b=>!b.strokes.length)){toast("每一格都要写一个字母哦");return;}
+        res=boxes.map((b,i)=>{const r=readLetter(b.strokes);const o=letterOK(r,miss[i]);return {ch:o?miss[i]:(r[0]?r[0].ch:"?"),ok:o};}); }
+      tries++;
+      boxes.forEach((b,i)=>{ b.el.querySelector(".dread").textContent=res[i].ch; b.el.classList.toggle("good",res[i].ok); b.el.classList.toggle("bad",!res[i].ok); });
+      if(res.every(r=>r.ok)){ ok[k]=tries===1; if(tries===1){good++;addStar(1,host.querySelector("#spCheck"));} say(`Yes! ${w}!`,"en"); host.querySelector("#spSeen").textContent=`✓ ${w}`; k++; setTimeout(one,1300); }
+      else if(tries>=2){ ok[k]=false; host.querySelector("#spSeen").innerHTML=`正确的拼写是 <b class="spans">${esc(w.slice(0,st))}<u>${esc(miss)}</u>${esc(w.slice(st+n))}</b>，下次加油！`; S.weak=S.weak||{}; S.weak["w:"+w]=(S.weak["w:"+w]||0)+1; save(); say(`${w}. ${[...w].join(", ")}.`,"en"); k++; setTimeout(one,3200); }
+      else { host.querySelector("#spSeen").textContent=`我看到你写的是 ${res.map(r=>r.ch).join("")}。再听一听，写清楚一点`; say("Try again","en"); setTimeout(()=>{boxes.forEach(b=>b.clear());typed=[];},1500); }
+    };
+  };
+  one();
+}
+
 /* ================= MATH LESSONS (学一学) ================= */
 function vform(a,b,op){
   const A=String(a),B=String(b),w=Math.max(A.length,B.length)+1;
@@ -1969,7 +2075,7 @@ const _mw={};
 function mathWritable(lv){ if(lv.type!=="math")return false; if(_mw[lv.key]==null){let ok=true;for(let i=0;i<12;i++){if(!NUMANS.test(String(levelQ(lv).ans))){ok=false;break;}} _mw[lv.key]=ok;} return _mw[lv.key]; }
 const hasWrite=lv=>["han","abc","words","phon"].includes(lv.type)||mathWritable(lv);
 function runHead(lv,step){
-  const steps=hasWrite(lv)?["学一学","闯关",lv.type==="math"?"写答案":"写一写"]:["学一学","闯关"];
+  const steps=hasWrite(lv)?["学一学","闯关",lv.type==="math"?"写答案":(lv.type==="words"||lv.type==="phon")?"拼一拼":"写一写"]:["学一学","闯关"];
   return `<div class="qhead"><button class="btn" data-back>← 地图</button><div><b>${lv.custom?"🏫 学校这周":GRADES[lv.gr][0]+" · 第 "+(lv.i+1)+" 关"}</b><h2>${esc(lv.title)}</h2></div></div>
     <div class="qsteps">${steps.map((s,i)=>`<span class="${i===step?"on":i<step?"ok":""}">${i+1} ${s}</span>`).join("")}</div>`;
 }
@@ -2074,7 +2180,8 @@ function resultStep(lv,n,plan){
   const wb=$("#qWrite"); if(wb) wb.onclick=()=>writeStep(lv,next);
 }
 function writeStep(lv,next){
-  if(lv.type==="abc"||lv.type==="words"||lv.type==="phon") return enWriteStep(lv,next);
+  if(lv.type==="words"||lv.type==="phon") return enSpellStep(lv,next);
+  if(lv.type==="abc") return enWriteStep(lv,next);
   if(lv.type==="math") return mathWriteStep(lv,next);
   const weakOnes=lv.items.filter(t=>S.weak["h:"+t.c]); let t=pick(weakOnes.length?weakOnes:lv.items);
   const box=$("#qRun");
@@ -2093,6 +2200,18 @@ function writeStep(lv,next){
   draw();
 }
 
+function enSpellStep(lv,next){
+  const items=(lv.type==="phon"?lv.items.map(i=>({w:i[0],e:i[1]})):lv.items.map(i=>({w:i.w,s:i.s||""}))).filter(i=>/^[a-z]{2,}$/.test(i.w));
+  if(items.length<2) return enWriteStep(lv,next);
+  const box=$("#qRun");
+  box.innerHTML=runHead(lv,2)+`<p class="qtip">拼写挑战：听单词，把缺的字母写出来。Spell it! 写对了得 ⭐</p><div class="stage" id="spStage"></div>`;
+  bindBack();
+  spellRound($("#spStage"),items,{count:5,onDone:(good,total)=>{
+    box.innerHTML=runHead(lv,2)+`<div class="result pass"><div class="bigstars">${[0,1,2].map(i=>`<span class="${i<Math.ceil(good/total*3)?"on":""}">★</span>`).join("")}</div><h2>拼写完成！</h2><p>一次就拼对 ${good}/${total} 个单词</p>
+      <div class="btnrow" style="justify-content:center">${next?`<button class="btn say" id="qNext">下一关 ▶</button>`:""}<button class="btn" id="qAgain">再拼 5 个</button><button class="btn write" id="qTrace">✍️ 描一描单词</button><button class="btn" data-back2>回地图</button></div></div>`;
+    bindBack(); box.querySelector("[data-back2]").onclick=closeLevel; $("#qAgain").onclick=()=>enSpellStep(lv,next); $("#qTrace").onclick=()=>enWriteStep(lv,next);
+    const nb=$("#qNext"); if(nb) nb.onclick=()=>openLevel(next); }});
+}
 function enWriteStep(lv,next){
   const key=it=>itemKeyOf(lv,it), txt=it=>lv.type==="abc"?it[0]+it[0].toLowerCase():lv.type==="phon"?it[0]:it.w;
   const weakOnes=lv.items.filter(it=>S.weak[key(it)]); let t=pick(weakOnes.length?weakOnes:lv.items);
