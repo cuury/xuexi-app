@@ -12,10 +12,9 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <title>汉宝宝 HanBao</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:"Andika";font-weight:400;font-display:swap;src:url(fonts/andika-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Andika";font-weight:700;font-display:swap;src:url(fonts/andika-latin-700-normal.woff2) format("woff2")}
 /* Layout idea: a bright exercise-book world — 田字格 for 汉字, 四线三格 for English, big tap targets for small fingers. Single light theme by choice. */
 :root{
   --paper:#F3F6FB;
@@ -27,8 +26,8 @@
   --leaf:#24A06B;
   --sky:#3B76F0;
   --line:#DCE3EE;
-  --f-display:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  --f-han:"KaiTi","STKaiti","Kaiti SC","Noto Serif SC","Songti SC",serif;
+  --f-display:"Yuanti SC","YouYuan","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-han:"KaiTi","STKaiti","Kaiti SC","Songti SC",serif;
   --f-en:"Andika","Comic Sans MS","Segoe UI",system-ui,sans-serif;
   --f-body:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
   color-scheme:light;
@@ -204,6 +203,12 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .cmp .slot{width:80px;height:80px;border:4px dashed var(--sun);border-radius:50%}
 .clock{width:200px;height:200px;margin:4px auto;display:block}
 .fbar{width:min(360px,100%);height:auto;margin:8px auto;display:block}
+.coin.rmb1{width:64px;height:64px;font-size:22px;background:radial-gradient(circle at 35% 30%,#FFFFFF,#D3D7DE 60%,#A3A9B5)}
+.coin.rmb5{width:70px;height:70px;font-size:24px;background:radial-gradient(circle at 35% 30%,#FFF4C2,#E3B94A 60%,#B48A23);border-color:#9C7618}
+.coin.rmb10{width:80px;height:80px;font-size:26px}
+.note-rmb{width:118px;height:62px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:2px;font-family:var(--f-en);border:3px solid rgba(0,0,0,.18);color:#2a2a2a}
+.note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
+.note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px;color:var(--muted);font-size:14px}
 
 /* stroke order */
@@ -620,8 +625,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1208</b></p>
-      <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学参照 BC 省课程。<br>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1214</b></p>
+      <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
       <div class="row"><button class="btn" id="resetBtn">清空进度</button><span class="note" id="resetNote"></span></div>
@@ -770,7 +775,7 @@ const SIGHT = [
   ["yes","Yes, I can."],["no","No, thank you."],["where","Where is my cat?"],["funny","The clown is funny."],["make","Let's make a cake."],["away","The bird flew away."]]},
  {gr:1,n:"Level 3",items:[["again","Read it again."],["could","I could see the moon."],["every","I read every day."],["from","A card from Grandma."],["give","Give me a hug."],
   ["going","We are going home."],["had","I had a nap."],["has","She has a red bag."],["her","I like her hat."],["him","Give it to him."],["his","His dog is brown."],
-  ["how","How are you?"],["just","Just one more."],["know","I know the answer."],["let","Let me try."],["live","I live in Canada."],["of","A cup of milk."],
+  ["how","How are you?"],["just","Just one more."],["know","I know the answer."],["let","Let me try."],["live","I live near the park."],["of","A cup of milk."],
   ["old","My shoes are old."],["once","Once upon a time."],["open","Open the door."],["over","Jump over the log."],["put","Put on your coat."],
   ["some","I want some water."],["stop","Stop at the red light."],["thank","Thank you!"],["when","When is lunch?"]]},
  {gr:2,n:"Grade 2",items:[["always","I always brush my teeth."],["around","We walk around the park."],["because","I smile because I am happy."],["been","I have been to the zoo."],
@@ -817,9 +822,10 @@ const GLIST=[1,2,3,4,5,6];
 /* ================= STATE ================= */
 const KEY="cn-en-hub-v1";
 const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:0,breakMin:20,breakSec:120,bday:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:0,breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
+if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
 if(S.day!==today()){S.day=today();S.dayStars=0;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
@@ -1247,7 +1253,12 @@ function numOpts(ans,steps=[1],min=0){
 const emo=(n,e,crossFrom=Infinity)=>`<div class="mvis">${Array.from({length:n},(_,i)=>`<span class="${i>=crossFrom?"x":""}">${e}</span>`).join("")}</div>`;
 function frames(n){const k=S.mRange/10;let h='<div class="frames">';for(let f=0;f<k;f++){h+='<div class="frame">';for(let i=0;i<10;i++)h+=`<i class="${f*10+i<n?"on":""}"></i>`;h+='</div>';}return h+'</div>';}
 const COINNAME={5:"nickel",10:"dime",25:"quarter",100:"loonie",200:"toonie"};
-const coinHtml=v=>`<div class="coin n${v}"><div>${v>=100?"$"+v/100:v+"¢"}<small>${COINNAME[v]}</small></div></div>`;
+const CN=()=>S.region==="cn";
+/* 人民币 values are counted in 角: 1角 5角 1元(10) are coins; 5元 10元 20元 are notes */
+const RMBNAME={1:"1角",5:"5角",10:"1元",50:"5元",100:"10元",200:"20元"};
+const yj=j=>{const y=Math.floor(j/10),r=j%10;return y?(r?`${y}元${r}角`:`${y}元`):`${r}角`;};
+const coinHtml=v=>CN()?(v>=50?`<div class="note-rmb r${v}"><b>${v/10}</b><small>元</small></div>`:`<div class="coin rmb${v}"><div>${v>=10?"1":v}<small>${v>=10?"元":"角"}</small></div></div>`)
+  :`<div class="coin n${v}"><div>${v>=100?"$"+v/100:v+"¢"}<small>${COINNAME[v]}</small></div></div>`;
 const money=c=>"$"+(c/100).toFixed(2);
 function clockSvg(h,m){
   let s=`<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="clock"><circle cx="100" cy="100" r="94" fill="#fff" stroke="#1F2B45" stroke-width="6"/>`;
@@ -1399,6 +1410,8 @@ function gen(mode){
     if(mode==="pat"){const u=pick(["AB","AAB","ABB","ABC","AABB"]);const sy=shuffle(OBJ).slice(0,4);const map={A:sy[0],B:sy[1],C:sy[2]};
       const seq=Array.from({length:7},(_,i)=>map[u[i%u.length]]);const ans=map[u[7%u.length]];
       return fixOpts({zh:"找规律，下一个是什么？",en:"What comes next?",vis:`<div class="mvis">${seq.map(s=>`<span>${s}</span>`).join("")}<span>❓</span></div>`,ans,opts:shuffle(sy),cls:"emo"});}
+    if(CN()){const cs=Array.from({length:R(2,top===10?4:5)},()=>pick(top===10?[1,5]:[1,5,10])).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
+      return {zh:"一共多少角钱？",en:"How many jiao in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div><div class="legend"><span>1元 = 10角</span></div>`,ans:sum+"角",opts:numOpts(sum,[1,5],1).map(x=>x+"角")};}
     const kinds=top===10?[5,10]:[5,10,25];const cs=Array.from({length:R(2,top===10?4:5)},()=>pick(kinds)).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
     return {zh:"一共多少分钱？",en:"How many cents in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div>`,ans:sum+"¢",opts:numOpts(sum,[5],5).map(x=>x+"¢")};
   }
@@ -1412,6 +1425,8 @@ function gen(mode){
     if(mode==="cmp"){const a=R(10,99);let b=Math.random()<.15?a:R(10,99);const ans=a>b?">":a<b?"<":"=";
       return {zh:`${a}和${b}，中间填什么？`,en:`${a} and ${b}: which sign goes in the circle?`,vis:`<div class="cmp"><span>${a}</span><span class="slot"></span><span>${b}</span></div>`,ans,opts:[">","<","="]};}
     if(mode==="time") return timeQ([0,30]);
+    if(mode==="coin"&&CN()){const cs=Array.from({length:R(3,6)},()=>pick([1,5,10,50])).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
+      return {zh:"一共多少钱？",en:"How much money in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div><div class="legend"><span>1元 = 10角</span><span>先数元，再数角</span></div>`,ans:yj(sum),opts:numOpts(sum,[1,5,10],1).map(x=>yj(+x))};}
     if(mode==="coin"){const cs=Array.from({length:R(2,5)},()=>pick([5,10,25])).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
       return {zh:"一共多少分钱？",en:"How many cents in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div><div class="legend"><span>5¢ nickel</span><span>10¢ dime</span><span>25¢ quarter</span></div>`,ans:sum+"¢",opts:numOpts(sum,[5,10],5).map(x=>x+"¢")};}
     if(mode==="shape"){const sh=pick(SHAPES.filter(x=>x[3])),corner=Math.random()<.5;
@@ -1434,6 +1449,8 @@ function gen(mode){
   if(mode==="perim"){const sq=Math.random()<.3,w=R(2,9),h=sq?w:R(2,7);
     return {zh:`这个${sq?"正方形":"长方形"}的周长是多少厘米？`,en:`What is the perimeter of this ${sq?"square":"rectangle"}?`,vis:perimSvg(w,h)+`<div class="legend"><span>周长 = 四条边加起来 · add all 4 sides</span></div>`,ans:`${2*(w+h)} cm`,opts:[...new Set([2*(w+h),w*h,w+h,2*(w+h)+2,2*(w+h)-2])].slice(0,4).map(x=>x+" cm")};}
   if(mode==="time") return timeQ([0,5,10,15,20,25,30,35,40,45,50,55]);
+  if(mode==="money"&&CN()){const cs=Array.from({length:R(3,6)},()=>pick([5,10,50,100,200])).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
+    return {zh:"一共多少钱？",en:"How much money in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div><div class="legend"><span>1元 = 10角</span><span>先算元，再算角</span></div>`,ans:yj(sum),opts:numOpts(sum,[5,10,50],5).map(c=>yj(+c))};}
   if(mode==="money"){const cs=Array.from({length:R(3,6)},()=>pick([5,10,25,100,200])).sort((x,y)=>y-x);const sum=cs.reduce((s,v)=>s+v,0);
     return {zh:"一共多少钱？",en:"How much money in all?",vis:`<div class="coins">${cs.map(coinHtml).join("")}</div><div class="legend"><span>$1 loonie</span><span>$2 toonie</span><span>25¢ quarter</span><span>10¢ dime</span><span>5¢ nickel</span></div>`,ans:money(sum),opts:numOpts(sum,[5,10,25,100],5).map(c=>money(+c))};}
   const w=wordProblem();return {zh:w.zh,en:w.en,vis:`<div class="mvis">📝</div>`,ans:w.ans,opts:numOpts(w.ans,[1,10])};
@@ -2070,6 +2087,11 @@ const LESSON={
  "6-word":[{zh:"折扣、比和平均数的应用题：先找出题目问的是什么，再选方法。打八折就是付 80%。",en:"Discounts, ratios and averages: find what the question asks, then choose a method.",vis:()=>`<div class="mvis">🏷️ ➗ 📊</div>`}],
  "3-word":[{zh:"“每…”和“一共”常常用乘法；“平均分”用除法。先想清楚再算！",en:"“Each… in all” often means ×. “Share equally” means ÷.",vis:()=>`<div class="hint" style="font-size:22px;color:var(--ink)">每盒 5 支，4 盒 → 4 × 5　·　12 个平均分给 3 人 → 12 ÷ 3</div>`}]
 };
+const LESSON_CN={
+ "1-coin":[{zh:"人民币的硬币：1 角和 5 角。5 角的硬币比 1 角值钱！",en:"Chinese coins: 1 jiao and 5 jiao. The 5-jiao coin is worth more!",vis:()=>`<div class="coins">${coinHtml(1)}${coinHtml(5)}</div>`},{zh:"先数 5 角的，再数 1 角的：5、10、11、12，一共 12 角。",en:"Count the 5-jiao coins first: 5, 10, then 11, 12.",vis:()=>`<div class="coins">${coinHtml(5)}${coinHtml(5)}${coinHtml(1)}${coinHtml(1)}</div><div class="eq" style="font-size:36px">5, 10, 11, 12角</div>`},{zh:"10 角就是 1 元。1 元 = 10 角。",en:"10 jiao make 1 yuan.",vis:()=>`<div class="coins">${coinHtml(10)}</div><div class="eq" style="font-size:36px">1元 = 10角</div>`}],
+ "2-coin":[{zh:"1 元 = 10 角。先数元，再数角：5 元、1 元、5 角，一共 6 元 5 角。",en:"1 yuan = 10 jiao. Count yuan first, then jiao.",vis:()=>`<div class="coins">${coinHtml(50)}${coinHtml(10)}${coinHtml(5)}</div><div class="eq" style="font-size:36px">6元5角</div>`},{zh:"满 10 角就换成 1 元：5 角 + 5 角 = 1 元。",en:"Every 10 jiao makes 1 yuan: 5 jiao + 5 jiao = 1 yuan.",vis:()=>`<div class="coins">${coinHtml(5)}${coinHtml(5)}</div><div class="eq" style="font-size:36px">5角 + 5角 = 1元</div>`}],
+ "3-money":[{zh:"纸币有 5 元、10 元、20 元。先把元加起来，再加角，满 10 角进 1 元。",en:"Add the yuan first, then the jiao. 10 jiao = 1 yuan.",vis:()=>`<div class="coins">${coinHtml(200)}${coinHtml(100)}${coinHtml(5)}</div><div class="eq" style="font-size:36px">20 + 10 = 30元，再加 5角 → 30元5角</div>`}]
+};
 
 /* ================= 闯关 QUEST: levels, review, unlocks ================= */
 const SUBJ={zh:["中文","Chinese"],en:["English","英文"],math:["数学","Math"]};
@@ -2231,9 +2253,9 @@ function openLevel(lv){
   learnStep(lv); window.scrollTo(0,0);
 }
 function closeLevel(){ qRunning=null; stopChain(); clearArena(); $("#qRun").hidden=true; $("#qMap").hidden=false; $("#qTabs").hidden=false; renderQuest(); }
-const NUMANS=/^\d+(¢| cm| cm²)?$/;
+const NUMANS=/^\d+(¢|角| cm| cm²)?$/;
 const _mw={};
-function mathWritable(lv){ if(lv.type!=="math")return false; if(_mw[lv.key]==null){let ok=true;for(let i=0;i<12;i++){if(!NUMANS.test(String(levelQ(lv).ans))){ok=false;break;}} _mw[lv.key]=ok;} return _mw[lv.key]; }
+function mathWritable(lv){ if(lv.type!=="math")return false; const mk=lv.key+S.region; if(_mw[mk]==null){let ok=true;for(let i=0;i<12;i++){if(!NUMANS.test(String(levelQ(lv).ans))){ok=false;break;}} _mw[mk]=ok;} return _mw[mk]; }
 const hasWrite=lv=>["han","abc","words","phon"].includes(lv.type)||mathWritable(lv);
 function runHead(lv,step){
   const steps=hasWrite(lv)?["学一学","闯关",lv.type==="math"?"写答案":(lv.type==="words"||lv.type==="phon")?"拼一拼":"写一写"]:["学一学","闯关"];
@@ -2290,7 +2312,7 @@ function learnStep(lv){
   if(lv.type==="han") ensureChars(lv.items.map(x=>x.c)).then(()=>{ if(qRunning!==lv)return; mountWriter(lv.items[0].c,$("#qhw"),$("#qhwTip")); });
   if(lv.type==="phon"){ tracerPanel($("#qtr"),lv.items[0][0]); $("#phEx").onclick=()=>say(lv.unit.ex,"en"); }
   if(lv.type==="abc"||lv.type==="words"){ const t=lv.items[0]; tracerPanel($("#qtr"),lv.type==="abc"?t[0]+t[0].toLowerCase():t.w); }
-  if(lv.type==="math"){ const cards=LESSON[`${lv.gr}-${lv.mode}`]||[]; let ci=0;
+  if(lv.type==="math"){ const cards=(CN()&&LESSON_CN[`${lv.gr}-${lv.mode}`])||LESSON[`${lv.gr}-${lv.mode}`]||[]; let ci=0;
     const showCard=()=>{ if(!cards.length){$("#qLesson").hidden=true;return;} const c=cards[ci];
       $("#qLesson").innerHTML=`<div class="lcardbig"><span class="lnum">${ci+1}/${cards.length}</span>${withGrade(lv.gr,lv.range,c.vis)}<p class="lzh">${esc(c.zh)}</p><p class="len">${esc(c.en)}</p>
         <div class="btnrow" style="justify-content:center"><button class="btn" data-l="prev" ${ci?"":"disabled"}>◀</button><button class="btn say" data-l="say">🔊 讲给我听</button><button class="btn" data-l="next" ${ci<cards.length-1?"":"disabled"}>▶</button></div></div>`;
@@ -2736,10 +2758,13 @@ function showWelcome(){
       <label>生日（可以不填） Birthday (optional)</label>
       <div class="row" style="justify-content:center"><select id="wM"><option value="">月 Month</option>${months.map(m=>`<option value="${String(m).padStart(2,"0")}">${m} 月</option>`).join("")}</select>
         <select id="wD"><option value="">日 Day</option>${days.map(d=>`<option value="${String(d).padStart(2,"0")}">${d} 日</option>`).join("")}</select></div>
+      <label for="wReg">在哪里上学？ Where do you go to school?</label>
+      <select id="wReg"><option value="cn">中国（人民币）</option><option value="ca">加拿大（加元）</option></select>
       <p class="note">名字和生日只保存在这台设备上，不会上传。生日那天会有惊喜哦！</p>
     </div>
     <div class="btnrow" style="justify-content:center"><button class="btn say big" id="wGo">开始学习 ▶</button><button class="btn" id="wSkip">跳过</button></div>`);
   if(S.bday){ const [m,d]=S.bday.split("-"); $("#wM").value=m; $("#wD").value=d; }
+  $("#wReg").value=S.region||"cn"; $("#wReg").onchange=e=>{S.region=e.target.value;save();};
   const done=()=>{ S.onboarded=true; save(); hideOverlay(); refreshTop(); route(); };
   $("#wGo").onclick=()=>{ const nm=$("#wName").value.trim().slice(0,12); if(!nm){ toast("先写上名字吧 · Please enter a name"); return; }
     S.name=nm; const m=$("#wM").value, d=$("#wD").value; if(m&&d) S.bday=`${m}-${d}`; done(); say(`你好，${nm}！我们开始学习吧！`,"zh"); };
@@ -2784,7 +2809,9 @@ function renderSettings(){
   el.innerHTML=`<div class="row"><label for="stLim">每天最多学</label><select id="stLim">${[0,15,20,30,45,60].map(m=>`<option value="${m}" ${(S.limitMin||0)===m?"selected":""}>${m?m+" 分钟":"不限制"}</option>`).join("")}</select>
       <label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
       <label for="stBrkS" style="min-width:auto">每次休息</label><select id="stBrkS">${[[30,"30 秒"],[60,"1 分钟"],[120,"2 分钟"],[180,"3 分钟"]].map(([v,t])=>`<option value="${v}" ${(S.breakSec||120)===v?"selected":""}>${t}</option>`).join("")}</select></div>
+    <div class="row"><label for="stReg">地区 / 钱币</label><select id="stReg"><option value="cn" ${S.region==="cn"?"selected":""}>中国 · 人民币（元角）</option><option value="ca" ${S.region==="ca"?"selected":""}>加拿大 · 加元（$ ¢）</option></select></div>
     <div class="row"><label for="stBd">生日（月-日）</label><input type="text" id="stBd" value="${esc(S.bday||"")}" style="width:90px" placeholder="例如 05-21"><button class="btn" id="stBdP">预览生日彩蛋</button></div>`;
+  $("#stReg").onchange=e=>{S.region=e.target.value;save();toast(S.region==="cn"?"钱币题改为人民币":"Money questions now use Canadian coins");};
   $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();};
   $("#stBrk").onchange=e=>{S.breakMin=+e.target.value;sinceBreak=0;save();};
   $("#stBrkS").onchange=e=>{S.breakSec=+e.target.value;save();};
