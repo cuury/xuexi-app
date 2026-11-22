@@ -108,6 +108,7 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .btn.know{background:#fff;border-color:var(--leaf);color:var(--leaf)}
 .btn.know.on{background:var(--leaf);color:#fff}
 .btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.45;cursor:default}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:10px;margin-top:16px}
 .tile{position:relative;border-radius:6px}
@@ -322,6 +323,10 @@ ruby rt{font-family:var(--f-en);font-size:.42em;color:var(--red);font-weight:400
 .ovbox h2{font-size:30px;margin:6px 0}
 .ovbox p{font-size:18px;margin:6px 0;line-height:1.5}
 .ovicon{font-size:72px}
+.eyestep{display:grid;justify-items:center;gap:2px;background:#F1F7FF;border-radius:18px;padding:10px;margin:10px 0}
+.eyestep b{font-size:24px}
+.eyebar{max-width:320px;margin:0 auto 14px;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.eyebar i{display:block;height:100%;background:var(--leaf);transition:width 1s linear}
 .bigcount{font-family:var(--f-en);font-size:80px;font-weight:700;color:var(--sky);font-variant-numeric:tabular-nums}
 .ovparent{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .ovparent input{font:inherit;font-size:18px;padding:8px;border-radius:10px;border:2px solid var(--line)}
@@ -610,7 +615,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1127</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1141</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、跳数、认钟表、乘法入门、应用题；三年级 = 1000 以内加减、乘除法、分数、四舍五入、钱币、应用题。汉字参照部编版一至三年级常用字，英文参照 Dolch sight words（pre-primer 到 Grade 3），数学参照 BC 省课程。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -764,7 +769,7 @@ const GRADES={1:["一年级","Grade 1"],2:["二年级","Grade 2"],3:["三年级"
 /* ================= STATE ================= */
 const KEY="cn-en-hub-v1";
 const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:0,breakMin:20,bday:"11-30",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:0,breakMin:20,breakSec:120,bday:"11-30",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(S.day!==today()){S.day=today();S.dayStars=0;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
@@ -2327,11 +2332,20 @@ function checkTime(){
   if(S.limitMin>0 && L.sec>=(S.limitMin+extra)*60){ showLimit(); return; }
   if(S.breakMin>0 && sinceBreak>=S.breakMin*60) showBreak();
 }
+const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
-  stopChain(); clearArena(); let n=20;
-  const o=showOverlay(`<div class="ovicon">👀</div><h2>休息一下眼睛</h2><p>已经学了 ${S.breakMin} 分钟啦！看看窗外远处的东西，眨眨眼睛。</p><p class="men">Eye break! Look at something far away.</p><div class="bigcount" id="ovCount">20</div><button class="btn say big" id="ovGo" disabled>继续学习 ▶</button>`);
-  say("休息一下眼睛，看看窗外远处的东西吧！","zh");
-  const t=setInterval(()=>{ n--; const c=$("#ovCount"); if(c) c.textContent=n; if(n<=0){clearInterval(t); const b=$("#ovGo"); if(b){b.disabled=false; b.onclick=()=>{sinceBreak=0;hideOverlay();};}} },1000);
+  stopChain(); clearArena(); const total=S.breakSec||120; let n=total, stepI=-1;
+  const fmt=x=>`${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`;
+  showOverlay(`<h2>休息一下眼睛 👀</h2><p>已经学了 ${S.breakMin} 分钟啦！跟着做护眼小操吧。</p><p class="men">Eye break! Follow along.</p>
+    <div class="eyestep"><div class="ovicon" id="eyeIc"></div><b id="eyeZh"></b><span class="men" id="eyeEn"></span></div>
+    <div class="bigcount" id="ovCount">${fmt(n)}</div><div class="pbar eyebar"><i id="eyeBar" style="width:0%"></i></div>
+    <button class="btn say big" id="ovGo" disabled>还要休息一会儿……</button>`);
+  const showStep=()=>{ const i=Math.min(EYE_STEPS.length-1,Math.floor((total-n)/20)); if(i===stepI) return; stepI=i; const st=EYE_STEPS[i];
+    $("#eyeIc").textContent=st[0]; $("#eyeZh").textContent=st[1]; $("#eyeEn").textContent=st[2]; say(st[1],"zh"); };
+  showStep();
+  const t=setInterval(()=>{ n--; if(!$("#ovCount")){clearInterval(t);return;} $("#ovCount").textContent=fmt(Math.max(n,0)); $("#eyeBar").style.width=`${Math.round((total-n)/total*100)}%`;
+    if(n>0) showStep();
+    if(n<=0){ clearInterval(t); const b=$("#ovGo"); b.disabled=false; b.textContent="休息好啦，继续学习 ▶"; say("休息好啦，继续学习吧！","zh"); b.onclick=()=>{sinceBreak=0;hideOverlay();}; } },1000);
 }
 function showLimit(){
   stopChain(); clearArena(); const a=R(12,19),b=R(6,9);
@@ -2569,10 +2583,12 @@ function renderReport(){
 function renderSettings(){
   const el=$("#settingsX"); if(!el) return;
   el.innerHTML=`<div class="row"><label for="stLim">每天最多学</label><select id="stLim">${[0,15,20,30,45,60].map(m=>`<option value="${m}" ${(S.limitMin||0)===m?"selected":""}>${m?m+" 分钟":"不限制"}</option>`).join("")}</select>
-      <label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select></div>
+      <label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
+      <label for="stBrkS" style="min-width:auto">每次休息</label><select id="stBrkS">${[[30,"30 秒"],[60,"1 分钟"],[120,"2 分钟"],[180,"3 分钟"]].map(([v,t])=>`<option value="${v}" ${(S.breakSec||120)===v?"selected":""}>${t}</option>`).join("")}</select></div>
     <div class="row"><label for="stBd">生日（月-日）</label><input type="text" id="stBd" value="${esc(S.bday||"11-30")}" style="width:90px" placeholder="11-30"><button class="btn" id="stBdP">预览生日彩蛋</button></div>`;
   $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();};
   $("#stBrk").onchange=e=>{S.breakMin=+e.target.value;sinceBreak=0;save();};
+  $("#stBrkS").onchange=e=>{S.breakSec=+e.target.value;save();};
   $("#stBd").onchange=e=>{ const v=e.target.value.trim(); if(/^\d{2}-\d{2}$/.test(v)){S.bday=v;save();toast("生日已保存");} else toast("请按 月-日 填写，例如 11-30"); };
   $("#stBdP").onclick=()=>showBirthday(true);
   $("#cuZh").value=(S.custom||{}).zhRaw||""; $("#cuEn").value=(S.custom||{}).enRaw||"";
