@@ -1,6 +1,6 @@
 {
-  "name": "小丸子的学习小站",
-  "short_name": "小丸子学习站",
+  "name": "学习小站 · 中文 English 数学",
+  "short_name": "学习小站",
   "description": "中文 · English · 数学，一到三年级闯关学习",
   "start_url": "./index.html",
   "scope": "./",

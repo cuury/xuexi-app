@@ -1,6 +1,12 @@
-# 小丸子的学习小站
+# 学习小站 · Learning Hub
 
-中文 · English · 数学，一到三年级闯关学习的 iPad 网页 App（PWA）。
+中文 · English · 数学，一到三年级的闯关学习网页 App（适合 iPad / iPhone）。
+Chinese, English and math for grades 1–3, as a home-screen web app for iPad and iPhone.
 
-在 iPad 的 Safari 打开 https://cuury.github.io/xuexi-app/ ，点分享 →“添加到主屏幕”。
-第一次打开后可以离线使用；学习进度只保存在这台设备上。
+**安装 Install:** 用 Safari 打开 https://cuury.github.io/xuexi-app/ ，点分享 →“添加到主屏幕”。
+Open the link in Safari, tap Share → "Add to Home Screen".
+
+- 免费，不用注册，不收集任何数据；名字、进度和录音只保存在自己的设备上。
+  Free, no sign-up, no data collected. Name, progress and recordings stay on the device.
+- 第一次联网打开后可以离线使用。Works offline after the first visit.
+- 内容为原创，古诗和英文儿歌均为公有领域作品。Content is original; classic poems and nursery rhymes are public domain.
