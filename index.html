@@ -625,7 +625,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1214</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1650</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -2636,18 +2636,28 @@ async function saveSchool(){
 const SRec=window.SpeechRecognition||window.webkitSpeechRecognition;
 function lcsRatio(a,b){ const m=a.length,n=b.length; if(!m) return 0; const d=Array.from({length:m+1},()=>new Array(n+1).fill(0));
   for(let i=1;i<=m;i++) for(let j=1;j<=n;j++) d[i][j]=a[i-1]===b[j-1]?d[i-1][j-1]+1:Math.max(d[i-1][j],d[i][j-1]); return d[m][n]/m; }
+/* Speech recognisers don't know a child's name (小丸子 comes back as 小丸神 / 小丸人) and often pick a
+   same-sounding character (在/再). Repair the name, and also compare by toneless pinyin. */
+function fixHeard(target,heard){
+  const nm=S.name||""; if(!hasHan(nm)||[...nm].length<2||!target.includes(nm)) return heard;
+  const ch=[...nm], pre=ch.slice(0,-1).join(""), last=ch[ch.length-1], e=x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const i=target.indexOf(nm)+nm.length, nx=target[i]&&hasHan(target[i])?"(?!"+e(target[i])+")":"";
+  return heard.replace(new RegExp(e(pre)+nx+"\\p{Script=Han}","gu"),nm).replace(new RegExp("\\p{Script=Han}"+e(ch.slice(1).join("")),"gu"),nm).replace(new RegExp(e(pre)+"(?!"+e(last)+")","gu"),nm);
+}
+const pyArr=t=>window.pinyinPro?pinyinPro.pinyin(t,{type:"array",toneType:"none"}).map(x=>x.replace(/v/g,"u")):null;
 function scoreRead(target,heard,lang){
-  if(lang==="zh"){ const T=[...target].filter(c=>/\p{Script=Han}/u.test(c)), H=[...heard].filter(c=>/\p{Script=Han}/u.test(c)); return lcsRatio(T,H); }
+  if(lang==="zh"){ heard=fixHeard(target,heard); const T=[...target].filter(c=>/\p{Script=Han}/u.test(c)), H=[...heard].filter(c=>/\p{Script=Han}/u.test(c)); let r=lcsRatio(T,H);
+    const PT=pyArr(T.join("")), PH=pyArr(H.join("")); if(PT&&PH) r=Math.max(r,lcsRatio(PT,PH)); return r; }
   const T=target.toLowerCase().match(/[a-z']+/g)||[], H=heard.toLowerCase().match(/[a-z']+/g)||[]; return lcsRatio(T,H);
 }
 function readAlong(target,lang,btn){
   if(!SRec){ toast("跟读要在 iPad/iPhone 的 Safari 或汉宝宝 App 里用"); return; }
-  stopChain();
+  stopChain(); if(lang==="zh"&&!window.pinyinPro) loadScript("pinyin-pro.js").catch(()=>{});
   sayChain([{text:target,lang,slow:.9}],()=>{
     const r=new SRec(); r.lang=lang==="zh"?"zh-CN":"en-US"; r.interimResults=false; r.maxAlternatives=4;
     btn&&btn.classList.add("listening"); toast(lang==="zh"?`🎤 请你读：${target}`:`🎤 Your turn: ${target}`);
     let done=false;
-    r.onresult=e=>{ done=true; const alts=[...e.results[0]].map(a=>a.transcript); const best=Math.max(...alts.map(a=>scoreRead(target,a,lang)));
+    r.onresult=e=>{ done=true; const alts=[...e.results[0]].map(a=>lang==="zh"?fixHeard(target,a.transcript):a.transcript); const best=Math.max(...alts.map(a=>scoreRead(target,a,lang)));
       btn&&btn.classList.remove("listening");
       if(best>=.8){ say(lang==="zh"?"读得真准！":"Great reading!",lang); toast("⭐ 读得真准！Great!"); const k="RA:"+target; S.readAlong=S.readAlong||{}; if(!S.readAlong[k]){S.readAlong[k]=1;addStar(1,btn);} }
       else if(best>=.5){ say(lang==="zh"?"不错，再读清楚一点":"Good! Try a little clearer.",lang); toast(`不错！我听到：${alts[0]}`); }
