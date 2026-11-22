@@ -1,12 +1,12 @@
 {
-  "name": "学习小站 · 中文 English 数学",
-  "short_name": "学习小站",
-  "description": "中文 · English · 数学，一到三年级闯关学习",
+  "name": "汉宝宝 HanBao · 中文 English 数学",
+  "short_name": "汉宝宝",
+  "description": "给有中文背景孩子的中文、English、数学闯关学习（一到三年级）",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#F3F6FB",
+  "background_color": "#FFF8E9",
   "theme_color": "#1F2B45",
   "lang": "zh-CN",
   "icons": [

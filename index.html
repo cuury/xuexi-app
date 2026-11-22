@@ -6,12 +6,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="学习小站">
+<meta name="apple-mobile-web-app-title" content="汉宝宝">
 <meta name="theme-color" content="#F3F6FB">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
-<title>学习小站</title>
+<title>汉宝宝 HanBao</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=ZCOOL+KuaiLe&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
@@ -323,6 +323,7 @@ ruby rt{font-family:var(--f-en);font-size:.42em;color:var(--red);font-weight:400
 .ovbox h2{font-size:30px;margin:6px 0}
 .ovbox p{font-size:18px;margin:6px 0;line-height:1.5}
 .ovicon{font-size:72px}
+.brand-en{font-family:var(--f-en);font-size:.6em;color:var(--red);letter-spacing:.04em}
 .welcome{display:grid;gap:8px;text-align:left;margin:12px 0}
 .welcome label{font-weight:700;font-size:16px}
 .welcome input{font:inherit;font-size:20px;padding:10px 12px;border-radius:12px;border:2px solid var(--line)}
@@ -495,7 +496,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
 <body>
 <div class="wrap">
   <header class="top">
-    <h1><span id="siteName">学习小站</span><small>中文 · English · 数学 · Grades 1–3</small></h1>
+    <h1><span id="siteName">汉宝宝</span> <span class="brand-en">HanBao</span><small>中文 · English · 数学 · Grades 1–3</small></h1>
     <div class="starpill" aria-label="星星总数">⭐ <span id="starTotal">0</span></div>
   </header>
   <div class="gradebar" id="gradebar"></div>
@@ -618,7 +619,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1147</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1153</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、跳数、认钟表、乘法入门、应用题；三年级 = 1000 以内加减、乘除法、分数、四舍五入、钱币、应用题。汉字参照部编版一至三年级常用字，英文参照 Dolch sight words（pre-primer 到 Grade 3），数学参照 BC 省课程。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -845,7 +846,7 @@ function refreshTop(){
   $("#starTotal").textContent=S.stars;
   $("#tStars").textContent=S.dayStars; $("#tHan").textContent=S.kh.length; $("#tWord").textContent=S.kw.length;
   $("#helloName").textContent=`你好，${S.name||"小朋友"}！Hello!`;
-  $("#siteName").textContent=S.name?`${S.name}的学习小站`:"学习小站"; document.title=$("#siteName").textContent;
+  document.title="汉宝宝 HanBao";
   $("#homeGrade").textContent=`Today · ${GRADES[S.grade][0]} ${GRADES[S.grade][1]}`;
   const n1=Math.min(S.dayHan.length,3), n2=Math.min(S.dayWord.length,3);
   $("#task1p").textContent=`今天看了 ${n1}/3 个字`; $("#task2p").textContent=`Today ${n2}/3 words`;
@@ -2461,7 +2462,7 @@ function scoreRead(target,heard,lang){
   const T=target.toLowerCase().match(/[a-z']+/g)||[], H=heard.toLowerCase().match(/[a-z']+/g)||[]; return lcsRatio(T,H);
 }
 function readAlong(target,lang,btn){
-  if(!SRec){ toast("跟读要在 iPad/iPhone 的 Safari 或学习小站 App 里用"); return; }
+  if(!SRec){ toast("跟读要在 iPad/iPhone 的 Safari 或汉宝宝 App 里用"); return; }
   stopChain();
   sayChain([{text:target,lang,slow:.9}],()=>{
     const r=new SRec(); r.lang=lang==="zh"?"zh-CN":"en-US"; r.interimResults=false; r.maxAlternatives=4;
@@ -2516,7 +2517,7 @@ function renderRecorder(){
       mrec.ondataavailable=e=>{ if(e.data.size) mchunks.push(e.data); };
       mrec.onstop=()=>{ st.getTracks().forEach(t=>t.stop()); const blob=new Blob(mchunks,{type:mrec.mimeType||"audio/mp4"}); who(); audPut(sel.value,blob).then(()=>{ $("#frMsg").textContent="✅ 录好了！"; renderRecorder(); }); };
       mrec.start(); $("#frRec").disabled=true; $("#frStop").disabled=false; $("#frMsg").textContent="🔴 正在录音……读完点“停止”";
-    }catch(e){ $("#frMsg").textContent="这里打不开麦克风。请在 iPad 的学习小站 App 里录，或者点“上传音频”。"; } };
+    }catch(e){ $("#frMsg").textContent="这里打不开麦克风。请在 iPad 的汉宝宝 App 里录，或者点“上传音频”。"; } };
   $("#frStop").onclick=()=>{ if(mrec&&mrec.state==="recording") mrec.stop(); $("#frRec").disabled=false; $("#frStop").disabled=true; };
   $("#frPlay").onclick=()=>{ if(AUD.has(sel.value)) playFam(sel.value); else toast("这一篇还没有录音"); };
   $("#frDel").onclick=()=>{ if(!AUD.has(sel.value)){toast("这一篇还没有录音");return;} audDel(sel.value).then(()=>{toast("已删除");renderRecorder();}); };
@@ -2571,7 +2572,7 @@ function renderSaga(){
 /* ---------- first run: whose app is this? ---------- */
 function showWelcome(){
   const months=Array.from({length:12},(_,i)=>i+1), days=Array.from({length:31},(_,i)=>i+1);
-  showOverlay(`<div class="ovicon">🌟</div><h2>欢迎来到学习小站！</h2><p class="men">Welcome! Let's set up your learning hub.</p>
+  showOverlay(`<div class="ovicon">🌟</div><h2>欢迎来到汉宝宝！</h2><p class="men">Welcome to HanBao! Let's get you set up.</p>
     <div class="welcome">
       <label for="wName">小朋友叫什么名字？ What's your name?</label>
       <input type="text" id="wName" maxlength="12" placeholder="例如：朵朵 / Emma" value="${esc(S.name||"")}">
