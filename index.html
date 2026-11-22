@@ -209,6 +209,15 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb{width:118px;height:62px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:2px;font-family:var(--f-en);border:3px solid rgba(0,0,0,.18);color:#2a2a2a}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
+.pzone.locked{display:none}
+.pgate{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pgate b{font-family:var(--f-display);font-weight:400;font-size:20px}
+.timepill{display:flex;align-items:center;gap:4px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;margin-left:auto}
+.timepill.low{border-color:#FF6B6B;color:#D63B3B}
+.pinbox{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+.pinbox input{width:120px;font-size:22px;text-align:center;letter-spacing:.3em}
+.tset{border:2px dashed var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
+.tset h3{font-size:18px;margin-bottom:6px}
 .legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px;color:var(--muted);font-size:14px}
 
 /* stroke order */
@@ -503,6 +512,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
 <div class="wrap">
   <header class="top">
     <h1><span id="siteName">汉宝宝</span> <span class="brand-en">HanBao</span><small>中文 · English · 数学 · Grades 1–6</small></h1>
+    <div class="timepill" id="timePill" hidden></div>
     <div class="starpill" aria-label="星星总数">⭐ <span id="starTotal">0</span></div>
   </header>
   <div class="gradebar" id="gradebar"></div>
@@ -606,6 +616,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
   <section class="view" id="v-stars">
     <div class="sec-title"><h2>魔法贴纸</h2><span id="nextEgg">Magic stickers</span></div>
     <div class="stk" id="stickers"></div>
+    <div class="panel pgate" id="pGate"></div>
+    <div id="parentZone" class="pzone locked">
     <div class="sec-title"><h2>学习报告</h2><span>For parents</span></div>
     <div class="panel" id="report"></div>
     <div class="sec-title"><h2>学校这周学的</h2><span>Match what she learns at school</span></div>
@@ -625,11 +637,12 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1650</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1657</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
       <div class="row"><button class="btn" id="resetBtn">清空进度</button><span class="note" id="resetNote"></span></div>
+    </div>
     </div>
   </section>
 </div>
@@ -822,7 +835,7 @@ const GLIST=[1,2,3,4,5,6];
 /* ================= STATE ================= */
 const KEY="cn-en-hub-v1";
 const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:0,breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
@@ -1500,7 +1513,7 @@ $("#testEn").onclick=()=>say("Hello! Let's learn together.","en");
 let resetArmed=false;
 $("#resetBtn").onclick=()=>{
   if(!resetArmed){resetArmed=true;$("#resetBtn").textContent="再点一次确认清空";$("#resetNote").textContent="星星、贴纸和“我会了”记录都会清空";setTimeout(()=>{resetArmed=false;$("#resetBtn").textContent="清空进度";$("#resetNote").textContent="";},4000);return;}
-  S={...FRESH,day:today(),name:S.name,rate:S.rate,mRange:S.mRange,mLang:S.mLang,ink:S.ink,lv:{},weak:{},grade:1,limitMin:S.limitMin,breakMin:S.breakMin,bday:S.bday,custom:S.custom,audWho:S.audWho,special:S.special,log:{}}; save(); renderGradebar();
+  S={...FRESH,day:today(),name:S.name,rate:S.rate,mRange:S.mRange,mLang:S.mLang,ink:S.ink,lv:{},weak:{},grade:1,limitMin:S.limitMin,limitWe:S.limitWe,hours:S.hours,pin:S.pin,region:S.region,breakSec:S.breakSec,extra:S.extra,breakMin:S.breakMin,bday:S.bday,custom:S.custom,audWho:S.audWho,special:S.special,log:S.log}; save(); renderGradebar();
   resetArmed=false; $("#resetBtn").textContent="清空进度"; $("#resetNote").textContent="已清空"; refreshTop(); renderStars();
 };
 
@@ -2482,9 +2495,8 @@ function bindPoemReader(box,p,lang){
 function renderParentLock(){
   const el=$("#parentLock"); if(!el)return;
   if(S.unlockAll){ el.innerHTML=`<span class="note">已解锁全部年级和关卡。</span><button class="btn" id="relock">恢复闯关顺序</button>`; $("#relock").onclick=()=>{S.unlockAll=false;save();fixGrade();renderGradebar();renderParentLock();toast("已恢复：按顺序闯关");}; return; }
-  const a=R(12,19),b=R(6,9);
-  el.innerHTML=`<label for="pl">家长解锁全部</label><span class="note">请回答 ${a} × ${b} =</span><input type="text" id="pl" inputmode="numeric" style="width:90px"><button class="btn" id="plGo">解锁</button>`;
-  $("#plGo").onclick=()=>{ if(+$("#pl").value===a*b){S.unlockAll=true;save();renderGradebar();renderParentLock();toast("已解锁全部年级和关卡");} else {toast("答案不对哦");renderParentLock();} };
+  el.innerHTML=`<label>闯关顺序</label><button class="btn" id="plGo">解锁全部年级和关卡</button>`;
+  $("#plGo").onclick=()=>{ S.unlockAll=true;save();renderGradebar();renderParentLock();toast("已解锁全部年级和关卡"); };
 }
 function fixGrade(){ while(S.grade>1&&!gradeOpen(S.grade)) S.grade--; save(); }
 
@@ -2504,11 +2516,40 @@ function pruneLog(){ const keep=new Set(Array.from({length:60},(_,i)=>new Date(D
 setInterval(()=>{ if(document.hidden||overlayOn) return; if(Date.now()-lastAct>90000) return; dayLog().sec+=15; sinceBreak+=15; save(); checkTime(); },15000);
 function showOverlay(html,cls=""){ overlayOn=true; const o=$("#overlay"); o.className="overlay "+cls; o.innerHTML=`<div class="ovbox">${html}</div>`; o.hidden=false; return o; }
 function hideOverlay(){ overlayOn=false; const o=$("#overlay"); o.hidden=true; o.innerHTML=""; stopConfetti(); }
+/* ---- parent controls: PIN, daily limit (school day / weekend), allowed hours ---- */
+const isWeekend=()=>{const d=new Date().getDay();return d===0||d===6;};
+function todayLimit(){ const we=isWeekend()&&S.limitWe>=0; return we?S.limitWe:(S.limitMin||0); }
+function minsLeft(){ const lim=todayLimit(); if(!lim) return null; const extra=(S.extra||{})[today()]||0; return Math.max(0,Math.ceil(((lim+extra)*60-dayLog().sec)/60)); }
+const hm=t=>{const [h,m]=String(t||"0:0").split(":").map(Number);return h*60+(m||0);};
+function outOfHours(){ const H=S.hours; if(!H||!H.on) return false; if(((S.extra||{})["h"+today()])) return false;
+  const now=new Date(), n=now.getHours()*60+now.getMinutes(), a=hm(H.from), b=hm(H.to); return a<=b?(n<a||n>=b):(n<a&&n>=b); }
+let warned5="";
+function updateTimePill(){ const el=$("#timePill"); if(!el) return; const m=minsLeft(); if(m==null){el.hidden=true;return;}
+  el.hidden=false; el.textContent=`⏳ ${m} 分钟`; el.title="今天还能学的时间 · Minutes left today"; el.classList.toggle("low",m<=5);
+  if(m<=5&&m>0&&warned5!==today()){ warned5=today(); toast(`还能学 ${m} 分钟哦，准备收尾吧～`); say(`还能学${m}分钟哦`,"zh"); } }
 function checkTime(){
+  updateTimePill();
   if(overlayOn) return;
-  const L=dayLog(), extra=(S.extra||{})[today()]||0;
-  if(S.limitMin>0 && L.sec>=(S.limitMin+extra)*60){ showLimit(); return; }
+  if(outOfHours()){ showNight(); return; }
+  const m=minsLeft(); if(m===0){ showLimit(); return; }
   if(S.breakMin>0 && sinceBreak>=S.breakMin*60) showBreak();
+}
+/* PIN entry (falls back to a 2-digit × 2-digit sum when no PIN is set). Renders into el, calls ok() on success. */
+function pinBox(el,ok,label="家长验证"){
+  const hasPin=/^\d{4}$/.test(S.pin||""); const a=R(13,29),b=R(13,29);
+  el.innerHTML=`<div class="pinbox"><span class="note">${label}：${hasPin?"输入 4 位家长密码":`${a} × ${b} =`}</span>
+    <input type="${hasPin?"password":"text"}" inputmode="numeric" maxlength="${hasPin?4:4}" autocomplete="off" class="pinIn">
+    <button class="btn say pinGo">确定</button>${hasPin?`<button class="linkbtn pinForgot">忘记密码</button>`:""}</div>`;
+  const inp=el.querySelector(".pinIn"), go=()=>{ const v=inp.value.trim(); if(hasPin?v===S.pin:+v===a*b) ok(); else { toast("不对哦 · Not quite"); inp.value=""; inp.focus(); } };
+  el.querySelector(".pinGo").onclick=go; inp.onkeydown=e=>{if(e.key==="Enter")go();};
+  const f=el.querySelector(".pinForgot"); if(f) f.onclick=()=>{ const c=R(13,29),d=R(13,29),v=prompt(`忘记密码：请算 ${c} × ${d} =（答对后清除密码）`); if(v!=null&&+v===c*d){ S.pin=""; save(); toast("密码已清除，请到家长区重新设置"); pinBox(el,ok,label); } else if(v!=null) toast("不对哦"); };
+}
+let parentOpen=false, parentT=null;
+function renderPGate(){ const g=$("#pGate"), z=$("#parentZone"); if(!g) return;
+  z.classList.toggle("locked",!parentOpen);
+  if(parentOpen){ g.innerHTML=`<b>🔓 家长区已打开</b><span class="note">离开这一页或 10 分钟后自动锁上</span><button class="btn" id="pLock">锁上</button>`; $("#pLock").onclick=()=>{parentOpen=false;renderPGate();}; return; }
+  g.innerHTML=`<b>🔒 家长区</b><span class="note">学习报告、每天使用时间、设置 · For parents</span><div id="pGateIn" style="flex-basis:100%"></div>`;
+  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); });
 }
 const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
@@ -2525,13 +2566,24 @@ function showBreak(){
     if(n>0) showStep();
     if(n<=0){ clearInterval(t); const b=$("#ovGo"); b.disabled=false; b.textContent="休息好啦，继续学习 ▶"; say("休息好啦，继续学习吧！","zh"); b.onclick=()=>{sinceBreak=0;hideOverlay();}; } },1000);
 }
-function showLimit(){
-  stopChain(); clearArena(); const a=R(12,19),b=R(6,9);
-  showOverlay(`<div class="ovicon">🌙</div><h2>今天的学习时间到啦！</h2><p>今天学得真认真，明天再来闯关吧～</p><p class="men">That's enough for today. See you tomorrow!</p>
-    <div class="ovparent"><span class="note">家长：再学 15 分钟，请回答 ${a} × ${b} =</span><input type="text" id="ovIn" inputmode="numeric" style="width:90px"><button class="btn" id="ovOk">确定</button></div>`);
-  say("今天的学习时间到啦，明天再来吧！","zh");
-  $("#ovOk").onclick=()=>{ if(+$("#ovIn").value===a*b){ S.extra=S.extra||{}; S.extra[today()]=((S.extra[today()])||0)+15; save(); sinceBreak=0; hideOverlay(); } else toast("答案不对哦"); };
+function parentExtend(onGrant,hoursMode){
+  const p=$("#ovPar"); pinBox(p,()=>{ p.innerHTML=`<div class="pinbox"><span class="note">家长：允许再学</span>${[10,20,30].map(m=>`<button class="btn" data-x="${m}">${m} 分钟</button>`).join("")}</div>`;
+    p.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{ S.extra=S.extra||{}; if(hoursMode) S.extra["h"+today()]=1; S.extra[today()]=((S.extra[today()])||0)+(+b.dataset.x); save(); sinceBreak=0; hideOverlay(); updateTimePill(); onGrant&&onGrant(); }); },"家长加时");
 }
+function showLimit(){
+  stopChain(); clearArena();
+  showOverlay(`<div class="ovicon">🌙</div><h2>今天的学习时间到啦！</h2><p>今天学了 ${Math.round(dayLog().sec/60)} 分钟，真认真！让眼睛休息一下，明天再来闯关吧～</p><p class="men">That's enough for today. See you tomorrow!</p>
+    <div class="ovparent" id="ovPar"></div>`);
+  say("今天的学习时间到啦，让眼睛休息一下，明天再来吧！","zh"); parentExtend();
+}
+function showNight(){
+  stopChain(); clearArena(); const H=S.hours;
+  showOverlay(`<div class="ovicon">😴</div><h2>现在是休息时间</h2><p>汉宝宝每天 ${H.from} – ${H.to} 开放，到时候再来吧！</p><p class="men">HanBao is open ${H.from}–${H.to}. See you then!</p>
+    <div class="ovparent" id="ovPar"></div>`);
+  say("现在是休息时间，到时候再来吧！","zh"); parentExtend(null,true);
+}
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) setTimeout(checkTime,300); });
+setTimeout(checkTime,1500);
 
 /* ---------- confetti + birthday ---------- */
 let confT=null;
@@ -2816,13 +2868,27 @@ function renderReport(){
 }
 function renderSettings(){
   const el=$("#settingsX"); if(!el) return;
-  el.innerHTML=`<div class="row"><label for="stLim">每天最多学</label><select id="stLim">${[0,15,20,30,45,60].map(m=>`<option value="${m}" ${(S.limitMin||0)===m?"selected":""}>${m?m+" 分钟":"不限制"}</option>`).join("")}</select>
-      <label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
+  const H=S.hours||{on:false,from:"07:00",to:"20:30"}, LM=[0,15,20,30,40,45,60,90], used=Math.round(dayLog().sec/60), ex=(S.extra||{})[today()]||0;
+  el.innerHTML=`<div class="tset"><h3>⏰ 每天使用时间</h3>
+    <p class="note">今天已经学了 <b>${used}</b> 分钟${ex?`（家长加时 ${ex} 分钟）`:""}${minsLeft()!=null?`，还剩 <b>${minsLeft()}</b> 分钟`:""}。时间到了会出现休息画面，需要家长密码才能加时。</p>
+    <div class="row"><label for="stLim">上学日（周一到周五）</label><select id="stLim">${LM.map(m=>`<option value="${m}" ${(S.limitMin||0)===m?"selected":""}>${m?m+" 分钟":"不限制"}</option>`).join("")}</select>
+      <label for="stLimW" style="min-width:auto">周末</label><select id="stLimW"><option value="-1" ${S.limitWe==null||S.limitWe<0?"selected":""}>和上学日一样</option>${LM.map(m=>`<option value="${m}" ${S.limitWe===m?"selected":""}>${m?m+" 分钟":"不限制"}</option>`).join("")}</select></div>
+    <div class="row"><label><input type="checkbox" id="stHon" ${H.on?"checked":""}> 只在这个时段可以用</label><input type="time" id="stHf" value="${H.from}"> – <input type="time" id="stHt" value="${H.to}"></div>
+    ${ex?`<div class="row"><button class="btn" id="stExClr">取消今天的加时</button></div>`:""}
+    <div class="row"><label for="stPin">家长密码</label><input type="password" id="stPin" inputmode="numeric" maxlength="4" placeholder="4 位数字" style="width:110px" autocomplete="off"><button class="btn" id="stPinS">${S.pin?"修改密码":"设置密码"}</button>${S.pin?`<button class="btn" id="stPinC">取消密码</button>`:""}<span class="note">${S.pin?"已设置 ✓":"未设置时，用两位数乘法题验证家长"}</span></div>
+    </div>
+    <div class="row"><label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
       <label for="stBrkS" style="min-width:auto">每次休息</label><select id="stBrkS">${[[30,"30 秒"],[60,"1 分钟"],[120,"2 分钟"],[180,"3 分钟"]].map(([v,t])=>`<option value="${v}" ${(S.breakSec||120)===v?"selected":""}>${t}</option>`).join("")}</select></div>
     <div class="row"><label for="stReg">地区 / 钱币</label><select id="stReg"><option value="cn" ${S.region==="cn"?"selected":""}>中国 · 人民币（元角）</option><option value="ca" ${S.region==="ca"?"selected":""}>加拿大 · 加元（$ ¢）</option></select></div>
     <div class="row"><label for="stBd">生日（月-日）</label><input type="text" id="stBd" value="${esc(S.bday||"")}" style="width:90px" placeholder="例如 05-21"><button class="btn" id="stBdP">预览生日彩蛋</button></div>`;
   $("#stReg").onchange=e=>{S.region=e.target.value;save();toast(S.region==="cn"?"钱币题改为人民币":"Money questions now use Canadian coins");};
-  $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();};
+  $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();renderSettings();updateTimePill();};
+  $("#stLimW").onchange=e=>{S.limitWe=+e.target.value;save();renderSettings();updateTimePill();};
+  const sh=()=>{S.hours={on:$("#stHon").checked,from:$("#stHf").value||"07:00",to:$("#stHt").value||"20:30"};save();};
+  $("#stHon").onchange=sh; $("#stHf").onchange=sh; $("#stHt").onchange=sh;
+  const xc=$("#stExClr"); if(xc) xc.onclick=()=>{ delete S.extra[today()]; delete S.extra["h"+today()]; save(); renderSettings(); updateTimePill(); };
+  $("#stPinS").onclick=()=>{ const v=$("#stPin").value.trim(); if(!/^\d{4}$/.test(v)){toast("请输入 4 位数字");return;} S.pin=v; save(); toast("家长密码已保存，请记好哦"); renderSettings(); };
+  const pc=$("#stPinC"); if(pc) pc.onclick=()=>{ S.pin=""; save(); toast("已取消家长密码"); renderSettings(); };
   $("#stBrk").onchange=e=>{S.breakMin=+e.target.value;sinceBreak=0;save();};
   $("#stBrkS").onchange=e=>{S.breakSec=+e.target.value;save();};
   $("#stBd").onchange=e=>{ const v=e.target.value.trim(); if(!v){S.bday="";save();toast("已清除生日");return;} if(/^\d{2}-\d{2}$/.test(v)){S.bday=v;save();toast("生日已保存");} else toast("请按 月-日 填写，例如 05-21"); };
@@ -2854,7 +2920,7 @@ function route(){
   if(v==="saga")renderSaga();
   if(v==="quest")renderQuest();
   if(v==="math")startMath();
-  if(v==="stars")renderStars();
+  if(v!=="stars"&&parentOpen){parentOpen=false;} if(v==="stars"){renderStars();renderPGate();}
   window.scrollTo(0,0);
 }
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{
