@@ -210,6 +210,13 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .pzone.locked{display:none}
+.kidsw{font-size:14px;margin-left:6px;vertical-align:middle}
+.kidlist{display:flex;flex-direction:column;gap:8px;align-items:center;margin:10px 0}
+.kidrow{display:flex;align-items:center;gap:8px}.kidrow .btn{min-width:180px}
+.gbanner.skipped{opacity:.75}
+.gbanner.placebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.gbanner.placebar .btn{margin-left:auto}
+.placehead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}.placehead b{font-family:var(--f-display);font-weight:400;font-size:24px}.placehead span{color:var(--muted)}
+.placeres{display:flex;flex-direction:column;gap:10px;margin:10px 0}.placeres div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.placeres b{min-width:70px;font-size:20px}.placeres small{color:var(--muted)}
 .pgate{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .pgate b{font-family:var(--f-display);font-weight:400;font-size:20px}
 .timepill{display:flex;align-items:center;gap:4px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;margin-left:auto}
@@ -521,7 +528,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
   <section class="view" id="v-home">
     <div class="hello">
       <div>
-        <h2 id="helloName">你好！Hello!</h2>
+        <h2 id="helloName">你好！Hello!</h2><button class="linkbtn kidsw" id="kidSw">👧 切换小朋友</button>
         <p>每天 20 分钟：认 3 个字，读 3 个英文词，做一轮数学，玩 1 个游戏。<br>20 minutes a day: characters, words, math, a game.</p>
       </div>
       <div class="today">
@@ -637,7 +644,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1930</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-2125</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -833,14 +840,25 @@ const GRADES={1:["一年级","Grade 1"],2:["二年级","Grade 2"],3:["三年级"
 const GLIST=[1,2,3,4,5,6];
 
 /* ================= STATE ================= */
-const KEY="cn-en-hub-v1";
+/* Several children can share one device: each child has its own saved progress. The first child keeps the
+   original storage key so existing progress is untouched. The parent PIN is shared by the whole device. */
+const PKEY="hb-profiles";
+let PROF=null; try{PROF=JSON.parse(localStorage.getItem(PKEY)||"null");}catch(e){}
+if(!PROF||!Array.isArray(PROF.list)||!PROF.list.length) PROF={cur:"p1",list:[{id:"p1",name:""}]};
+if(!PROF.list.some(x=>x.id===PROF.cur)) PROF.cur=PROF.list[0].id;
+const keyOf=id=>id==="p1"?"cn-en-hub-v1":"cn-en-hub-v1-"+id;
+const KEY=keyOf(PROF.cur);
+function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF));}catch(e){}}
 const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
 if(S.day!==today()){S.day=today();S.dayStars=0;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem("hb-pin",S.pin||"");
+  const me=PROF.list.find(x=>x.id===PROF.cur); if(me&&me.name!==S.name){me.name=S.name;saveProf();}}catch(e){}}
+try{ const dp=localStorage.getItem("hb-pin"); if(dp!=null) S.pin=dp; }catch(e){}
+if(!S.start) S.start={zh:1,en:1,math:1};
 
 /* ================= HELPERS ================= */
 const $=s=>document.querySelector(s);
@@ -1513,7 +1531,7 @@ $("#testEn").onclick=()=>say("Hello! Let's learn together.","en");
 let resetArmed=false;
 $("#resetBtn").onclick=()=>{
   if(!resetArmed){resetArmed=true;$("#resetBtn").textContent="再点一次确认清空";$("#resetNote").textContent="星星、贴纸和“我会了”记录都会清空";setTimeout(()=>{resetArmed=false;$("#resetBtn").textContent="清空进度";$("#resetNote").textContent="";},4000);return;}
-  S={...FRESH,day:today(),name:S.name,rate:S.rate,mRange:S.mRange,mLang:S.mLang,ink:S.ink,lv:{},weak:{},grade:1,limitMin:S.limitMin,limitWe:S.limitWe,hours:S.hours,pin:S.pin,region:S.region,breakSec:S.breakSec,extra:S.extra,breakMin:S.breakMin,bday:S.bday,custom:S.custom,audWho:S.audWho,special:S.special,log:S.log}; save(); renderGradebar();
+  S={...FRESH,day:today(),name:S.name,rate:S.rate,mRange:S.mRange,mLang:S.mLang,ink:S.ink,lv:{},weak:{},grade:1,start:S.start,limitMin:S.limitMin,limitWe:S.limitWe,hours:S.hours,pin:S.pin,region:S.region,breakSec:S.breakSec,extra:S.extra,breakMin:S.breakMin,bday:S.bday,custom:S.custom,audWho:S.audWho,special:S.special,log:S.log}; save(); renderGradebar();
   resetArmed=false; $("#resetBtn").textContent="清空进度"; $("#resetNote").textContent="已清空"; refreshTop(); renderStars();
 };
 
@@ -2141,9 +2159,13 @@ function buildLevels(){
   LEVELS=L;
 }
 const passed=lv=>(S.lv[lv.key]||0)>0;
-function isOpen(lv){ if(S.unlockAll||lv.i===0||lv.custom||passed(lv)) return true; return passed(LEVELS[lv.subj][lv.i-1]); }
-function gradeOpen(g){ return g===1||S.unlockAll||BOSSKEY(g-1).every(k=>(S.lv[k]||0)>0); }
-function currentLevel(subj){ const L=LEVELS[subj]; return L.find(lv=>!passed(lv)&&isOpen(lv))||L[L.length-1]; }
+/* Each subject has its own starting grade (S.start). Grades below it stay open for review;
+   the first level of the starting grade is open; after that the usual chain applies. */
+const startOf=subj=>Math.min(6,Math.max(1,(S.start&&S.start[subj])||1));
+function isOpen(lv){ if(S.unlockAll||lv.i===0||lv.custom||passed(lv)) return true; const st=startOf(lv.subj), prev=LEVELS[lv.subj][lv.i-1];
+  if(lv.gr<st||(lv.gr===st&&prev.gr<st)) return true; return passed(prev); }
+function gradeOpen(g){ return g===1||S.unlockAll||g<=Math.max(startOf("zh"),startOf("en"),startOf("math"))||BOSSKEY(g-1).every(k=>(S.lv[k]||0)>0); }
+function currentLevel(subj){ const L=LEVELS[subj], st=startOf(subj); return L.find(lv=>lv.gr>=st&&!passed(lv)&&isOpen(lv))||L.find(lv=>!passed(lv)&&isOpen(lv))||L[L.length-1]; }
 
 /* ---------- question makers per level type ---------- */
 function withGrade(g,range,fn){const o=[S.grade,S.mRange];S.grade=g;S.mRange=range||S.mRange;try{return fn();}finally{S.grade=o[0];S.mRange=o[1];}}
@@ -2234,8 +2256,8 @@ function renderQuest(){
   const sch=schoolLevels().filter(x=>x.subj===qSubj);
   if(sch.length) html+=`<div class="gbanner school"><b>🏫 学校这周</b> This week at school <span>家长在“贴纸 › 家长角”里更新</span></div><div class="trail short">${sch.map((x,j)=>`<button class="node ${S.lv[x.key]?"done":""} cur" data-c="${j}" style="--off:1"><span class="ring"><i class="${x.type==="han"?"hz":""}">${esc(x.icon)}</i></span><b>${esc(x.title)}</b><small>${x.items.length} ${x.type==="han"?"个字":"words"}</small><span class="stars">${S.lv[x.key]?"★".repeat(S.lv[x.key])+"☆".repeat(3-S.lv[x.key]):""}</span></button>`).join("")}</div>`;
   for(const g of GLIST){
-    const lv=L.filter(x=>x.gr===g), done=lv.filter(passed).length, open=g===1||S.unlockAll||passed(L.find(x=>x.type==="boss"&&x.gr===g-1));
-    html+=`<div class="gbanner ${open?"":"locked"}"><b>${GRADES[g][0]}</b> ${GRADES[g][1]} <span>${open?`${done}/${lv.length} 关`:"🔒 完成上一个年级的 Boss 关就能解锁"}</span></div><div class="trail">`;
+    const lv=L.filter(x=>x.gr===g), done=lv.filter(passed).length, open=g===1||S.unlockAll||g<=startOf(qSubj)||passed(L.find(x=>x.type==="boss"&&x.gr===g-1)), before=g<startOf(qSubj);
+    html+=`<div class="gbanner ${open?"":"locked"} ${before?"skipped":""}"><b>${GRADES[g][0]}</b> ${GRADES[g][1]} <span>${!open?"🔒 完成上一个年级的 Boss 关就能解锁":before?`起点之前 · 可以随时复习 · ${done}/${lv.length}`:g===startOf(qSubj)&&startOf(qSubj)>1?`🚩 从这里开始 · ${done}/${lv.length} 关`:`${done}/${lv.length} 关`}</span></div><div class="trail">`;
     lv.forEach((x,j)=>{
       const st=S.lv[x.key]||0, opn=isOpen(x), isCur=x===cur&&opn&&!passed(x);
       const off=[0,1,2,1][j%4];
@@ -2247,7 +2269,8 @@ function renderQuest(){
     });
     html+=`</div>`;
   }
-  $("#qMap").innerHTML=html;
+  html=`<div class="gbanner placebar"><b>🚩 起点</b> ${["zh","en","math"].map(k=>`${SUBJ[k][0]} ${GRADES[startOf(k)][0]}`).join(" · ")} <button class="btn" id="qPlace">测一测起点</button></div>`+html;
+  $("#qMap").innerHTML=html; $("#qPlace").onclick=()=>runPlacement(["zh","en","math"]);
   const c=$("#qMap .node.cur"); if(c) setTimeout(()=>c.scrollIntoView({block:"center",behavior:"smooth"}),60);
 }
 $("#qTabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;qSubj=b.dataset.s;renderQuest();};
@@ -2259,6 +2282,41 @@ $("#qMap").onclick=e=>{
   openLevel(lv);
 };
 
+/* ---------- placement test: 4 questions per round, move up/down one grade, per subject ---------- */
+const PLACE_TYPES=["han","py","words","phon","abc","math"];
+function runPlacement(subjs,onApply){
+  location.hash="quest"; qRunning={placement:true}; stopChain(); clearArena();
+  $("#qMap").hidden=true; $("#qTabs").hidden=true; const box=$("#qRun"); box.hidden=false; window.scrollTo(0,0);
+  const res={}, detail={}; let si=0;
+  const quit=()=>{ qRunning=null; stopChain(); clearArena(); box.hidden=true; $("#qMap").hidden=false; $("#qTabs").hidden=false; renderQuest(); };
+  function nextSubj(){
+    if(si>=subjs.length){ showResult(); return; }
+    const subj=subjs[si++], from=startOf(subj), tried={}; let g=from, best=0; detail[subj]=[];
+    say(`${SUBJ[subj][0]}小测，开始！`,"zh");
+    (function round(){
+      const pool=LEVELS[subj].filter(x=>x.gr===g&&PLACE_TYPES.includes(x.type));
+      box.innerHTML=`<div class="placehead"><button class="btn" id="plQuit">✕ 退出</button><b>起点小测 · ${SUBJ[subj][0]}</b><span>第 ${si} / ${subjs.length} 科 · 正在测 ${GRADES[g][0]}</span></div>
+        <p class="qtip">不会的题可以猜一猜，没关系！这些题只用来找到最适合的关卡。</p><div class="stage" id="plStage"></div>`;
+      $("#plQuit").onclick=quit;
+      runQuiz($("#plStage"),()=>levelQ(pick(pool)),{lang:()=>subj==="en"?"en":subj==="math"?S.mLang:"zh",total:4,
+        finish:n=>{ tried[g]=n; detail[subj].push([g,n]);
+          if(n>=3){ best=Math.max(best,g); if(g<6&&g<from+1&&tried[g+1]==null){g++;round();return;} }
+          else if(!best&&g>1&&g>from-2&&tried[g-1]==null){g--;round();return;}
+          res[subj]=best||g; nextSubj(); }});
+    })();
+  }
+  function showResult(){
+    box.innerHTML=`<div class="placehead"><b>🎉 小测完成！</b><span>Placement done</span></div>
+      <div class="panel"><p>根据刚才的答题，建议这样开始：</p><div class="placeres">${subjs.map(k=>`<div><b>${SUBJ[k][0]}</b><select data-ps="${k}">${GLIST.map(g=>`<option value="${g}" ${res[k]===g?"selected":""}>${GRADES[g][0]}</option>`).join("")}</select>
+        <small>${detail[k].map(([g,n])=>`${GRADES[g][0]} 答对 ${n}/4`).join("，")}</small></div>`).join("")}</div>
+      <p class="note">家长可以在这里调整。起点之前的关卡不用闯，但随时可以回去复习。</p>
+      <div class="btnrow"><button class="btn say big" id="plOk">就从这里开始 ▶</button><button class="btn" id="plNo">保持原来的</button></div></div>`;
+    say("小测完成啦！","zh");
+    $("#plOk").onclick=()=>{ box.querySelectorAll("[data-ps]").forEach(sel=>{S.start[sel.dataset.ps]=+sel.value;}); S.grade=Math.min(...Object.values(S.start)); save(); renderGradebar(); refreshTop(); toast("起点设置好了，出发闯关吧！"); quit(); onApply&&onApply(); };
+    $("#plNo").onclick=quit;
+  }
+  nextSubj();
+}
 /* ---------- level runner: 学一学 → 闯关 → (写一写) ---------- */
 function openLevel(lv){
   qRunning=lv; stopChain(); clearArena();
@@ -2811,6 +2869,27 @@ function renderSaga(){
 }
 
 /* ---------- first run: whose app is this? ---------- */
+/* ---------- several children on one device ---------- */
+function showKids(){
+  const list=PROF.list.map(p=>`<div class="kidrow ${p.id===PROF.cur?"me":""}"><button class="btn ${p.id===PROF.cur?"say":""}" data-k="${p.id}">${p.id===PROF.cur?"✓ ":""}${esc(p.name||"小朋友")}</button>${p.id!==PROF.cur&&p.id!=="p1"?`<button class="linkbtn" data-del="${p.id}">删除</button>`:""}</div>`).join("");
+  showOverlay(`<div class="ovicon">👧👦</div><h2>谁来学习？</h2><p class="men">Who's learning?</p><div class="kidlist">${list}</div>
+    <div class="btnrow" style="justify-content:center"><button class="btn" id="kAdd">➕ 添加小朋友</button><button class="btn" id="kClose">关闭</button></div><div id="kPin"></div>
+    <p class="note">每个小朋友的进度、星星、起点和每天使用时间分开保存；家长密码全家共用。</p>`);
+  const gate=(fn,label)=>{ $("#kPin").innerHTML=""; pinBox($("#kPin"),fn,label); $("#kPin").scrollIntoView({block:"center"}); };
+  $("#kClose").onclick=hideOverlay;
+  $(".kidlist").onclick=e=>{
+    const sw=e.target.closest("[data-k]"), del=e.target.closest("[data-del]");
+    if(sw&&sw.dataset.k!==PROF.cur){ const go=()=>{ save(); PROF.cur=sw.dataset.k; saveProf(); location.hash="home"; location.reload(); }; S.pin?gate(go,"家长确认切换"):go(); }
+    if(del){ gate(()=>{ const id=del.dataset.del; try{localStorage.removeItem(keyOf(id));}catch(e){} PROF.list=PROF.list.filter(x=>x.id!==id); saveProf(); toast("已删除"); showKids(); },"家长确认删除"); }
+  };
+  $("#kAdd").onclick=()=>gate(()=>{
+    if(PROF.list.length>=6){ toast("最多 6 个小朋友"); return; }
+    const id="p"+Date.now().toString(36); const keep={limitMin:S.limitMin,limitWe:S.limitWe,hours:S.hours,breakMin:S.breakMin,breakSec:S.breakSec,region:S.region,rate:S.rate,pin:S.pin,extra:{}};
+    try{localStorage.setItem(keyOf(id),JSON.stringify(keep));}catch(e){}
+    save(); PROF.list.push({id,name:""}); PROF.cur=id; saveProf(); location.hash="home"; location.reload();
+  },"家长确认添加");
+}
+$("#kidSw").onclick=showKids;
 function showWelcome(){
   const months=Array.from({length:12},(_,i)=>i+1), days=Array.from({length:31},(_,i)=>i+1);
   showOverlay(`<div class="ovicon">🌟</div><h2>欢迎来到汉宝宝！</h2><p class="men">Welcome to Hanbaobao! Let's get you set up.</p>
@@ -2820,16 +2899,25 @@ function showWelcome(){
       <label>生日（可以不填） Birthday (optional)</label>
       <div class="row" style="justify-content:center"><select id="wM"><option value="">月 Month</option>${months.map(m=>`<option value="${String(m).padStart(2,"0")}">${m} 月</option>`).join("")}</select>
         <select id="wD"><option value="">日 Day</option>${days.map(d=>`<option value="${String(d).padStart(2,"0")}">${d} 日</option>`).join("")}</select></div>
+      <label for="wGr">现在上几年级？ What grade are you in?</label>
+      <select id="wGr"><option value="1">幼儿园 / 学前 Kindergarten</option>${GLIST.map(g=>`<option value="${g}">${GRADES[g][0]} ${GRADES[g][1]}</option>`).join("")}</select>
       <label for="wReg">在哪里上学？ Where do you go to school?</label>
       <select id="wReg"><option value="cn">中国（人民币）</option><option value="ca">加拿大（加元）</option></select>
       <p class="note">名字和生日只保存在这台设备上，不会上传。生日那天会有惊喜哦！</p>
     </div>
     <div class="btnrow" style="justify-content:center"><button class="btn say big" id="wGo">开始学习 ▶</button><button class="btn" id="wSkip">跳过</button></div>`);
   if(S.bday){ const [m,d]=S.bday.split("-"); $("#wM").value=m; $("#wD").value=d; }
+  $("#wGr").selectedIndex=Math.max(0,(S.grade||1)); if(S.grade<=1) $("#wGr").selectedIndex=1;
   $("#wReg").value=S.region||"cn"; $("#wReg").onchange=e=>{S.region=e.target.value;save();};
   const done=()=>{ S.onboarded=true; save(); hideOverlay(); refreshTop(); route(); };
   $("#wGo").onclick=()=>{ const nm=$("#wName").value.trim().slice(0,12); if(!nm){ toast("先写上名字吧 · Please enter a name"); return; }
-    S.name=nm; const m=$("#wM").value, d=$("#wD").value; if(m&&d) S.bday=`${m}-${d}`; done(); say(`你好，${nm}！我们开始学习吧！`,"zh"); };
+    S.name=nm; const m=$("#wM").value, d=$("#wD").value; if(m&&d) S.bday=`${m}-${d}`;
+    const g=+$("#wGr").value; const fresh=!Object.keys(S.lv||{}).length;
+    if(fresh){ S.start={zh:g,en:g,math:g}; S.grade=g; }
+    done(); renderGradebar(); say(`你好，${nm}！`,"zh");
+    if(fresh&&g>1) setTimeout(()=>{ showOverlay(`<div class="ovicon">🚩</div><h2>做个起点小测吗？</h2><p>每科几道题，大约 3 分钟，帮${esc(nm)}找到最合适的关卡。<br>比如数学可以从${GRADES[g][0]}开始，中文从更早的年级打基础。</p><p class="men">A quick 3-minute quiz to find the right starting level.</p>
+      <div class="btnrow" style="justify-content:center"><button class="btn say big" id="wPl">做小测 ▶</button><button class="btn" id="wNoPl">直接从${GRADES[g][0]}开始</button></div>`);
+      $("#wPl").onclick=()=>{hideOverlay();runPlacement(["zh","en","math"]);}; $("#wNoPl").onclick=()=>{hideOverlay();route();}; },600); };
   $("#wSkip").onclick=done;
 }
 /* ---------- parent report & 错题本 ---------- */
@@ -2877,12 +2965,17 @@ function renderSettings(){
     ${ex?`<div class="row"><button class="btn" id="stExClr">取消今天的加时</button></div>`:""}
     <div class="row"><label for="stPin">家长密码</label><input type="password" id="stPin" inputmode="numeric" maxlength="4" placeholder="4 位数字" style="width:110px" autocomplete="off"><button class="btn" id="stPinS">${S.pin?"修改密码":"设置密码"}</button>${S.pin?`<button class="btn" id="stPinC">取消密码</button>`:""}<span class="note">${S.pin?"已设置 ✓":"未设置时，用两位数乘法题验证家长"}</span></div>
     </div>
+    <div class="tset"><h3>🚩 起点年级</h3><p class="note">三门课可以从不同年级开始。起点之前的关卡不用闯，随时可以复习。</p>
+    <div class="row">${["zh","en","math"].map(k=>`<label style="min-width:auto">${SUBJ[k][0]}</label><select data-st="${k}">${GLIST.map(g=>`<option value="${g}" ${startOf(k)===g?"selected":""}>${GRADES[g][0]}</option>`).join("")}</select>`).join("")}
+      <button class="btn" id="stPlace">做起点小测</button></div></div>
     <div class="row"><label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
       <label for="stBrkS" style="min-width:auto">每次休息</label><select id="stBrkS">${[[30,"30 秒"],[60,"1 分钟"],[120,"2 分钟"],[180,"3 分钟"]].map(([v,t])=>`<option value="${v}" ${(S.breakSec||120)===v?"selected":""}>${t}</option>`).join("")}</select></div>
     <div class="row"><label for="stReg">地区 / 钱币</label><select id="stReg"><option value="cn" ${S.region==="cn"?"selected":""}>中国 · 人民币（元角）</option><option value="ca" ${S.region==="ca"?"selected":""}>加拿大 · 加元（$ ¢）</option></select></div>
     <div class="row"><label for="stBd">生日（月-日）</label><input type="text" id="stBd" value="${esc(S.bday||"")}" style="width:90px" placeholder="例如 05-21"><button class="btn" id="stBdP">预览生日彩蛋</button></div>`;
   $("#stReg").onchange=e=>{S.region=e.target.value;save();toast(S.region==="cn"?"钱币题改为人民币":"Money questions now use Canadian coins");};
   $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();renderSettings();updateTimePill();};
+  el.querySelectorAll("[data-st]").forEach(sel=>sel.onchange=()=>{ S.start[sel.dataset.st]=+sel.value; save(); renderGradebar(); toast(`${SUBJ[sel.dataset.st][0]}从${GRADES[+sel.value][0]}开始`); });
+  $("#stPlace").onclick=()=>runPlacement(["zh","en","math"]);
   $("#stLimW").onchange=e=>{S.limitWe=+e.target.value;save();renderSettings();updateTimePill();};
   const sh=()=>{S.hours={on:$("#stHon").checked,from:$("#stHf").value||"07:00",to:$("#stHt").value||"20:30"};save();};
   $("#stHon").onchange=sh; $("#stHf").onchange=sh; $("#stHt").onchange=sh;
