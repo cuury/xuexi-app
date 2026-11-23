@@ -210,6 +210,7 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .pzone.locked{display:none}
+.synclist{margin:6px 0 10px 20px;line-height:1.7}
 .kidsw{font-size:14px;margin-left:6px;vertical-align:middle}
 .kidlist{display:flex;flex-direction:column;gap:8px;align-items:center;margin:10px 0}
 .kidrow{display:flex;align-items:center;gap:8px}.kidrow .btn{min-width:180px}
@@ -636,6 +637,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
     </div>
     <div class="sec-title"><h2>家人录音</h2><span>Family voices</span></div>
     <div class="panel" id="famRec"></div>
+    <div class="sec-title"><h2>📲 同步到其他设备</h2><span>Phone ⇄ iPad</span></div>
+    <div class="panel" id="syncBox"></div>
     <div class="sec-title"><h2>家长角</h2><span>Settings</span></div>
     <div class="panel">
       <div class="stats" id="pStats"></div>
@@ -644,7 +647,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-2125</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-2128</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -850,15 +853,19 @@ const keyOf=id=>id==="p1"?"cn-en-hub-v1":"cn-en-hub-v1-"+id;
 const KEY=keyOf(PROF.cur);
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF));}catch(e){}}
 const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,sb:{},mt:0,limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
 if(S.day!==today()){S.day=today();S.dayStars=0;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem("hb-pin",S.pin||"");
+function save(){try{S.mt=Date.now(); localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem("hb-pin",S.pin||"");
   const me=PROF.list.find(x=>x.id===PROF.cur); if(me&&me.name!==S.name){me.name=S.name;saveProf();}}catch(e){}}
 try{ const dp=localStorage.getItem("hb-pin"); if(dp!=null) S.pin=dp; }catch(e){}
 if(!S.start) S.start={zh:1,en:1,math:1};
+/* Stars are kept per device (S.sb) so progress from two devices can be merged without double counting. */
+let DEV=""; try{DEV=localStorage.getItem("hb-dev")||"";if(!DEV){DEV="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);localStorage.setItem("hb-dev",DEV);}}catch(e){DEV="d0";}
+if(!S.sb||typeof S.sb!=="object") S.sb={};
+if(!Object.keys(S.sb).length&&S.stars>0) S.sb[DEV]=S.stars;
 
 /* ================= HELPERS ================= */
 const $=s=>document.querySelector(s);
@@ -918,7 +925,7 @@ $("#gradebar").onclick=e=>{
 /* ================= STARS ================= */
 function addStar(n,el){
   const before=Math.floor(S.stars/10);
-  S.stars+=n; S.dayStars+=n; try{dayLog().stars+=n;}catch(e){} save(); refreshTop();
+  S.sb[DEV]=(S.sb[DEV]||0)+n; S.stars=Object.values(S.sb).reduce((a,x)=>a+x,0); S.dayStars+=n; try{dayLog().stars+=n;}catch(e){} save(); refreshTop();
   if(el){const r=el.getBoundingClientRect();const f=document.createElement("div");f.className="fly";f.textContent="⭐";f.style.left=(r.left+r.width/2-20)+"px";f.style.top=(r.top)+"px";document.body.appendChild(f);setTimeout(()=>f.remove(),900);}
   const now=Math.floor(S.stars/10);
   if(now>before && now<=STICKERS.length){const s=STICKERS[now-1];toast(`新贴纸：${s[0]} ${s[1]}！`);}
@@ -2607,7 +2614,7 @@ function renderPGate(){ const g=$("#pGate"), z=$("#parentZone"); if(!g) return;
   z.classList.toggle("locked",!parentOpen);
   if(parentOpen){ g.innerHTML=`<b>🔓 家长区已打开</b><span class="note">离开这一页或 10 分钟后自动锁上</span><button class="btn" id="pLock">锁上</button>`; $("#pLock").onclick=()=>{parentOpen=false;renderPGate();}; return; }
   g.innerHTML=`<b>🔒 家长区</b><span class="note">学习报告、每天使用时间、设置 · For parents</span><div id="pGateIn" style="flex-basis:100%"></div>`;
-  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); });
+  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); });
 }
 const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
@@ -2869,6 +2876,68 @@ function renderSaga(){
 }
 
 /* ---------- first run: whose app is this? ---------- */
+/* ---------- move / merge one child's progress between devices (no server needed) ---------- */
+const SYNC_SKIP=["pin","extra","limitMin","limitWe","hours","breakMin","breakSec","day","dayStars","dayHan","dayWord","dayGame","dayMath","lastSync"];
+function syncPick(st){ const o={}; for(const k in st) if(!SYNC_SKIP.includes(k)) o[k]=st[k]; return o; }
+const b64e=u8=>{let b="";for(let i=0;i<u8.length;i+=8192)b+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(b);};
+const b64d=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+async function packSync(){
+  const json=JSON.stringify({app:"hanbaobao",v:1,at:Date.now(),from:DEV,s:syncPick(S)});
+  if(window.CompressionStream){ try{ const st=new Blob([json]).stream().pipeThrough(new CompressionStream("deflate-raw")); return "HB1Z:"+b64e(new Uint8Array(await new Response(st).arrayBuffer())); }catch(e){} }
+  return "HB1J:"+b64e(new TextEncoder().encode(json));
+}
+async function unpackSync(text){
+  text=String(text||"").trim();
+  if(text.startsWith("{")) return JSON.parse(text);
+  const m=text.replace(/\s+/g,"").match(/HB1([ZJ]):([A-Za-z0-9+/=]+)/); if(!m) throw new Error("bad");
+  const u8=b64d(m[2]);
+  if(m[1]==="J") return JSON.parse(new TextDecoder().decode(u8));
+  const st=new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate-raw")); return JSON.parse(await new Response(st).text());
+}
+function mergeState(a,b){
+  const m={...a}, newer=(b.mt||0)>(a.mt||0)?b:a;
+  ["name","bday","start","custom","region","grade","ink","rate","mLang","mRange","unlockAll","audWho"].forEach(k=>{ if(newer[k]!==undefined) m[k]=newer[k]; });
+  m.onboarded=!!(a.onboarded||b.onboarded);
+  const maxMap=k=>{ const o={...(a[k]||{})}; for(const x in (b[k]||{})) o[x]=Math.max(o[x]||0,b[k][x]||0); m[k]=o; };
+  ["lv","weak","mweak","sb"].forEach(maxMap);
+  ["kh","kw","written","readDone","special"].forEach(k=>{ m[k]=[...new Set([...(a[k]||[]),...(b[k]||[])])]; });
+  m.stars=Object.values(m.sb).reduce((s,x)=>s+x,0)||Math.max(a.stars||0,b.stars||0);
+  m.mathDone=Math.max(a.mathDone||0,b.mathDone||0);
+  m.bdayDone={...(a.bdayDone||{}),...(b.bdayDone||{})};
+  const lg={...(a.log||{})}; for(const d in (b.log||{})){ const x=lg[d]||{sec:0,stars:0,lv:0}, y=b.log[d]; lg[d]={sec:Math.max(x.sec||0,y.sec||0),stars:Math.max(x.stars||0,y.stars||0),lv:Math.max(x.lv||0,y.lv||0)}; } m.log=lg;
+  return m;
+}
+const progSum=st=>`${st.name||"小朋友"} · ⭐ ${st.stars||0} · 过关 ${Object.keys(st.lv||{}).filter(k=>st.lv[k]>0).length} · 认识的字 ${(st.kh||[]).length}`;
+function renderSync(){
+  const el=$("#syncBox"); if(!el) return;
+  el.innerHTML=`<p class="note">一个孩子在 iPad 和手机上都用时，用这里把进度带过去。两边都学过也没关系，会<b>合并</b>：过关、星星、认识的字都加在一起，不会互相覆盖。</p>
+    <ol class="note synclist"><li>在<b>学得多的那台</b>点「发送进度」，用 AirDrop、微信「文件传输助手」或邮件发给另一台；也可以点「复制同步码」，发到另一台再复制。</li>
+      <li>在<b>另一台</b>的汉宝宝里，打开家长区，点「打开进度文件」，或者把同步码粘贴到下面的框里。</li>
+      <li>想让两边一样，再从这台发一次回去就行。</li></ol>
+    <div class="row"><button class="btn say" id="syOut">📤 发送进度</button><button class="btn" id="syCopy">📋 复制同步码</button>
+      <label class="btn" for="syFile" style="cursor:pointer">📥 打开进度文件</label><input type="file" id="syFile" accept=".json,.hbb,application/json,text/plain" hidden></div>
+    <div class="row"><textarea id="syCode" rows="2" placeholder="或者把同步码粘贴到这里（以 HB1 开头）" style="flex:1;min-width:220px;font-size:14px"></textarea><button class="btn" id="syPaste">合并</button></div>
+    <p class="note" id="syMsg">这台设备：${esc(progSum(S))}${S.lastSync?` · 上次同步 ${S.lastSync}`:""}</p><div id="syPrev"></div>`;
+  $("#syOut").onclick=async()=>{ const code=await packSync(); const name=`汉宝宝进度-${(S.name||"child").replace(/[\\/:*?"<>|\s]/g,"")}-${today()}.json`;
+    const file=new File([code],name,{type:"application/json"});
+    try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:"汉宝宝进度"}); return; } }catch(e){ if(e&&e.name==="AbortError") return; }
+    const a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000); toast("进度文件已保存"); };
+  $("#syCopy").onclick=async()=>{ const code=await packSync(); try{ await navigator.clipboard.writeText(code); toast(`同步码已复制（${code.length} 个字符），发到另一台设备吧`); }catch(e){ $("#syCode").value=code; $("#syCode").select(); toast("请长按选择这段同步码并复制"); } };
+  $("#syFile").onchange=async e=>{ const f=e.target.files[0]; if(!f) return; preview(await f.text()); e.target.value=""; };
+  $("#syPaste").onclick=()=>preview($("#syCode").value);
+  async function preview(text){
+    let data; try{ data=await unpackSync(text); if(!data||data.app!=="hanbaobao"||!data.s) throw 0; }catch(e){ toast("这不是汉宝宝的进度，请检查一下"); return; }
+    if(data.from===DEV&&(data.s.mt||0)<=(S.mt||0)){ toast("这是这台设备自己发出的进度，已经是最新的"); }
+    const merged=mergeState(S,data.s);
+    $("#syPrev").innerHTML=`<div class="tset"><h3>收到的进度</h3><p class="note">来自另一台设备（${new Date(data.at).toLocaleString()}）：${esc(progSum(data.s))}</p>
+      <p class="note">这台设备现在：${esc(progSum(S))}</p><p class="note"><b>合并以后：${esc(progSum(merged))}</b></p>
+      ${S.name&&data.s.name&&S.name!==data.s.name?`<p class="note" style="color:#D63B3B">⚠️ 名字不一样（${esc(S.name)} / ${esc(data.s.name)}），确定是同一个孩子吗？</p>`:""}
+      <div class="row"><button class="btn say" id="syMerge">✓ 合并进度（推荐）</button><button class="btn" id="syReplace">用收到的替换这台</button><button class="btn" id="syCancel">取消</button></div></div>`;
+    $("#syMerge").onclick=()=>apply(merged); $("#syReplace").onclick=()=>apply({...S,...data.s,sb:data.s.sb||{}}); $("#syCancel").onclick=()=>{$("#syPrev").innerHTML="";};
+  }
+  function apply(st){ const keep={}; SYNC_SKIP.forEach(k=>{ if(S[k]!==undefined) keep[k]=S[k]; });
+    S={...FRESH,...st,...keep,lastSync:new Date().toLocaleString()}; if(!S.start) S.start={zh:1,en:1,math:1}; save(); toast("同步好了！"); setTimeout(()=>{location.hash="stars";location.reload();},700); }
+}
 /* ---------- several children on one device ---------- */
 function showKids(){
   const list=PROF.list.map(p=>`<div class="kidrow ${p.id===PROF.cur?"me":""}"><button class="btn ${p.id===PROF.cur?"say":""}" data-k="${p.id}">${p.id===PROF.cur?"✓ ":""}${esc(p.name||"小朋友")}</button>${p.id!==PROF.cur&&p.id!=="p1"?`<button class="linkbtn" data-del="${p.id}">删除</button>`:""}</div>`).join("");
