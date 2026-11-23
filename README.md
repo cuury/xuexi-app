@@ -1,4 +1,4 @@
-# 汉宝宝 HanBao
+# 汉宝宝 Hanbaobao
 
 给有中文背景孩子的中文 · English · 数学闯关学习网页 App（一到六年级，适合 iPad / iPhone）。
 Chinese, English and math for grades 1–6, made for kids from Chinese-speaking families. A home-screen web app for iPad and iPhone.

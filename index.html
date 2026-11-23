@@ -11,7 +11,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
-<title>汉宝宝 HanBao</title>
+<title>汉宝宝 Hanbaobao</title>
 <style>
 @font-face{font-family:"Andika";font-weight:400;font-display:swap;src:url(fonts/andika-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Andika";font-weight:700;font-display:swap;src:url(fonts/andika-latin-700-normal.woff2) format("woff2")}
@@ -511,7 +511,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
 <body>
 <div class="wrap">
   <header class="top">
-    <h1><span id="siteName">汉宝宝</span> <span class="brand-en">HanBao</span><small>中文 · English · 数学 · Grades 1–6</small></h1>
+    <h1><span id="siteName">汉宝宝</span> <span class="brand-en">Hanbaobao</span><small>中文 · English · 数学 · Grades 1–6</small></h1>
     <div class="timepill" id="timePill" hidden></div>
     <div class="starpill" aria-label="星星总数">⭐ <span id="starTotal">0</span></div>
   </header>
@@ -637,7 +637,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-1657</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.22-1930</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -909,7 +909,7 @@ function refreshTop(){
   $("#starTotal").textContent=S.stars;
   $("#tStars").textContent=S.dayStars; $("#tHan").textContent=S.kh.length; $("#tWord").textContent=S.kw.length;
   $("#helloName").textContent=`你好，${S.name||"小朋友"}！Hello!`;
-  document.title="汉宝宝 HanBao";
+  document.title="汉宝宝 Hanbaobao";
   $("#homeGrade").textContent=`Today · ${GRADES[S.grade][0]} ${GRADES[S.grade][1]}`;
   const n1=Math.min(S.dayHan.length,3), n2=Math.min(S.dayWord.length,3);
   $("#task1p").textContent=`今天看了 ${n1}/3 个字`; $("#task2p").textContent=`Today ${n2}/3 words`;
@@ -2578,7 +2578,7 @@ function showLimit(){
 }
 function showNight(){
   stopChain(); clearArena(); const H=S.hours;
-  showOverlay(`<div class="ovicon">😴</div><h2>现在是休息时间</h2><p>汉宝宝每天 ${H.from} – ${H.to} 开放，到时候再来吧！</p><p class="men">HanBao is open ${H.from}–${H.to}. See you then!</p>
+  showOverlay(`<div class="ovicon">😴</div><h2>现在是休息时间</h2><p>汉宝宝每天 ${H.from} – ${H.to} 开放，到时候再来吧！</p><p class="men">Hanbaobao is open ${H.from}–${H.to}. See you then!</p>
     <div class="ovparent" id="ovPar"></div>`);
   say("现在是休息时间，到时候再来吧！","zh"); parentExtend(null,true);
 }
@@ -2813,7 +2813,7 @@ function renderSaga(){
 /* ---------- first run: whose app is this? ---------- */
 function showWelcome(){
   const months=Array.from({length:12},(_,i)=>i+1), days=Array.from({length:31},(_,i)=>i+1);
-  showOverlay(`<div class="ovicon">🌟</div><h2>欢迎来到汉宝宝！</h2><p class="men">Welcome to HanBao! Let's get you set up.</p>
+  showOverlay(`<div class="ovicon">🌟</div><h2>欢迎来到汉宝宝！</h2><p class="men">Welcome to Hanbaobao! Let's get you set up.</p>
     <div class="welcome">
       <label for="wName">小朋友叫什么名字？ What's your name?</label>
       <input type="text" id="wName" maxlength="12" placeholder="例如：朵朵 / Emma" value="${esc(S.name||"")}">
