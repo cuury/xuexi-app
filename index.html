@@ -652,7 +652,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
   <section class="view" id="v-stars">
     <div class="sec-title"><h2>魔法贴纸</h2><span id="nextEgg">Magic stickers</span></div>
     <div class="stk" id="stickers"></div>
-    <div class="sec-title"><h2>🎁 星星兑换</h2><span id="shopLeft">Rewards</span></div>
+    <div class="sec-title" id="shopTitle"><h2>🎁 星星兑换</h2><span id="shopLeft">Rewards</span></div>
     <div class="shop" id="shop"></div>
     <div class="panel pgate" id="pGate"></div>
     <div id="parentZone" class="pzone locked">
@@ -679,7 +679,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.24-1846</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.24-1848</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -992,7 +992,7 @@ function addStar(n,el,bonus){
   if(now>before && now<=STICKERS.length){const s=STICKERS[now-1];toast(`新贴纸：${s[0]} ${s[1]}！`);}
 }
 function refreshTop(){
-  $("#starTotal").textContent=starsLeft(); $("#starTotal").title=`一共得到 ${S.stars} ⭐，已兑换 ${starsSpent()} ⭐`;
+  $("#starTotal").textContent=S.shopOn?starsLeft():S.stars; $("#starTotal").title=S.shopOn?`一共得到 ${S.stars} ⭐，已兑换 ${starsSpent()} ⭐`:`一共得到 ${S.stars} ⭐`;
   $("#tStars").textContent=S.dayStars; $("#tHan").textContent=S.kh.length; $("#tWord").textContent=S.kw.length;
   $("#helloName").textContent=`你好，${S.name||"小朋友"}！Hello!`;
   document.title="汉宝宝 Hanbaobao";
@@ -1608,6 +1608,7 @@ const starsSpent=()=>Object.values(S.sp||{}).reduce((a,x)=>a+x,0);
 const starsLeft=()=>Math.max(0,(S.stars||0)-starsSpent());
 function renderShop(){
   const el=$("#shop"); if(!el) return; const left=starsLeft();
+  el.hidden=!S.shopOn; $("#shopTitle").hidden=!S.shopOn; if(!S.shopOn) return;
   $("#shopLeft").textContent=`可以用 ${left} ⭐ · 一共得到 ${S.stars} ⭐`;
   const pend=(S.redeem||[]).filter(r=>!r.done);
   el.innerHTML=shopList().map(r=>`<button class="reward ${left>=r.c?"can":""}" data-r="${r.id}"><span class="re">${esc(r.e)}</span><b>${esc(r.n)}</b><span class="rc">${r.c} ⭐</span><small>${left>=r.c?"可以兑换！":`还差 ${r.c-left} ⭐`}</small></button>`).join("")
@@ -1625,7 +1626,8 @@ function renderShop(){
 }
 function renderShopEdit(){
   const el=$("#shopEdit"); if(!el) return; const L=shopList(), log=(S.redeem||[]).slice().reverse();
-  el.innerHTML=`<p class="note">孩子用星星兑换这些奖励，兑换时要输入家长密码确认。每答对一题 1 颗星；隔天复习以前学过的题，照样每题 1 颗；<b>同一天里重复刷同一道题，每答对 3 次给 1 颗</b>。练习每天最多得 <b>${DAY_CAP()}</b> 颗（考试进步、生日另算）。贴纸按「一共得到的星星」算，兑换不会让贴纸变少。</p>
+  el.innerHTML=`<div class="row"><label><input type="checkbox" id="seOn" ${S.shopOn?"checked":""}> <b>开启星星兑换</b></label><span class="note">${S.shopOn?"孩子在贴纸页能看到兑换区，右上角显示可兑换的星星。":"现在是关闭的：孩子看不到兑换区，右上角显示一共得到的星星。下面可以先把奖励设置好。"}</span></div>
+    <p class="note">孩子用星星兑换这些奖励，兑换时要输入家长密码确认。每答对一题 1 颗星；隔天复习以前学过的题，照样每题 1 颗；<b>同一天里重复刷同一道题，每答对 3 次给 1 颗</b>。练习每天最多得 <b>${DAY_CAP()}</b> 颗（考试进步、生日另算）。贴纸按「一共得到的星星」算，兑换不会让贴纸变少。</p>
     <div class="row"><button class="btn" id="seRe">🧹 清掉以前刷得太多的星星</button><span class="note">每天超过上限的部分去掉，正常复习的保留</span></div>
     <div class="row"><label for="seCap">每天最多得</label><select id="seCap">${[20,30,40,50,60,80,100].map(v=>`<option value="${v}" ${DAY_CAP()===v?"selected":""}>${v} ⭐</option>`).join("")}</select>
       <label for="seBal" style="min-width:auto">现在可兑换</label><input type="number" id="seBal" min="0" max="${S.stars}" value="${starsLeft()}" style="width:90px"> ⭐ <button class="btn" id="seBalOk">修改余额</button><span class="note">（一共得到 ${S.stars} ⭐）</span></div>
@@ -1644,6 +1646,7 @@ function renderShopEdit(){
     $("#reOk").onclick=()=>{ const left=starsLeft(); S.sbEpoch=(S.sbEpoch||0)+1; S.sb={["re"+S.sbEpoch]:r.total}; S.stars=r.total;
       S.sp={open:Math.max(0,r.total-Math.min(left,r.total))}; save(); hideOverlay(); refreshTop(); renderStars(); renderShopEdit(); toast(`已重新计算：${r.total} ⭐`); };
   };
+  $("#seOn").onchange=e=>{ S.shopOn=e.target.checked; save(); refreshTop(); renderShop(); renderShopEdit(); toast(S.shopOn?"星星兑换已开启":"星星兑换已关闭"); };
   $("#seCap").onchange=e=>{ S.starCap=+e.target.value; save(); renderShopEdit(); };
   $("#seBalOk").onclick=()=>{ const v=Math.max(0,Math.min(S.stars,Math.round(+$("#seBal").value||0))); const other=starsSpent()-(S.sp.open||0); S.sp.open=Math.max(0,S.stars-v-other); save(); refreshTop(); renderShop(); renderShopEdit(); toast(`可兑换星星改为 ${starsLeft()} ⭐`); };
   $("#seAdd").onclick=()=>{ S.shop=[...collect(),{id:"r"+Date.now().toString(36),e:"🎁",n:"新奖励",c:50}]; renderShopEdit(); };
