@@ -210,6 +210,28 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .pzone.locked{display:none}
+.examrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:4px 0 22px}
+.examcard{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:200px;padding:12px 16px;border-radius:18px;background:var(--card);border:3px solid #7B61FF;box-shadow:0 4px 0 #5B44D6}
+.examcard .ei{font-size:30px}.examcard b{font-size:17px}.examcard small{color:var(--muted)}
+.examcard.lock{opacity:.55;border-color:var(--line);box-shadow:none}.examcard.gold{border-color:#F5B700;box-shadow:0 4px 0 #C99400;background:#FFF8DC}
+.examhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}.examhead b{font-family:var(--f-display);font-weight:400;font-size:22px;flex:1}
+.extime{font-variant-numeric:tabular-nums;font-weight:700;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 12px}
+.exnav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.exnav button{width:34px;height:34px;border-radius:10px;border:2px solid var(--line);background:var(--card);font-weight:700}
+.exnav button.done{background:#E8E3FF;border-color:#7B61FF}.exnav button.on{outline:3px solid var(--sky);outline-offset:1px}
+.exno{font-weight:700;color:#5B44D6}.exno small{color:var(--muted);font-weight:400}
+.opt.pick{background:#E8E3FF;border-color:#7B61FF;box-shadow:0 0 0 3px #7B61FF55}
+.exbtns{justify-content:center;margin-top:12px}
+.exscore{text-align:center;background:var(--card);border:3px solid var(--line);border-radius:24px;padding:18px;margin:8px auto 12px;max-width:520px}
+.exscore.gold{border-color:#F5B700;background:#FFF8DC}.exscore .big{font-size:84px;font-weight:800;line-height:1;color:#5B44D6}.exscore .big small{font-size:28px}
+.exscore .rate{font-size:26px;margin:6px 0}.exscore .rate small{font-size:16px;color:var(--muted)}
+.review{display:flex;flex-direction:column;gap:8px}.rv{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px}
+.rv.bad{border-color:#FFB3B3;background:#FFF5F5}.rv>div{flex:1}.rv p{margin:2px 0}.rv small{color:var(--muted)}.rv s{color:#D63B3B}.rv b{color:#1E9E5A}
+.rn{min-width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#E8E3FF;font-weight:700}.rv.bad .rn{background:#FFD6D6}
+.rvvis{transform:scale(.7);transform-origin:left top;max-height:160px;overflow:hidden}
+.extable{width:100%;border-collapse:collapse;font-size:15px}.extable th,.extable td{border-bottom:1px solid var(--line);padding:6px;text-align:left}
+.cert{background:linear-gradient(135deg,#FFF4C2,#FFE08A);padding:10px;border-radius:16px}.cbd{border:4px double #C99400;border-radius:12px;padding:18px 16px;text-align:center;background:#FFFBEA}
+.ctop{font-family:var(--f-display);font-size:38px;color:#C0392B;letter-spacing:.2em}.cname{text-align:left;font-size:22px;margin-top:10px}
+.ctext{font-size:20px;line-height:1.8;text-indent:2em;text-align:left}.csc{font-size:30px;color:#C0392B}.cen{font-size:13px;color:var(--muted)}.cfoot{text-align:right;margin-top:10px}
 .synclist{margin:6px 0 10px 20px;line-height:1.7}
 .kidsw{font-size:14px;margin-left:6px;vertical-align:middle}
 .kidlist{display:flex;flex-direction:column;gap:8px;align-items:center;margin:10px 0}
@@ -647,7 +669,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.24-1826</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.24-1838</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -852,8 +874,10 @@ if(!PROF.list.some(x=>x.id===PROF.cur)) PROF.cur=PROF.list[0].id;
 const keyOf=id=>id==="p1"?"cn-en-hub-v1":"cn-en-hub-v1-"+id;
 const KEY=keyOf(PROF.cur);
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF));}catch(e){}}
-const today=()=>new Date().toISOString().slice(0,10);
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,sb:{},mt:0,limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+/* local calendar date (toISOString is UTC, which rolled the day over at 4–5 pm in Vancouver) */
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const today=()=>ymd(new Date());
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,sb:{},mt:0,exams:{},limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
@@ -2296,7 +2320,9 @@ function renderQuest(){
         <b>${x.i+1}. ${esc(x.title)}</b><small>${esc(x.sub)}</small>
         <span class="stars">${opn&&st?"★".repeat(st)+"☆".repeat(3-st):""}</span></button>`;
     });
-    html+=`</div>`;
+    html+=`</div><div class="examrow">${examsFor(qSubj,g).map(ex=>{ const ok=examOpen(ex), best=examBest(ex.id);
+      return `<button class="examcard ${ok?"":"lock"} ${best>=90?"gold":""}" data-ex="${ex.id}"><span class="ei">${ok?"📝":"🔒"}</span><b>${GRADES[g][0]} ${ex.name}</b>
+        <small>${!ok?ex.lockTip:best>=0?`最高 ${best} 分 ${rateOf(best)[0]}`:`${ex.n} 题 · 100 分 · 还没考`}</small></button>`; }).join("")}</div>`;
   }
   html=`<div class="gbanner placebar"><b>🚩 起点</b> ${["zh","en","math"].map(k=>`${SUBJ[k][0]} ${GRADES[startOf(k)][0]}`).join(" · ")} <button class="btn" id="qPlace">测一测起点</button></div>`+html;
   $("#qMap").innerHTML=html; $("#qPlace").onclick=()=>runPlacement(["zh","en","math"]);
@@ -2304,6 +2330,7 @@ function renderQuest(){
 }
 $("#qTabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;qSubj=b.dataset.s;renderQuest();};
 $("#qMap").onclick=e=>{
+  const x=e.target.closest("[data-ex]"); if(x){ const ex=findExam(x.dataset.ex); if(!examOpen(ex)){ toast(ex.lockTip+" 🔒"); return; } examIntro(ex); return; }
   const b=e.target.closest(".node"); if(!b)return;
   if(b.dataset.c!=null){ openLevel(schoolLevels().filter(x=>x.subj===qSubj)[+b.dataset.c]); return; }
   const lv=LEVELS[qSubj][+b.dataset.i];
@@ -2311,6 +2338,99 @@ $("#qMap").onclick=e=>{
   openLevel(lv);
 };
 
+/* ---------- 阶段测试: 期中 / 期末 per subject per grade, scored out of 100, no hints until handed in ---------- */
+function examsFor(subj,g){
+  const L=LEVELS[subj].filter(x=>x.gr===g&&x.type!=="boss"), half=Math.ceil(L.length/2), boss=LEVELS[subj].find(x=>x.type==="boss"&&x.gr===g);
+  return [{id:`${subj}-${g}-mid`,subj,g,name:"期中测试",en:"Mid-term test",levels:L.slice(0,half),n:20,mins:15,lockTip:`过完前 ${half} 关解锁`,ready:()=>L.slice(0,half).every(passed)},
+          {id:`${subj}-${g}-end`,subj,g,name:"期末测试",en:"Final test",levels:L,n:25,mins:20,lockTip:"打败本年级 Boss 解锁",ready:()=>(boss&&passed(boss))||L.every(passed)}];
+}
+const findExam=id=>{ const [subj,g]=id.split("-"); return examsFor(subj,+g).find(x=>x.id===id); };
+const examOpen=ex=>S.unlockAll||ex.g<startOf(ex.subj)||ex.ready();
+const examBest=id=>Math.max(-1,...((S.exams||{})[id]||[]).map(r=>r.sc));
+const rateOf=sc=>sc>=90?["🏆 优秀","Excellent"]:sc>=75?["👍 良好","Good"]:sc>=60?["✅ 及格","Pass"]:["💪 再练练","Keep practising"];
+const EXAM_OK=["han","py","words","phon","abc","math","poem","story"];
+function buildExam(ex){
+  const lvs=ex.levels.filter(l=>EXAM_OK.includes(l.type)), qs=[], seen=new Set();
+  for(let tries=0; qs.length<ex.n && tries<ex.n*12; tries++){
+    const lv=lvs[tries%lvs.length]; let q; try{ q=levelQ(lv); }catch(e){ continue; }
+    if(!q||!q.opts||q.ans==null) continue; q.ans=String(q.ans); if(!q.opts.map(String).includes(q.ans)) continue;
+    const sig=q.zh+"|"+q.ans+"|"+(q.vis||"").length; if(seen.has(sig)) continue; seen.add(sig);
+    q.after=null; q.lvKey=lv.key; q.subjLv=lv; qs.push(q);
+  }
+  return shuffle(qs);
+}
+function examIntro(ex){
+  const hist=((S.exams||{})[ex.id]||[]).slice(-3).reverse();
+  showOverlay(`<div class="ovicon">📝</div><h2>${GRADES[ex.g][0]} ${SUBJ[ex.subj][0]} · ${ex.name}</h2><p class="men">${GRADES[ex.g][1]} ${SUBJ[ex.subj][1]} · ${ex.en}</p>
+    <p>一共 <b>${ex.n}</b> 题，满分 <b>100</b> 分，建议 ${ex.mins} 分钟做完。<br>考试的时候<b>不会马上告诉你对错</b>，可以回去改答案。做完点「交卷」看分数！</p>
+    ${hist.length?`<p class="note">最近成绩：${hist.map(r=>`${r.sc} 分（${r.d.slice(5)}）`).join("、")}</p>`:""}
+    <div class="btnrow" style="justify-content:center"><button class="btn say big" id="exGo">开始考试 ▶</button><button class="btn" id="exNo">等一下</button></div>`);
+  $("#exGo").onclick=()=>{ hideOverlay(); runExam(ex); }; $("#exNo").onclick=hideOverlay;
+}
+function runExam(ex){
+  const qs=buildExam(ex); if(qs.length<5){ toast("这一段的题目还不够，先闯更多关吧"); return; }
+  location.hash="quest"; qRunning={exam:true}; stopChain(); clearArena();
+  $("#qMap").hidden=true; $("#qTabs").hidden=true; const box=$("#qRun"); box.hidden=false; window.scrollTo(0,0);
+  const ans=new Array(qs.length).fill(null), t0=Date.now(); let i=0, tick=null;
+  const L=q=>q.lang||(ex.subj==="en"?"en":ex.subj==="math"?S.mLang:"zh");
+  const mmss=sec=>`${String(Math.floor(sec/60)).padStart(2,"0")}:${String(sec%60).padStart(2,"0")}`;
+  const quit=()=>{ clearInterval(tick); qRunning=null; stopChain(); clearArena(); box.hidden=true; $("#qMap").hidden=false; $("#qTabs").hidden=false; renderQuest(); };
+  function show(){
+    const q=qs[i], lang=L(q);
+    box.innerHTML=`<div class="examhead"><button class="btn" id="exQuit">✕</button><b>📝 ${GRADES[ex.g][0]} ${SUBJ[ex.subj][0]} · ${ex.name}</b><span class="extime" id="exTime">⏱ ${mmss(Math.round((Date.now()-t0)/1000))}</span></div>
+      <div class="exnav">${qs.map((_,k)=>`<button class="${k===i?"on":""} ${ans[k]!=null?"done":""}" data-j="${k}">${k+1}</button>`).join("")}</div>
+      <div class="stage exstage"><p class="exno">第 ${i+1} 题 <small>/ ${qs.length} · 每题 ${Math.round(100/qs.length*10)/10} 分</small></p>
+      <p class="ask">${esc(q.zh)}<br><span class="en-ask">${esc(q.en)}</span></p>${q.vis||""}
+      <button class="btn say" id="exSay" style="margin-top:10px">🔊 ${lang==="zh"?"听题":"Hear it"}</button>
+      <div class="opts">${q.opts.map(o=>{o=String(o);return `<button class="opt ${q.cls||"num"} ${q.cls!=="emo"&&q.cls!=="han"&&o.length>4?"long":""} ${ans[i]===o?"pick":""}" data-v="${esc(o)}">${esc(o)}</button>`;}).join("")}</div></div>
+      <div class="btnrow exbtns"><button class="btn" id="exPrev" ${i?"":"disabled"}>◀ 上一题</button>${i<qs.length-1?`<button class="btn say" id="exNext">下一题 ▶</button>`:""}<button class="btn write" id="exHand">交卷 ✓</button></div>`;
+    const speak=q.speak||(()=>say(lang==="zh"?q.zh:q.en,lang));
+    $("#exSay").onclick=speak; if(!q.noAuto&&ans[i]==null) speak();
+    box.querySelector(".opts").onclick=e=>{ const b=e.target.closest(".opt"); if(!b) return; ans[i]=b.dataset.v; box.querySelectorAll(".opts .opt").forEach(x=>x.classList.toggle("pick",x===b)); box.querySelector(`.exnav [data-j="${i}"]`).classList.add("done");
+      if(i<qs.length-1) setTimeout(()=>{ if(ans[i]===b.dataset.v){ i++; show(); } },450); };
+    box.querySelector(".exnav").onclick=e=>{ const b=e.target.closest("[data-j]"); if(b){ i=+b.dataset.j; show(); } };
+    $("#exPrev").onclick=()=>{ if(i){ i--; show(); } }; const nx=$("#exNext"); if(nx) nx.onclick=()=>{ i++; show(); };
+    $("#exHand").onclick=hand; $("#exQuit").onclick=()=>{ if(confirm("确定要退出吗？这次考试不会记分。")) quit(); };
+  }
+  function hand(){
+    const left=ans.filter(a=>a==null).length;
+    if(left&&!confirm(`还有 ${left} 题没做，确定交卷吗？`)){ i=ans.findIndex(a=>a==null); show(); return; }
+    clearInterval(tick); stopChain();
+    const right=qs.map((q,k)=>ans[k]===q.ans), n=right.filter(Boolean).length, sc=Math.round(n*100/qs.length), secs=Math.round((Date.now()-t0)/1000);
+    qs.forEach((q,k)=>{ if(right[k]) return;
+      if(q.key&&!q.key.startsWith("m:")){ S.weak[q.key]=(S.weak[q.key]||0)+1; }
+      else if(q.key&&q.key.startsWith("m:")){ const kk=q.key.slice(2); S.mweak=S.mweak||{}; S.mweak[kk]=(S.mweak[kk]||0)+1; } });
+    const prevBest=examBest(ex.id);
+    S.exams=S.exams||{}; (S.exams[ex.id]=S.exams[ex.id]||[]).push({at:Date.now(),d:today(),sc,n,of:qs.length,secs}); S.exams[ex.id]=S.exams[ex.id].slice(-10); save();
+    const [rz,re]=rateOf(sc), stars=sc>=90?10:sc>=75?6:sc>=60?3:1;
+    box.innerHTML=`<div class="examhead"><b>📝 ${GRADES[ex.g][0]} ${SUBJ[ex.subj][0]} · ${ex.name} · 成绩</b></div>
+      <div class="exscore ${sc>=90?"gold":""}"><div class="big">${sc}<small> 分</small></div><div class="rate">${rz} <small>${re}</small></div>
+        <p>答对 ${n} / ${qs.length} 题 · 用时 ${mmss(secs)}${prevBest>=0?` · ${sc>prevBest?`比上次最好成绩高 ${sc-prevBest} 分！🎉`:`最好成绩 ${prevBest} 分`}`:""}</p>
+        <p class="note">得到 ${stars} ⭐</p></div>
+      <div class="btnrow" style="justify-content:center">${sc>=90?`<button class="btn say big" id="exCert">📜 看奖状</button>`:""}<button class="btn" id="exAgain">再考一次</button><button class="btn" id="exBack">返回地图</button></div>
+      <h3 class="rh">试卷讲评 · ${n===qs.length?"全部答对！":`错了 ${qs.length-n} 题`}</h3>
+      <div class="review">${qs.map((q,k)=>`<div class="rv ${right[k]?"ok":"bad"}"><span class="rn">${k+1}</span><div><p>${esc(q.zh)} <small>${esc(q.en)}</small></p>${!right[k]&&q.vis&&q.vis.length<1500?`<div class="rvvis">${q.vis}</div>`:""}
+        <p>${right[k]?`✓ <b>${esc(q.ans)}</b>`:`✗ 你选了 <s>${esc(ans[k]??"没做")}</s> → 正确答案 <b>${esc(q.ans)}</b>`}</p></div>${!right[k]&&q.speak?`<button class="btn" data-rs="${k}">🔊</button>`:""}</div>`).join("")}</div>
+      ${n<qs.length?`<p class="note">错的题已经放进家长区的「错题本」，可以在那里专门练。</p>`:""}`;
+    addStar(stars,$(".exscore"));
+    say(sc>=90?`${sc}分，太棒了！`:sc>=60?`${sc}分，不错哦！`:`${sc}分，我们再练练吧！`,"zh");
+    box.querySelector(".review").onclick=e=>{ const b=e.target.closest("[data-rs]"); if(b) qs[+b.dataset.rs].speak(); };
+    const c=$("#exCert"); if(c) c.onclick=()=>showCert(ex,sc);
+    $("#exAgain").onclick=()=>{ qRunning=null; runExam(ex); }; $("#exBack").onclick=quit;
+    if(sc>=90) setTimeout(()=>showCert(ex,sc),900);
+  }
+  tick=setInterval(()=>{ const t=$("#exTime"); if(t) t.textContent=`⏱ ${mmss(Math.round((Date.now()-t0)/1000))}`; },1000);
+  show();
+}
+function showCert(ex,sc){
+  const nm=S.name||"小朋友", d=new Date();
+  showOverlay(`<div class="cert"><div class="cbd"><div class="ctop">🏆 奖 状 🏆</div><p class="cname">${esc(nm)} 同学：</p>
+    <p class="ctext">在 <b>${GRADES[ex.g][0]}${SUBJ[ex.subj][0]}${ex.name}</b> 中获得 <b class="csc">${sc}</b> 分，成绩<b>优秀</b>！<br>特发此状，以资鼓励！</p>
+    <p class="cen">Certificate of Excellence · ${GRADES[ex.g][1]} ${SUBJ[ex.subj][1]} ${ex.en} · ${sc}/100</p>
+    <p class="cfoot">汉宝宝 Hanbaobao<br>${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日</p></div></div>
+    <div class="btnrow" style="justify-content:center"><button class="btn say" id="ceOk">收好啦 ✓</button></div><p class="note">想留念可以截屏保存哦。</p>`);
+  say(`恭喜${nm}，获得奖状！`,"zh"); $("#ceOk").onclick=hideOverlay;
+}
 /* ---------- placement test: 4 questions per round, move up/down one grade, per subject ---------- */
 const PLACE_TYPES=["han","py","words","phon","abc","math"];
 function runPlacement(subjs,onApply){
@@ -2599,7 +2719,7 @@ const DATA3={"saga":[{"n":1,"title":["发光的蛋","The Glowing Egg"],"scene":{
 let lastAct=Date.now(), sinceBreak=0, overlayOn=false;
 ["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>{lastAct=Date.now();},{passive:true}));
 function dayLog(d=today()){ if(!S.log)S.log={}; return S.log[d]||(S.log[d]={sec:0,stars:0,lv:0}); }
-function pruneLog(){ const keep=new Set(Array.from({length:60},(_,i)=>new Date(Date.now()-i*864e5).toISOString().slice(0,10))); for(const k in S.log) if(!keep.has(k)) delete S.log[k]; }
+function pruneLog(){ const keep=new Set(Array.from({length:60},(_,i)=>ymd(new Date(Date.now()-i*864e5)))); for(const k in S.log) if(!keep.has(k)) delete S.log[k]; }
 setInterval(()=>{ if(document.hidden||overlayOn) return; if(Date.now()-lastAct>90000) return; dayLog().sec+=15; sinceBreak+=15; save(); checkTime(); },15000);
 function showOverlay(html,cls=""){ overlayOn=true; const o=$("#overlay"); o.className="overlay "+cls; o.innerHTML=`<div class="ovbox">${html}</div>`; o.hidden=false; return o; }
 function hideOverlay(){ overlayOn=false; const o=$("#overlay"); o.hidden=true; o.innerHTML=""; stopConfetti(); }
@@ -2927,6 +3047,7 @@ function mergeState(a,b){
   ["name","bday","start","custom","region","grade","ink","rate","mLang","mRange","unlockAll"].forEach(k=>{ if(newer[k]!==undefined) m[k]=newer[k]; });
   m.onboarded=!!(a.onboarded||b.onboarded);
   m.audWho={...(a.audWho||{}),...(b.audWho||{})};
+  m.exams={...(a.exams||{})}; for(const id in (b.exams||{})){ const seen=new Set((m.exams[id]||[]).map(r=>r.at)); m.exams[id]=[...(m.exams[id]||[]),...b.exams[id].filter(r=>!seen.has(r.at))].sort((x,y)=>x.at-y.at).slice(-10); }
   const maxMap=k=>{ const o={...(a[k]||{})}; for(const x in (b[k]||{})) o[x]=Math.max(o[x]||0,b[k][x]||0); m[k]=o; };
   ["lv","weak","mweak","sb"].forEach(maxMap);
   ["kh","kw","written","readDone","special"].forEach(k=>{ m[k]=[...new Set([...(a[k]||[]),...(b[k]||[])])]; });
@@ -3033,7 +3154,7 @@ function weakLabel(k){ const [t,v]=[k.slice(0,k.indexOf(":")),k.slice(k.indexOf(
   return `<span class="wk en">${esc(v)}<small>${t==="ph"?"phonics":t==="a"?"letter":"word"}</small></span>`; }
 function renderReport(){
   const el=$("#report"); if(!el) return; pruneLog();
-  const days=Array.from({length:7},(_,i)=>new Date(Date.now()-(6-i)*864e5).toISOString().slice(0,10));
+  const days=Array.from({length:7},(_,i)=>ymd(new Date(Date.now()-(6-i)*864e5)));
   const data=days.map(d=>({d,...(S.log&&S.log[d]||{sec:0,stars:0,lv:0})})); const maxM=Math.max(10,...data.map(x=>Math.ceil(x.sec/60)));
   const wk=["日","一","二","三","四","五","六"];
   const weekMin=Math.round(data.reduce((a,x)=>a+x.sec,0)/60), weekStars=data.reduce((a,x)=>a+x.stars,0), weekLv=data.reduce((a,x)=>a+x.lv,0);
@@ -3043,6 +3164,9 @@ function renderReport(){
   el.innerHTML=`<div class="stats"><div><b>${weekMin}</b>本周学习（分钟）</div><div><b>${weekStars}</b>本周星星</div><div><b>${weekLv}</b>本周过关</div>${subj}</div>
     <div class="chart" role="img" aria-label="最近 7 天每天学习分钟">${data.map(x=>{const m=Math.round(x.sec/60);return `<div class="bar"><span class="v">${m||""}</span><i style="height:${Math.round(m/maxM*100)}%"></i><small>周${wk[new Date(x.d+"T12:00").getDay()]}</small></div>`;}).join("")}</div>
     <p class="note" style="text-align:center">最近 7 天每天学习的分钟数（有操作才计时）</p>
+    <h3 class="rh">📝 测试成绩</h3>
+    ${(()=>{ const rows=Object.entries(S.exams||{}).flatMap(([id,rs])=>{const ex=findExam(id);return ex?rs.map(r=>({...r,ex})):[];}).sort((a,b)=>b.at-a.at).slice(0,12);
+      return rows.length?`<table class="extable"><tr><th>日期</th><th>测试</th><th>分数</th><th>用时</th></tr>${rows.map(r=>`<tr><td>${r.d.slice(5)}</td><td>${GRADES[r.ex.g][0]} ${SUBJ[r.ex.subj][0]} ${r.ex.name}</td><td><b>${r.sc}</b> ${rateOf(r.sc)[0]}</td><td>${Math.floor(r.secs/60)}分${r.secs%60}秒</td></tr>`).join("")}</table>`:`<p class="note">还没有考过试。闯关地图里每个年级都有「期中测试」和「期末测试」。</p>`; })()}
     <h3 class="rh">错题本 · 常错的</h3>
     ${weak.length||mweak?`<div class="wklist">${weak.map(([k])=>weakLabel(k)).join("")}${mweak}</div><div class="btnrow"><button class="btn say" id="wkGo">练一练错题</button></div><div class="stage" id="wkStage" hidden></div>`:`<p class="note">还没有错题记录，继续闯关吧！</p>`}`;
   const g=$("#wkGo"); if(g) g.onclick=()=>{
