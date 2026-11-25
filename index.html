@@ -647,7 +647,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.24-1807</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.24-1826</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -2829,27 +2829,32 @@ function audioItems(){
   DATA3.saga.map(x=>sagaCh(x.n)).forEach(s=>{ L.push([`saga:${s.n}:zh`,`豆豆的冒险 第${s.n}章 · ${s.title[0]}`,s.zh.map(plain).join("")]); L.push([`saga:${s.n}:en`,`Doudou ch.${s.n} · ${s.title[1]}`,s.en.join(" ")]); });
   return L;
 }
-let mrec=null, mchunks=[];
-function renderRecorder(){
+let mrec=null, mchunks=[], recSel="";
+function renderRecorder(msg){
   const el=$("#famRec"); if(!el) return; const items=audioItems();
   el.innerHTML=`<div class="row"><label for="frSel">选一篇</label><select id="frSel">${items.map(i=>`<option value="${i[0]}">${AUD.has(i[0])?"✅ ":""}${esc(i[1])}</option>`).join("")}</select></div>
     <div class="row"><label for="frWho">谁来读</label><input type="text" id="frWho" placeholder="妈妈 / 爸爸 / 奶奶" value="${esc(S.lastWho||"")}" style="width:160px"></div>
     <pre class="frText" id="frText"></pre>
     <div class="btnrow"><button class="btn write" id="frRec">● 开始录音</button><button class="btn" id="frStop" disabled>■ 停止</button><button class="btn" id="frPlay">▶ 试听</button><button class="btn" id="frDel">🗑 删除</button>
     <label class="btn" for="frFile">📁 上传音频</label><input type="file" id="frFile" accept="audio/*" hidden></div>
-    <p class="note" id="frMsg">录好以后，孩子在这篇故事或诗歌旁边会看到“🎙️ 听妈妈读”。远方的家人可以用手机录好发过来，存到“文件”里再上传。录音只存在这台设备上。</p>`;
-  const sel=$("#frSel"); const showText=()=>{ const it=items.find(i=>i[0]===sel.value); $("#frText").textContent=it?it[2]:""; }; sel.onchange=showText; showText();
+    <div id="frNow"></div>
+    <p class="note" id="frMsg">${msg||"点「开始录音」读下面这篇，读完点「停止」，<b>会自动保存</b>，不需要另外上传。孩子在这篇旁边会看到「🎙️ 听妈妈读」。远方的家人可以用手机录好发过来，存到「文件」里，再点「上传音频」。"}</p>
+    <p class="note">录音存在这台设备上。要带到另一台设备：在下面「同步到其他设备」里点「发送进度」，会一起带上录音。</p>`;
+  const sel=$("#frSel"); if(recSel&&items.some(i=>i[0]===recSel)) sel.value=recSel;
+  const showText=()=>{ recSel=sel.value; const it=items.find(i=>i[0]===sel.value); $("#frText").textContent=it?it[2]:"";
+    const now=$("#frNow"); now.innerHTML=""; if(AUD.has(sel.value)) audGet(sel.value).then(b=>{ if(b&&sel.value===recSel) now.innerHTML=`<div class="row"><span class="note">✅ 已保存（${esc((S.audWho||{})[sel.value]||"家人")}读）</span><audio controls src="${URL.createObjectURL(b)}" style="max-width:100%"></audio></div>`; }); };
+  sel.onchange=showText; showText();
   const who=()=>{ const w=$("#frWho").value.trim()||"家人"; S.lastWho=w; S.audWho=S.audWho||{}; S.audWho[sel.value]=w; save(); };
   $("#frRec").onclick=async()=>{
     try{ const st=await navigator.mediaDevices.getUserMedia({audio:true}); mchunks=[]; mrec=new MediaRecorder(st);
       mrec.ondataavailable=e=>{ if(e.data.size) mchunks.push(e.data); };
-      mrec.onstop=()=>{ st.getTracks().forEach(t=>t.stop()); const blob=new Blob(mchunks,{type:mrec.mimeType||"audio/mp4"}); who(); audPut(sel.value,blob).then(()=>{ $("#frMsg").textContent="✅ 录好了！"; renderRecorder(); }); };
+      mrec.onstop=()=>{ st.getTracks().forEach(t=>t.stop()); const blob=new Blob(mchunks,{type:mrec.mimeType||"audio/mp4"}); who(); const k=sel.value; if(blob.size<1500){ renderRecorder("⚠️ 没录到声音，请检查麦克风权限后再试一次。"); return; } audPut(k,blob).then(()=>{ recSel=k; renderRecorder("✅ 录好了，已经自动保存！下面可以直接播放听听。"); }).catch(()=>renderRecorder("保存失败了，请再试一次。")); };
       mrec.start(); $("#frRec").disabled=true; $("#frStop").disabled=false; $("#frMsg").textContent="🔴 正在录音……读完点“停止”";
     }catch(e){ $("#frMsg").textContent="这里打不开麦克风。请在 iPad 的汉宝宝 App 里录，或者点“上传音频”。"; } };
   $("#frStop").onclick=()=>{ if(mrec&&mrec.state==="recording") mrec.stop(); $("#frRec").disabled=false; $("#frStop").disabled=true; };
   $("#frPlay").onclick=()=>{ if(AUD.has(sel.value)) playFam(sel.value); else toast("这一篇还没有录音"); };
   $("#frDel").onclick=()=>{ if(!AUD.has(sel.value)){toast("这一篇还没有录音");return;} audDel(sel.value).then(()=>{toast("已删除");renderRecorder();}); };
-  $("#frFile").onchange=e=>{ const f=e.target.files[0]; if(!f) return; who(); audPut(sel.value,f).then(()=>{ $("#frMsg").textContent="✅ 上传好了！"; renderRecorder(); }); };
+  $("#frFile").onchange=e=>{ const f=e.target.files[0]; if(!f) return; const k=sel.value; who(); audPut(k,f).then(()=>{ recSel=k; renderRecorder("✅ 上传好了，已经保存！"); }); e.target.value=""; };
 }
 
 /* ---------- 豆豆的冒险 (saga unlocks with levels passed) ---------- */
@@ -2903,8 +2908,9 @@ const SYNC_SKIP=["voice","pin","extra","limitMin","limitWe","hours","breakMin","
 function syncPick(st){ const o={}; for(const k in st) if(!SYNC_SKIP.includes(k)) o[k]=st[k]; return o; }
 const b64e=u8=>{let b="";for(let i=0;i<u8.length;i+=8192)b+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(b);};
 const b64d=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
-async function packSync(){
-  const json=JSON.stringify({app:"hanbaobao",v:1,at:Date.now(),from:DEV,s:syncPick(S)});
+async function packAudio(){ const out={}; for(const k of AUD){ try{ const b=await audGet(k); if(b) out[k]=[b.type||"audio/mp4",b64e(new Uint8Array(await b.arrayBuffer()))]; }catch(e){} } return out; }
+async function packSync(withAudio){
+  const json=JSON.stringify({app:"hanbaobao",v:1,at:Date.now(),from:DEV,s:syncPick(S),...(withAudio&&AUD.size?{aud:await packAudio()}:{})});
   if(window.CompressionStream){ try{ const st=new Blob([json]).stream().pipeThrough(new CompressionStream("deflate-raw")); return "HB1Z:"+b64e(new Uint8Array(await new Response(st).arrayBuffer())); }catch(e){} }
   return "HB1J:"+b64e(new TextEncoder().encode(json));
 }
@@ -2918,8 +2924,9 @@ async function unpackSync(text){
 }
 function mergeState(a,b){
   const m={...a}, newer=(b.mt||0)>(a.mt||0)?b:a;
-  ["name","bday","start","custom","region","grade","ink","rate","mLang","mRange","unlockAll","audWho"].forEach(k=>{ if(newer[k]!==undefined) m[k]=newer[k]; });
+  ["name","bday","start","custom","region","grade","ink","rate","mLang","mRange","unlockAll"].forEach(k=>{ if(newer[k]!==undefined) m[k]=newer[k]; });
   m.onboarded=!!(a.onboarded||b.onboarded);
+  m.audWho={...(a.audWho||{}),...(b.audWho||{})};
   const maxMap=k=>{ const o={...(a[k]||{})}; for(const x in (b[k]||{})) o[x]=Math.max(o[x]||0,b[k][x]||0); m[k]=o; };
   ["lv","weak","mweak","sb"].forEach(maxMap);
   ["kh","kw","written","readDone","special"].forEach(k=>{ m[k]=[...new Set([...(a[k]||[]),...(b[k]||[])])]; });
@@ -2930,6 +2937,7 @@ function mergeState(a,b){
   return m;
 }
 const progSum=st=>`${st.name||"小朋友"} · ⭐ ${st.stars||0} · 过关 ${Object.keys(st.lv||{}).filter(k=>st.lv[k]>0).length} · 认识的字 ${(st.kh||[]).length}`;
+let pendingAud=null;
 function renderSync(){
   const el=$("#syncBox"); if(!el) return;
   el.innerHTML=`<p class="note">一个孩子在 iPad 和手机上都用时，用这里把进度带过去。两边都学过也没关系，会<b>合并</b>：过关、星星、认识的字都加在一起，不会互相覆盖。</p>
@@ -2940,7 +2948,7 @@ function renderSync(){
       <label class="btn" for="syFile" style="cursor:pointer">📥 打开进度文件</label><input type="file" id="syFile" accept=".json,.hbb,application/json,text/plain" hidden></div>
     <div class="row"><textarea id="syCode" rows="2" placeholder="或者把同步码粘贴到这里（以 HB1 开头）" style="flex:1;min-width:220px;font-size:14px"></textarea><button class="btn" id="syPaste">合并</button></div>
     <p class="note" id="syMsg">这台设备：${esc(progSum(S))}${S.lastSync?` · 上次同步 ${S.lastSync}`:""}</p><div id="syPrev"></div>`;
-  $("#syOut").onclick=async()=>{ const code=await packSync(); const name=`汉宝宝进度-${(S.name||"child").replace(/[\\/:*?"<>|\s]/g,"")}-${today()}.json`;
+  $("#syOut").onclick=async()=>{ const code=await packSync(true); const name=`汉宝宝进度-${(S.name||"child").replace(/[\\/:*?"<>|\s]/g,"")}-${today()}.json`;
     const file=new File([code],name,{type:"application/json"});
     try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:"汉宝宝进度"}); return; } }catch(e){ if(e&&e.name==="AbortError") return; }
     const a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000); toast("进度文件已保存"); };
@@ -2950,14 +2958,16 @@ function renderSync(){
   async function preview(text){
     let data; try{ data=await unpackSync(text); if(!data||data.app!=="hanbaobao"||!data.s) throw 0; }catch(e){ toast("这不是汉宝宝的进度，请检查一下"); return; }
     if(data.from===DEV&&(data.s.mt||0)<=(S.mt||0)){ toast("这是这台设备自己发出的进度，已经是最新的"); }
-    const merged=mergeState(S,data.s);
+    pendingAud=data.aud||null; const merged=mergeState(S,data.s);
     $("#syPrev").innerHTML=`<div class="tset"><h3>收到的进度</h3><p class="note">来自另一台设备（${new Date(data.at).toLocaleString()}）：${esc(progSum(data.s))}</p>
+      ${data.aud?`<p class="note">🎙️ 还带了 ${Object.keys(data.aud).length} 段家人录音，会一起保存。</p>`:""}
       <p class="note">这台设备现在：${esc(progSum(S))}</p><p class="note"><b>合并以后：${esc(progSum(merged))}</b></p>
       ${S.name&&data.s.name&&S.name!==data.s.name?`<p class="note" style="color:#D63B3B">⚠️ 名字不一样（${esc(S.name)} / ${esc(data.s.name)}），确定是同一个孩子吗？</p>`:""}
       <div class="row"><button class="btn say" id="syMerge">✓ 合并进度（推荐）</button><button class="btn" id="syReplace">用收到的替换这台</button><button class="btn" id="syCancel">取消</button></div></div>`;
     $("#syMerge").onclick=()=>apply(merged); $("#syReplace").onclick=()=>apply({...S,...data.s,sb:data.s.sb||{}}); $("#syCancel").onclick=()=>{$("#syPrev").innerHTML="";};
   }
-  function apply(st){ const keep={}; SYNC_SKIP.forEach(k=>{ if(S[k]!==undefined) keep[k]=S[k]; });
+  async function apply(st){ if(pendingAud){ for(const k in pendingAud){ try{ const [t,b]=pendingAud[k]; await audPut(k,new Blob([b64d(b)],{type:t})); }catch(e){} } }
+    const keep={}; SYNC_SKIP.forEach(k=>{ if(S[k]!==undefined) keep[k]=S[k]; });
     S={...FRESH,...st,...keep,lastSync:new Date().toLocaleString()}; if(!S.start) S.start={zh:1,en:1,math:1}; save(); toast("同步好了！"); setTimeout(()=>{location.hash="stars";location.reload();},700); }
 }
 /* ---------- several children on one device ---------- */
