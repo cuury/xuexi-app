@@ -210,6 +210,12 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .pzone.locked{display:none}
+.shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.reward{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px;border-radius:18px;background:var(--card);border:3px solid var(--line);opacity:.75}
+.reward.can{opacity:1;border-color:#F5B700;box-shadow:0 4px 0 #C99400;background:#FFFBEA}
+.reward .re{font-size:40px}.reward b{font-size:16px;text-align:center}.reward .rc{font-weight:800;color:#C99400;font-size:18px}.reward small{color:var(--muted)}
+.pendbox{grid-column:1/-1;background:#FFF1F1;border:2px dashed #FF9B9B;border-radius:14px;padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pendbox span{background:#fff;border-radius:999px;padding:3px 10px}
+.rdlog .row{border-bottom:1px solid var(--line);padding:4px 0}
 .examrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:4px 0 22px}
 .examcard{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:200px;padding:12px 16px;border-radius:18px;background:var(--card);border:3px solid #7B61FF;box-shadow:0 4px 0 #5B44D6}
 .examcard .ei{font-size:30px}.examcard b{font-size:17px}.examcard small{color:var(--muted)}
@@ -646,6 +652,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
   <section class="view" id="v-stars">
     <div class="sec-title"><h2>魔法贴纸</h2><span id="nextEgg">Magic stickers</span></div>
     <div class="stk" id="stickers"></div>
+    <div class="sec-title"><h2>🎁 星星兑换</h2><span id="shopLeft">Rewards</span></div>
+    <div class="shop" id="shop"></div>
     <div class="panel pgate" id="pGate"></div>
     <div id="parentZone" class="pzone locked">
     <div class="sec-title"><h2>学习报告</h2><span>For parents</span></div>
@@ -659,6 +667,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
     </div>
     <div class="sec-title"><h2>家人录音</h2><span>Family voices</span></div>
     <div class="panel" id="famRec"></div>
+    <div class="sec-title"><h2>🎁 兑换奖励设置</h2><span>Rewards</span></div>
+    <div class="panel" id="shopEdit"></div>
     <div class="sec-title"><h2>📲 同步到其他设备</h2><span>Phone ⇄ iPad</span></div>
     <div class="panel" id="syncBox"></div>
     <div class="sec-title"><h2>家长角</h2><span>Settings</span></div>
@@ -669,7 +679,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.24-1838</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.24-1843</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -877,11 +887,11 @@ function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF));}catch(e
 /* local calendar date (toISOString is UTC, which rolled the day over at 4–5 pm in Vancouver) */
 const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const today=()=>ymd(new Date());
-const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,sb:{},mt:0,exams:{},limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
+const FRESH={stars:0,day:today(),dayStars:0,dayHan:[],dayWord:[],dayGame:0,dayMath:0,kh:[],kw:[],name:"",rate:0.8,mRange:10,mLang:"zh",mathDone:0,grade:1,written:[],readDone:[],ink:"rainbow",lv:{},weak:{},unlockAll:false,log:{},start:null,sb:{},sp:{},shop:null,redeem:[],mt:0,exams:{},limitMin:30,limitWe:-1,hours:{on:false,from:"07:00",to:"20:30"},pin:"",breakMin:20,breakSec:120,bday:"",region:"",custom:{},mweak:{},special:[],audWho:{},readAlong:{},extra:{}};
 let S={...FRESH};
 try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
 if(!S.region){ let tz=""; try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch(e){} S.region=/^Asia\/(Shanghai|Chongqing|Harbin|Urumqi|Kashgar)$/.test(tz)?"cn":/^America\//.test(tz)?"ca":"cn"; }
-if(S.day!==today()){S.day=today();S.dayStars=0;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
+if(S.day!==today()){S.day=today();S.dayStars=0;S.dayQ=[];S.capTold=false;S.dayHan=[];S.dayWord=[];S.dayGame=0;S.dayMath=0;}
 function save(){try{S.mt=Date.now(); localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem("hb-pin",S.pin||"");
   const me=PROF.list.find(x=>x.id===PROF.cur); if(me&&me.name!==S.name){me.name=S.name;saveProf();}}catch(e){}}
 try{ const dp=localStorage.getItem("hb-pin"); if(dp!=null) S.pin=dp; }catch(e){}
@@ -969,15 +979,19 @@ $("#gradebar").onclick=e=>{
 };
 
 /* ================= STARS ================= */
-function addStar(n,el){
+/* Stars should mean effort, not grinding: at most DAY_CAP stars a day from practice (exams and birthdays don't count
+   toward it), and the same question answered again on the same day earns nothing (see runQuiz). */
+const DAY_CAP=()=>S.starCap||50;
+function addStar(n,el,bonus){
+  if(!bonus){ const room=DAY_CAP()-(S.dayStars||0); if(room<=0){ if(!S.capTold){ S.capTold=true; save(); toast(`今天的 ${DAY_CAP()} 颗星攒满啦！继续练习会更厉害，明天再来拿星星～`); } return; } n=Math.min(n,room); }
   const before=Math.floor(S.stars/10);
-  S.sb[DEV]=(S.sb[DEV]||0)+n; S.stars=Object.values(S.sb).reduce((a,x)=>a+x,0); S.dayStars+=n; try{dayLog().stars+=n;}catch(e){} save(); refreshTop();
+  S.sb[DEV]=(S.sb[DEV]||0)+n; S.stars=Object.values(S.sb).reduce((a,x)=>a+x,0); if(!bonus) S.dayStars+=n; try{dayLog().stars+=n;}catch(e){} save(); refreshTop();
   if(el){const r=el.getBoundingClientRect();const f=document.createElement("div");f.className="fly";f.textContent="⭐";f.style.left=(r.left+r.width/2-20)+"px";f.style.top=(r.top)+"px";document.body.appendChild(f);setTimeout(()=>f.remove(),900);}
   const now=Math.floor(S.stars/10);
   if(now>before && now<=STICKERS.length){const s=STICKERS[now-1];toast(`新贴纸：${s[0]} ${s[1]}！`);}
 }
 function refreshTop(){
-  $("#starTotal").textContent=S.stars;
+  $("#starTotal").textContent=starsLeft(); $("#starTotal").title=`一共得到 ${S.stars} ⭐，已兑换 ${starsSpent()} ⭐`;
   $("#tStars").textContent=S.dayStars; $("#tHan").textContent=S.kh.length; $("#tWord").textContent=S.kw.length;
   $("#helloName").textContent=`你好，${S.name||"小朋友"}！Hello!`;
   document.title="汉宝宝 Hanbaobao";
@@ -1015,7 +1029,7 @@ function runQuiz(el,gen,{lang,onDone,onFirst,total=10,onMiss,finish}){
       const b=e.target.closest(".opt"); if(!b||st.lock)return;
       if(b.dataset.v===String(g.ans)){
         b.classList.add("right"); st.lock=true; st.ok[st.q]=st.first;
-        if(st.first){addStar(1,b); onFirst&&onFirst(g);}
+        if(st.first){ const sig=(g.key||"")+"|"+g.zh+"|"+g.ans; S.dayQ=S.dayQ||[]; if(!S.dayQ.includes(sig)){ S.dayQ.push(sig); if(S.dayQ.length>400) S.dayQ.shift(); addStar(1,b); } onFirst&&onFirst(g); }
         if(g.after) g.after();
         setTimeout(()=>{st.q++;next();},g.after?1300:850);
       }else{
@@ -1566,7 +1580,49 @@ $("#v-math").addEventListener("click",e=>{
 });
 
 /* ================= STICKERS & PARENTS ================= */
+/* ---------- 星星兑换: parents set real-life rewards; spending needs a parent to confirm.
+   Stickers still count every star ever earned, so spending never takes a sticker away. ---------- */
+const SHOP_DEFAULT=[["🎬","看一集动画片",30],["🍦","一个小零食",40],["🎲","和爸爸妈妈玩一个游戏",40],["🍽️","选一次晚饭吃什么",60],["🛝","去公园 / 游乐场玩",120],["📚","买一本新书",200],["🧸","一个小玩具",300]];
+const shopList=()=>{ if(!Array.isArray(S.shop)) S.shop=SHOP_DEFAULT.map(([e,n,c],i)=>({id:"r"+i,e,n,c})); return S.shop; };
+if(!S.shopInit){ S.shopInit=true; S.sp=S.sp||{}; if((S.stars||0)>100) S.sp.open=(S.stars||0)-100; }
+const starsSpent=()=>Object.values(S.sp||{}).reduce((a,x)=>a+x,0);
+const starsLeft=()=>Math.max(0,(S.stars||0)-starsSpent());
+function renderShop(){
+  const el=$("#shop"); if(!el) return; const left=starsLeft();
+  $("#shopLeft").textContent=`可以用 ${left} ⭐ · 一共得到 ${S.stars} ⭐`;
+  const pend=(S.redeem||[]).filter(r=>!r.done);
+  el.innerHTML=shopList().map(r=>`<button class="reward ${left>=r.c?"can":""}" data-r="${r.id}"><span class="re">${esc(r.e)}</span><b>${esc(r.n)}</b><span class="rc">${r.c} ⭐</span><small>${left>=r.c?"可以兑换！":`还差 ${r.c-left} ⭐`}</small></button>`).join("")
+    +(pend.length?`<div class="pendbox">🎁 等爸爸妈妈兑现：${pend.map(r=>`<span>${esc(r.e)} ${esc(r.n)}</span>`).join("")}</div>`:"");
+  el.onclick=e=>{ const b=e.target.closest("[data-r]"); if(!b) return; const r=shopList().find(x=>x.id===b.dataset.r); if(!r) return;
+    if(starsLeft()<r.c){ toast(`还差 ${r.c-starsLeft()} 颗星，继续加油！`); say(`还差${r.c-starsLeft()}颗星，继续加油！`,"zh"); return; }
+    showOverlay(`<div class="ovicon">${esc(r.e)}</div><h2>用 ${r.c} ⭐ 兑换「${esc(r.n)}」？</h2><p>兑换以后还剩 ${starsLeft()-r.c} ⭐。贴纸不会减少哦！</p><p class="men">请爸爸妈妈确认 · Ask a parent to confirm</p>
+      <div class="ovparent" id="ovPar"></div><div class="btnrow" style="justify-content:center"><button class="btn" id="rdNo">先不换</button></div>`);
+    say(`要用${r.c}颗星，兑换${r.n}吗？请爸爸妈妈确认`,"zh");
+    $("#rdNo").onclick=hideOverlay;
+    pinBox($("#ovPar"),()=>{ S.sp=S.sp||{}; S.sp[DEV]=(S.sp[DEV]||0)+r.c; S.redeem=S.redeem||[]; S.redeem.push({at:Date.now(),d:today(),e:r.e,n:r.n,c:r.c,done:false}); S.redeem=S.redeem.slice(-60); save(); refreshTop();
+      showOverlay(`<div class="ovicon">🎉</div><h2>兑换成功！</h2><p>「${esc(r.e)} ${esc(r.n)}」<br>记得找爸爸妈妈领奖励哦！</p><div class="btnrow" style="justify-content:center"><button class="btn say" id="rdOk">好的 ✓</button></div>`);
+      say(`兑换成功！${r.n}`,"zh"); $("#rdOk").onclick=()=>{hideOverlay();renderShop();}; },"家长确认兑换");
+  };
+}
+function renderShopEdit(){
+  const el=$("#shopEdit"); if(!el) return; const L=shopList(), log=(S.redeem||[]).slice().reverse();
+  el.innerHTML=`<p class="note">孩子用星星兑换这些奖励，兑换时要输入家长密码确认。每答对一题 1 颗星；<b>同一道题一天里只算一次</b>，练习每天最多得 <b>${DAY_CAP()}</b> 颗（考试进步、生日另算）。贴纸按「一共得到的星星」算，兑换不会让贴纸变少。</p>
+    <div class="row"><label for="seCap">每天最多得</label><select id="seCap">${[20,30,40,50,60,80,100].map(v=>`<option value="${v}" ${DAY_CAP()===v?"selected":""}>${v} ⭐</option>`).join("")}</select>
+      <label for="seBal" style="min-width:auto">现在可兑换</label><input type="number" id="seBal" min="0" max="${S.stars}" value="${starsLeft()}" style="width:90px"> ⭐ <button class="btn" id="seBalOk">修改余额</button><span class="note">（一共得到 ${S.stars} ⭐）</span></div>
+    <div class="shopedit">${L.map(r=>`<div class="row" data-id="${r.id}"><input class="se-e" value="${esc(r.e)}" maxlength="4" style="width:56px;text-align:center"><input class="se-n" value="${esc(r.n)}" maxlength="20" style="flex:1;min-width:140px"><input class="se-c" type="number" min="1" max="9999" value="${r.c}" style="width:80px"> ⭐<button class="linkbtn se-del">删除</button></div>`).join("")}</div>
+    <div class="row"><button class="btn" id="seAdd">➕ 添加奖励</button><button class="btn say" id="seSave">保存</button><button class="linkbtn" id="seReset">恢复默认</button></div>
+    <h3 class="rh">兑换记录</h3>${log.length?`<div class="rdlog">${log.slice(0,20).map(r=>`<div class="row"><span>${r.d.slice(5)}</span><span style="flex:1">${esc(r.e)} ${esc(r.n)}（${r.c} ⭐）</span>${r.done?`<span class="note">✓ 已兑现</span>`:`<button class="btn" data-done="${r.at}">标记已兑现</button>`}</div>`).join("")}</div>`:`<p class="note">还没有兑换过。</p>`}`;
+  const collect=()=>[...el.querySelectorAll(".shopedit [data-id]")].map(row=>({id:row.dataset.id,e:row.querySelector(".se-e").value.trim()||"🎁",n:row.querySelector(".se-n").value.trim(),c:Math.max(1,Math.round(+row.querySelector(".se-c").value||1))})).filter(r=>r.n);
+  el.querySelector(".shopedit").onclick=e=>{ const d=e.target.closest(".se-del"); if(d){ d.closest("[data-id]").remove(); } };
+  $("#seCap").onchange=e=>{ S.starCap=+e.target.value; save(); renderShopEdit(); };
+  $("#seBalOk").onclick=()=>{ const v=Math.max(0,Math.min(S.stars,Math.round(+$("#seBal").value||0))); const other=starsSpent()-(S.sp.open||0); S.sp.open=Math.max(0,S.stars-v-other); save(); refreshTop(); renderShop(); renderShopEdit(); toast(`可兑换星星改为 ${starsLeft()} ⭐`); };
+  $("#seAdd").onclick=()=>{ S.shop=[...collect(),{id:"r"+Date.now().toString(36),e:"🎁",n:"新奖励",c:50}]; renderShopEdit(); };
+  $("#seSave").onclick=()=>{ S.shop=collect().sort((a,b)=>a.c-b.c); save(); renderShop(); renderShopEdit(); toast("奖励已保存"); };
+  $("#seReset").onclick=()=>{ S.shop=null; shopList(); save(); renderShop(); renderShopEdit(); };
+  el.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{ const r=S.redeem.find(x=>String(x.at)===b.dataset.done); if(r){ r.done=true; save(); renderShop(); renderShopEdit(); } });
+}
 function renderStars(){
+  renderShop();
   const got=Math.floor(S.stars/10);
   $("#stickers").innerHTML=(S.special||[]).map(k=>`<div class="st got special"><div class="e">${k.slice(0,2)}</div><small>${k.slice(2)} 生日贴纸</small></div>`).join("")+STICKERS.map((s,i)=>`<div class="st ${i<got?"got":""}"><div class="e">${s[0]}</div><small>${i<got?s[1]+" · "+s[2]:"还需 "+((i+1)*10-S.stars)+" ⭐"}</small></div>`).join("");
   $("#nextEgg").textContent = got<STICKERS.length ? `再得 ${10-S.stars%10} 颗星，孵出下一只` : "全部集齐！All collected!";
@@ -2402,17 +2458,17 @@ function runExam(ex){
       else if(q.key&&q.key.startsWith("m:")){ const kk=q.key.slice(2); S.mweak=S.mweak||{}; S.mweak[kk]=(S.mweak[kk]||0)+1; } });
     const prevBest=examBest(ex.id);
     S.exams=S.exams||{}; (S.exams[ex.id]=S.exams[ex.id]||[]).push({at:Date.now(),d:today(),sc,n,of:qs.length,secs}); S.exams[ex.id]=S.exams[ex.id].slice(-10); save();
-    const [rz,re]=rateOf(sc), stars=sc>=90?10:sc>=75?6:sc>=60?3:1;
+    const rs=x=>x>=90?10:x>=75?6:x>=60?3:x>=0?1:0, [rz,re]=rateOf(sc), stars=Math.max(0,rs(sc)-rs(prevBest));
     box.innerHTML=`<div class="examhead"><b>📝 ${GRADES[ex.g][0]} ${SUBJ[ex.subj][0]} · ${ex.name} · 成绩</b></div>
       <div class="exscore ${sc>=90?"gold":""}"><div class="big">${sc}<small> 分</small></div><div class="rate">${rz} <small>${re}</small></div>
         <p>答对 ${n} / ${qs.length} 题 · 用时 ${mmss(secs)}${prevBest>=0?` · ${sc>prevBest?`比上次最好成绩高 ${sc-prevBest} 分！🎉`:`最好成绩 ${prevBest} 分`}`:""}</p>
-        <p class="note">得到 ${stars} ⭐</p></div>
+        <p class="note">${stars?`得到 ${stars} ⭐`:"考出更高的等级才会再得星星哦"}</p></div>
       <div class="btnrow" style="justify-content:center">${sc>=90?`<button class="btn say big" id="exCert">📜 看奖状</button>`:""}<button class="btn" id="exAgain">再考一次</button><button class="btn" id="exBack">返回地图</button></div>
       <h3 class="rh">试卷讲评 · ${n===qs.length?"全部答对！":`错了 ${qs.length-n} 题`}</h3>
       <div class="review">${qs.map((q,k)=>`<div class="rv ${right[k]?"ok":"bad"}"><span class="rn">${k+1}</span><div><p>${esc(q.zh)} <small>${esc(q.en)}</small></p>${!right[k]&&q.vis&&q.vis.length<1500?`<div class="rvvis">${q.vis}</div>`:""}
         <p>${right[k]?`✓ <b>${esc(q.ans)}</b>`:`✗ 你选了 <s>${esc(ans[k]??"没做")}</s> → 正确答案 <b>${esc(q.ans)}</b>`}</p></div>${!right[k]&&q.speak?`<button class="btn" data-rs="${k}">🔊</button>`:""}</div>`).join("")}</div>
       ${n<qs.length?`<p class="note">错的题已经放进家长区的「错题本」，可以在那里专门练。</p>`:""}`;
-    addStar(stars,$(".exscore"));
+    if(stars) addStar(stars,$(".exscore"),true);
     say(sc>=90?`${sc}分，太棒了！`:sc>=60?`${sc}分，不错哦！`:`${sc}分，我们再练练吧！`,"zh");
     box.querySelector(".review").onclick=e=>{ const b=e.target.closest("[data-rs]"); if(b) qs[+b.dataset.rs].speak(); };
     const c=$("#exCert"); if(c) c.onclick=()=>showCert(ex,sc);
@@ -2756,7 +2812,7 @@ function renderPGate(){ const g=$("#pGate"), z=$("#parentZone"); if(!g) return;
   z.classList.toggle("locked",!parentOpen);
   if(parentOpen){ g.innerHTML=`<b>🔓 家长区已打开</b><span class="note">离开这一页或 10 分钟后自动锁上</span><button class="btn" id="pLock">锁上</button>`; $("#pLock").onclick=()=>{parentOpen=false;renderPGate();}; return; }
   g.innerHTML=`<b>🔒 家长区</b><span class="note">学习报告、每天使用时间、设置 · For parents</span><div id="pGateIn" style="flex-basis:100%"></div>`;
-  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); voiceInfo(); });
+  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); voiceInfo(); renderShopEdit(); });
 }
 const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
@@ -2815,7 +2871,7 @@ function showBirthday(preview){
   const read=()=>sayChain([{text:`生日快乐，${name}！`,lang:"zh",pause:400},...B.zh.map(l=>({text:plain(l),lang:"zh",pause:350})),...B.en.map(l=>({text:l,lang:"en",pause:250}))]);
   $("#bdRead").onclick=read; setTimeout(read,600);
   $("#bdGift").onclick=()=>{ S.bdayDone=S.bdayDone||{}; const first=!S.bdayDone[yr];
-    if(!preview&&first){ S.bdayDone[yr]=true; S.special=S.special||[]; if(!S.special.includes("🎂"+yr)) S.special.push("🎂"+yr); addStar(6,$("#bdGift")); save(); toast("得到生日贴纸 🎂 和 6 颗星！"); }
+    if(!preview&&first){ S.bdayDone[yr]=true; S.special=S.special||[]; if(!S.special.includes("🎂"+yr)) S.special.push("🎂"+yr); addStar(6,$("#bdGift"),true); save(); toast("得到生日贴纸 🎂 和 6 颗星！"); }
     stopChain(); hideOverlay(); };
 }
 
@@ -3024,7 +3080,7 @@ function renderSaga(){
 
 /* ---------- first run: whose app is this? ---------- */
 /* ---------- move / merge one child's progress between devices (no server needed) ---------- */
-const SYNC_SKIP=["voice","pin","extra","limitMin","limitWe","hours","breakMin","breakSec","day","dayStars","dayHan","dayWord","dayGame","dayMath","lastSync"];
+const SYNC_SKIP=["dayQ","capTold","voice","pin","extra","limitMin","limitWe","hours","breakMin","breakSec","day","dayStars","dayHan","dayWord","dayGame","dayMath","lastSync"];
 function syncPick(st){ const o={}; for(const k in st) if(!SYNC_SKIP.includes(k)) o[k]=st[k]; return o; }
 const b64e=u8=>{let b="";for(let i=0;i<u8.length;i+=8192)b+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(b);};
 const b64d=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
@@ -3049,7 +3105,9 @@ function mergeState(a,b){
   m.audWho={...(a.audWho||{}),...(b.audWho||{})};
   m.exams={...(a.exams||{})}; for(const id in (b.exams||{})){ const seen=new Set((m.exams[id]||[]).map(r=>r.at)); m.exams[id]=[...(m.exams[id]||[]),...b.exams[id].filter(r=>!seen.has(r.at))].sort((x,y)=>x.at-y.at).slice(-10); }
   const maxMap=k=>{ const o={...(a[k]||{})}; for(const x in (b[k]||{})) o[x]=Math.max(o[x]||0,b[k][x]||0); m[k]=o; };
-  ["lv","weak","mweak","sb"].forEach(maxMap);
+  ["lv","weak","mweak","sb","sp"].forEach(maxMap);
+  const rs=new Map(); [...(a.redeem||[]),...(b.redeem||[])].forEach(r=>{ const o=rs.get(r.at); rs.set(r.at,o?{...o,done:o.done||r.done}:r); }); m.redeem=[...rs.values()].sort((x,y)=>x.at-y.at).slice(-60);
+  m.shop=newer.shop||a.shop||b.shop;
   ["kh","kw","written","readDone","special"].forEach(k=>{ m[k]=[...new Set([...(a[k]||[]),...(b[k]||[])])]; });
   m.stars=Object.values(m.sb).reduce((s,x)=>s+x,0)||Math.max(a.stars||0,b.stars||0);
   m.mathDone=Math.max(a.mathDone||0,b.mathDone||0);
