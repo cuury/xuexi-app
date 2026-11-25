@@ -646,10 +646,10 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="kidName">孩子的名字</label><input type="text" id="kidName" placeholder="例如：朵朵 / Emma"></div>
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
-      <p class="note" id="voiceInfo"></p>
-      <p class="note">版本 Version：<b id="appVer">2026.11.22-2128</b></p>
+      <div class="note" id="voiceInfo"></div>
+      <p class="note">版本 Version：<b id="appVer">2026.11.24-1807</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
-      进度保存在这台设备的浏览器里，换设备不会同步。没有中文声音时：iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音，下载“中文（中国大陆）”；Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
+      进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
       <div class="row"><button class="btn" id="resetBtn">清空进度</button><span class="note" id="resetNote"></span></div>
     </div>
@@ -877,16 +877,38 @@ let tt; function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("o
 
 /* ================= SPEECH ================= */
 let voices=[];
+/* iPad / iPhone list joke voices (Bad News, Bells, Zarvox…) and robotic "Eloquence" voices (Eddy, Flo, Grandma…)
+   alphabetically first, so "first English voice" often sounded strange. Rank voices instead; parents can override. */
+const NOVELTY=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|junior|organ|pipe organ|ralph|superstar|trinoids|whisper|wobble|zarvox|fred|kathy|princess|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+const GOOD={zh:["tingting","婷婷","lili","莉莉","yu-shu","语舒","shanshan","珊珊","lilian","li-mu","xiaoxiao","晓晓","google 普通话","microsoft xiaoxiao","microsoft huihui"],
+            en:["ava","samantha","allison","zoe","susan","nicky","evan","nathan","joelle","google us english","microsoft aria","microsoft jenny","microsoft ana","karen","daniel","moira"]};
+const normL=v=>v.lang.replace("_","-").toLowerCase();
+function voiceScore(v,lang){
+  const n=(v.name||"").toLowerCase(), uri=(v.voiceURI||"").toLowerCase(), l=normL(v); let sc=0;
+  if(lang==="zh"){ if(!l.startsWith("zh")&&!l.startsWith("cmn")) return -1; if(/hk|yue/.test(l)) return -1; sc+=l==="zh-cn"||l.startsWith("cmn")?30:/tw/.test(l)?5:15; }
+  else { if(!l.startsWith("en")) return -1; sc+=l==="en-us"||l==="en-ca"?30:l==="en-gb"||l==="en-au"?20:10; }
+  if(NOVELTY.test(n)||/eloquence|speech\.synthesis\.voice\.(?!.*premium)/.test(uri)&&NOVELTY.test(n)) return 0;
+  if(/premium|高级|优化音质/.test(n+uri)) sc+=60; else if(/enhanced|增强|neural|natural|online/.test(n+uri)) sc+=45;
+  if(/compact|紧凑/.test(n+uri)) sc-=10;
+  const gi=GOOD[lang].findIndex(g=>n.includes(g)); if(gi>=0) sc+=40-gi;
+  if(v.localService===false) sc+=5;
+  return sc;
+}
+function rankVoices(lang){ return voices.map(v=>[v,voiceScore(v,lang)]).filter(x=>x[1]>=0).sort((a,b)=>b[1]-a[1]).map(x=>x[0]); }
 function pickVoice(lang){
-  const norm=v=>v.lang.replace("_","-").toLowerCase();
-  if(lang==="zh"){return voices.find(v=>norm(v)==="zh-cn")||voices.find(v=>norm(v).startsWith("zh")&&!/hk|tw/.test(norm(v)))||voices.find(v=>norm(v).startsWith("zh"));}
-  return voices.find(v=>norm(v)==="en-ca")||voices.find(v=>norm(v)==="en-us")||voices.find(v=>norm(v).startsWith("en"));
+  const want=(S.voice||{})[lang]; if(want){ const v=voices.find(v=>v.voiceURI===want||v.name===want); if(v) return v; }
+  return rankVoices(lang)[0];
 }
 function voiceInfo(){
   const el=document.getElementById("voiceInfo"); if(!el)return;
   if(!('speechSynthesis' in window)){el.textContent="这个浏览器不支持朗读。";return;}
   const zh=pickVoice("zh"), en=pickVoice("en");
-  el.textContent=`中文声音：${zh?zh.name:"没找到（见下方说明）"} · English voice: ${en?en.name:"not found"}`;
+  const opt=lang=>rankVoices(lang).filter(v=>voiceScore(v,lang)>0).slice(0,12).map(v=>`<option value="${esc(v.voiceURI)}" ${pickVoice(lang)===v?"selected":""}>${esc(v.name)}${/premium|高级/i.test(v.name+v.voiceURI)?" ★★":/enhanced|增强|neural|natural/i.test(v.name+v.voiceURI)?" ★":""} (${v.lang})</option>`).join("");
+  el.innerHTML=`<span class="row" style="margin:4px 0"><label for="vZh" style="min-width:auto">中文声音</label><select id="vZh">${opt("zh")||"<option>没找到</option>"}</select>
+    <label for="vEn" style="min-width:auto">English voice</label><select id="vEn">${opt("en")||"<option>not found</option>"}</select></span>
+    ${!/premium|enhanced|高级|增强|neural|natural|google|microsoft/i.test(((zh&&zh.name+zh.voiceURI)||"")+((en&&en.name+en.voiceURI)||""))?`<span style="color:#D63B3B">💡 声音听着像机器人？iPad/iPhone 可以免费下载高质量声音，见下方说明。</span>`:"带 ★ 的是高质量声音。"}`;
+  const ch=(lang,e)=>{ S.voice=S.voice||{}; S.voice[lang]=e.target.value; save(); say(lang==="zh"?"你好，我们一起读书吧！":"Hello! Let's read together.",lang); };
+  const a=el.querySelector("#vZh"), b=el.querySelector("#vEn"); if(a) a.onchange=e=>ch("zh",e); if(b) b.onchange=e=>ch("en",e);
 }
 function loadVoices(){ if('speechSynthesis' in window){voices=speechSynthesis.getVoices();} voiceInfo(); }
 if('speechSynthesis' in window){loadVoices(); speechSynthesis.onvoiceschanged=loadVoices;}
@@ -2614,7 +2636,7 @@ function renderPGate(){ const g=$("#pGate"), z=$("#parentZone"); if(!g) return;
   z.classList.toggle("locked",!parentOpen);
   if(parentOpen){ g.innerHTML=`<b>🔓 家长区已打开</b><span class="note">离开这一页或 10 分钟后自动锁上</span><button class="btn" id="pLock">锁上</button>`; $("#pLock").onclick=()=>{parentOpen=false;renderPGate();}; return; }
   g.innerHTML=`<b>🔒 家长区</b><span class="note">学习报告、每天使用时间、设置 · For parents</span><div id="pGateIn" style="flex-basis:100%"></div>`;
-  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); });
+  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); voiceInfo(); });
 }
 const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
@@ -2877,7 +2899,7 @@ function renderSaga(){
 
 /* ---------- first run: whose app is this? ---------- */
 /* ---------- move / merge one child's progress between devices (no server needed) ---------- */
-const SYNC_SKIP=["pin","extra","limitMin","limitWe","hours","breakMin","breakSec","day","dayStars","dayHan","dayWord","dayGame","dayMath","lastSync"];
+const SYNC_SKIP=["voice","pin","extra","limitMin","limitWe","hours","breakMin","breakSec","day","dayStars","dayHan","dayWord","dayGame","dayMath","lastSync"];
 function syncPick(st){ const o={}; for(const k in st) if(!SYNC_SKIP.includes(k)) o[k]=st[k]; return o; }
 const b64e=u8=>{let b="";for(let i=0;i<u8.length;i+=8192)b+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(b);};
 const b64d=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
