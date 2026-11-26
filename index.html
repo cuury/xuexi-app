@@ -692,7 +692,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.25-1944</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.25-1949</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -2479,11 +2479,13 @@ function renderPlan(){
 const weekKey=(d=new Date())=>{ const x=new Date(d); const w=(x.getDay()+6)%7; x.setDate(x.getDate()-w); return ymd(x); };
 const weekDays=wk=>Array.from({length:7},(_,i)=>{ const x=new Date(wk+"T12:00:00"); x.setDate(x.getDate()+i); return ymd(x); });
 function weekProg(wk=weekKey()){
-  const days=weekDays(wk), G=S.goals; const studied=days.filter(d=>((S.log||{})[d]||{}).sec>=300).length;
+  const days=weekDays(wk), G=S.goals, P=S.plan, need=P&&P.on?Math.max(5,["zh","en","math"].reduce((a,k)=>a+(P.min[k]||0),0)):5;
+  /* a day counts when the day's planned minutes were reached (30 min = 中文10 + English10 + 数学10) */
+  const studied=days.filter(d=>((S.log||{})[d]||{}).sec>=need*60-30).length;
   const lv={}; ["zh","en","math"].forEach(k=>{ lv[k]=days.reduce((a,d)=>a+((((S.log||{})[d]||{}).lvs||{})[k]||0),0); });
   const test={}; ["zh","en","math"].forEach(k=>{ test[k]=examBest(`${k}-wk-${wk}`); });
   const ok=studied>=G.days&&["zh","en","math"].every(k=>lv[k]>=(G.lv[k]||0)&&(!(G.test>0)||test[k]>=G.test));
-  return {wk,days,studied,lv,test,ok};
+  return {wk,days,studied,lv,test,ok,need};
 }
 function weeklyExam(subj,wk=weekKey()){
   const days=weekDays(wk), L=LEVELS[subj].filter(x=>x.type!=="boss"&&EXAM_OK.includes(x.type));
@@ -2505,7 +2507,7 @@ function renderGoals(){
   if(!G||!G.on){ el.hidden=true; return; } el.hidden=false; const p=weekProg(), left=7-p.days.indexOf(today());
   const bar=(a,b)=>`<span class="gbar"><i style="width:${Math.min(100,Math.round(a/Math.max(1,b)*100))}%"></i></span>`;
   el.innerHTML=`<div class="goalcard ${p.ok?"ok":""}"><div class="ghead"><b>🎯 本周目标</b><small>${p.days[0].slice(5)} – ${p.days[6].slice(5)} · 还剩 ${left} 天${p.ok?" · ✅ 全部完成！":""}</small></div>
-    <div class="grow"><span>📅 学习天数</span>${bar(p.studied,G.days)}<b>${p.studied}/${G.days} 天</b></div>
+    <div class="grow"><span>📅 学满天数</span>${bar(p.studied,G.days)}<b>${p.studied}/${G.days} 天</b><small class="note">每天学满 ${p.need} 分钟算一天</small></div>
     ${["zh","en","math"].map(k=>`<div class="grow"><span>${SUBJ[k][0]}</span>${G.lv[k]>0?`${bar(p.lv[k],G.lv[k])}<b>闯关 ${Math.min(p.lv[k],G.lv[k])}/${G.lv[k]}</b>`:"<b></b>"}
       ${G.test>0?`<button class="btn wkt ${p.test[k]>=G.test?"done":""}" data-wk="${k}">📝 周测 ${p.test[k]>=0?`${p.test[k]} 分${p.test[k]>=G.test?" ✓":""}`:`目标 ${G.test} 分`}</button>`:""}</div>`).join("")}</div>`;
   el.onclick=e=>{ const b=e.target.closest("[data-wk]"); if(!b) return; const k=b.dataset.wk; if(!planAllowed(k)){ planBlock(k); return; } qSubj=k; examIntro(weeklyExam(k)); };
