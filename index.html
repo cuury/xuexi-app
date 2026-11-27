@@ -692,7 +692,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.25-1949</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.26-1940</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -825,6 +825,16 @@ const SHENG = [["b","爸","bà"],["p","爬","pá"],["m","妈","mā"],["f","飞",
 const YUN = [["a","啊","ā"],["o","哦","ō"],["e","鹅","é"],["i","衣","yī"],["u","乌","wū"],["ü","鱼","yú"],["ai","爱","ài"],["ei","杯","bēi"],["ui","水","shuǐ"],
  ["ao","猫","māo"],["ou","狗","gǒu"],["iu","牛","niú"],["ie","叶","yè"],["üe","月","yuè"],["er","耳","ěr"],["an","山","shān"],["en","门","mén"],["in","林","lín"],
  ["un","春","chūn"],["ün","云","yún"],["ang","羊","yáng"],["eng","风","fēng"],["ing","星","xīng"],["ong","红","hóng"]];
+/* How the sound itself is read in class (呼读音 for initials, 本音 for finals). TTS can only read characters,
+   so each sound is voiced through a character that is pronounced exactly (or as closely as possible) like it. */
+const PYREAD={b:["玻","bō"],p:["坡","pō"],m:["摸","mō"],f:["佛","fó"],d:["得","dē"],t:["特","tè"],n:["讷","nè"],l:["勒","lè"],g:["哥","gē"],k:["科","kē"],h:["喝","hē"],
+ j:["基","jī"],q:["欺","qī"],x:["希","xī"],zh:["知","zhī"],ch:["吃","chī"],sh:["诗","shī"],r:["日","rì"],z:["资","zī"],c:["疵","cī"],s:["思","sī"],y:["衣","yī"],w:["乌","wū"],
+ a:["啊","ā"],o:["喔","ō"],e:["婀","ē"],i:["衣","ī"],u:["乌","ū"],"ü":["迂","ǖ"],ai:["哀","āi"],ei:["诶","ēi"],ui:["威","uī"],ao:["凹","āo"],ou:["欧","ōu"],iu:["优","iū"],
+ ie:["耶","iē"],"üe":["约","üē"],er:["儿","ér"],an:["安","ān"],en:["恩","ēn"],in:["因","īn"],un:["温","ūn"],"ün":["晕","ǖn"],ang:["肮","āng"],eng:["鞥","ēng"],ing:["英","īng"],ong:["翁","ōng"]};
+/* the second item is what is shown: initials with their 呼读音 syllable, finals as the final itself in first tone (as in the textbook) */
+const pyRead=sym=>PYREAD[sym]||[sym,sym];
+/* say the sound first, then the example character: "ai … 爱" */
+const sayPy=(t,exampleFirst)=>{ const r=pyRead(t[0]); sayChain(exampleFirst?[{text:t[1],lang:"zh",pause:500},{text:r[0],lang:"zh",slow:.8}]:[{text:r[0],lang:"zh",slow:.8,pause:500},{text:t[1],lang:"zh"}]); };
 const TONES = [["bā","八","一声 平"],["bá","拔","二声 扬"],["bǎ","把","三声 拐弯"],["bà","爸","四声 降"]];
 const TONEPATH = ["M10 8 L90 8","M10 24 L90 6","M10 10 L50 24 L90 6","M10 6 L90 24"];
 
@@ -1103,10 +1113,11 @@ function renderPinyin(){
   $("#shengmu").innerHTML=SHENG.map((s,i)=>`<button class="pyt sm" data-t="s" data-i="${i}">${s[0]}<small>${s[1]}</small></button>`).join("");
   $("#yunmu").innerHTML=YUN.map((s,i)=>`<button class="pyt ym" data-t="y" data-i="${i}">${s[0]}<small>${s[1]}</small></button>`).join("");
 }
-function pyShow(sym,c,py){ $("#pyBubble").innerHTML=`<span class="pinyin">${sym}</span><span class="note">→</span><span class="big">${c}</span><span class="pinyin">${py}</span>`; say(c,"zh"); }
+function pyShow(sym,c,py,isTone){ if(isTone){ $("#pyBubble").innerHTML=`<span class="pinyin">${sym}</span><span class="note">→</span><span class="big">${c}</span>`; say(c,"zh"); return; }
+  const r=pyRead(sym); $("#pyBubble").innerHTML=`<span class="pinyin">${sym}</span><span class="note">读 <b class="pinyin" style="font-size:1.1em">${r[1]}</b></span><span class="note">· 例字</span><span class="big">${c}</span><span class="pinyin">${py}</span>`; sayPy([sym,c]); }
 $("#zh-pinyin").addEventListener("click",e=>{
   const t=e.target.closest(".pyt,.tone"); if(!t)return; const i=+t.dataset.i;
-  if(t.classList.contains("tone")){const x=TONES[i];pyShow(x[0],x[1],x[0]);return;}
+  if(t.classList.contains("tone")){const x=TONES[i];pyShow(x[0],x[1],x[0],true);return;}
   const x=(t.dataset.t==="s"?SHENG:YUN)[i]; pyShow(x[0],x[1],x[2]);
 });
 
@@ -2337,9 +2348,11 @@ function levelQ(lv,target){
     return {...base,zh:"听一听，是哪个字？",en:"Listen. Which character?",speak:()=>sayHan(t),after:null};
   }
   if(lv.type==="py"){
-    const t=target||pick(lv.items); const opts=shuffle([t,...distinctBy(lv.items,0,t,3)]).map(x=>x[0]);
+    const t=target||pick(lv.items); const opts=shuffle([t,...distinctBy(lv.items,0,t,3)]).map(x=>x[0]), r=pyRead(t[0]);
+    if(Math.random()<.5) return {zh:`听一听，这是哪个${lv.kind}？`,en:`Listen. Which ${lv.kind==="声母"?"initial":"final"} is it?`,vis:`<div class="bigword" style="font-size:64px">🔊</div>`,opts,ans:t[0],cls:"eng",key:"p:"+t[0],lang:"zh",
+      speak:()=>say(r[0],"zh"),after:()=>sayPy(t)};
     return {zh:`“${t[1]}”的${lv.kind}是什么？`,en:`Which ${lv.kind==="声母"?"initial":"final"} does “${t[1]}” have?`,vis:`<div class="bigword">${t[1]}</div>`,opts,ans:t[0],cls:"eng",key:"p:"+t[0],lang:"zh",
-      speak:()=>say(t[1],"zh"),after:()=>say(t[1],"zh")};
+      speak:()=>say(t[1],"zh"),after:()=>sayPy(t,true)};
   }
   if(lv.type==="abc"){
     const t=target||pick(lv.items); const opts=shuffle([t,...distinctBy(lv.items,0,t,3)]).map(x=>x[0]+x[0].toLowerCase());
@@ -2670,8 +2683,8 @@ function learnStep(lv){
       <div class="learntr" id="qtr"></div><div class="btnrow" style="justify-content:center;margin:-6px 0 10px">${raBtn(u.items[0][0],"en").replace('class="btn mic"','class="btn mic" id="phRa"')}</div>
       <div class="lgrid">${lv.items.map((t,i)=>`<button class="lcard" data-i="${i}"><span class="e" style="font-size:40px">${t[1]}</span><span class="c phw">${phHighlight(u,t[0])}</span></button>`).join("")}</div>`;
   } else if(lv.type==="py"){
-    tip=`认识${lv.kind}：点一点，听例字。`;
-    body=`<div class="lgrid">${lv.items.map((t,i)=>`<button class="lcard" data-i="${i}"><span class="c" style="font-family:var(--f-en);color:var(--red)">${t[0]}</span><span class="e">${t[1]} ${t[2]}</span></button>`).join("")}</div>`;
+    tip=`认识${lv.kind}：点一点，先听${lv.kind}本身怎么读，再听例字。`;
+    body=`<div class="lgrid">${lv.items.map((t,i)=>`<button class="lcard" data-i="${i}"><span class="c" style="font-family:var(--f-en);color:var(--red)">${t[0]}</span><span class="e">读 <b>${pyRead(t[0])[1]}</b></span><small>例字：${t[1]} ${t[2]}</small></button>`).join("")}</div>`;
   } else if(lv.type==="abc"){
     tip="点字母：听读音，看笔顺。Tap a letter to hear it and watch how to write it.";
     body=`<div class="learntr" id="qtr"></div><div class="lgrid">${lv.items.map((t,i)=>`<button class="lcard" data-i="${i}"><span class="c" style="font-family:var(--f-en)">${t[0]}${t[0].toLowerCase()}</span><span class="e">${t[2]} ${t[1]}</span></button>`).join("")}</div>`;
@@ -2698,7 +2711,7 @@ function learnStep(lv){
   if(grid) grid.onclick=e=>{const b=e.target.closest(".lcard");if(!b)return;const t=lv.items[+b.dataset.i];
     grid.querySelectorAll(".lcard").forEach(x=>x.classList.remove("seen-now")); b.classList.add("seen","seen-now");
     if(lv.type==="han"){ sayHan(t); ensureChars([t.c]).then(()=>{mountWriter(t.c,$("#qhw"),$("#qhwTip")); if(STROKES[t.c])setTimeout(()=>rainbowAnimate(t.c),300);}); }
-    else if(lv.type==="py") say(t[1],"zh");
+    else if(lv.type==="py") sayPy(t);
     else if(lv.type==="phon"){ say(t[0],"en"); const tr=tracerPanel($("#qtr"),t[0]); tr.animate(); const r=$("#phRa"); if(r) r.dataset.raT=t[0]; }
     else if(lv.type==="abc"){ say(`${t[0]}. ${t[1]}`,"en"); const tr=tracerPanel($("#qtr"),t[0]+t[0].toLowerCase()); tr.animate(); }
     else { sayChain([{text:t.w,lang:"en",pause:400},{text:t.s,lang:"en"}]); const tr=tracerPanel($("#qtr"),t.w); tr.animate(); }
