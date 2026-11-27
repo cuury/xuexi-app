@@ -210,6 +210,34 @@ nav a.on{background:#EAF0FE;color:var(--sky)}
 .note-rmb b{font-size:30px}.note-rmb small{font-size:15px}
 .note-rmb.r50{background:linear-gradient(135deg,#E9D8F2,#B892CF)}.note-rmb.r100{background:linear-gradient(135deg,#DCEAF8,#8DB3DE)}.note-rmb.r200{background:linear-gradient(135deg,#F3E6CF,#CFA86A)}
 .pzone.locked{display:none}
+.usage td{vertical-align:middle}.usage .gbar{display:inline-block;width:120px}.unused{display:flex;flex-wrap:wrap;gap:6px}.unused span{background:#F1F3F8;border-radius:999px;padding:3px 10px;font-size:14px}
+.tgrid{display:grid;gap:4px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px;font-size:30px;text-align:center}.tgrid span{padding:2px}.tgrid span.mk{background:#FFE08A;border-radius:8px}
+.spotwrap{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}.spotwrap small{display:block;text-align:center;color:var(--muted)}
+.sudo{display:grid;grid-template-columns:repeat(4,56px);margin:8px auto;width:max-content;border:3px solid #333;border-radius:6px;overflow:hidden}
+.sudo span{height:56px;display:grid;place-items:center;font:700 28px var(--f-en);border:1px solid #BBB;background:#fff}.sudo span.rb{border-right:3px solid #333}.sudo span.bb{border-bottom:3px solid #333}.sudo span.q{background:#FFF2B3}
+.pseq{font-size:42px;text-align:center;letter-spacing:4px;margin:10px 0}.pseq.num{font:700 34px var(--f-en);letter-spacing:1px}
+.bal{display:flex;align-items:center;justify-content:center;gap:12px;font-size:36px;margin:6px 0}.bal b{font-size:44px}
+.houses{display:flex;gap:18px;justify-content:center;font-size:48px}.houses span{display:flex;flex-direction:column;align-items:center}.houses i{font-style:normal;font-size:26px}
+.advhead h2{font-family:var(--f-display);font-weight:400;font-size:28px}
+.advlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.advcard{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:20px;background:var(--card);border:3px solid #9B5DE5;box-shadow:0 5px 0 #7A3FC4;text-align:left}
+.advcard .scene{border-radius:12px}.advcard b{font-size:19px}.advcard small{color:var(--muted)}
+.advtop{display:flex;align-items:center;gap:12px;margin-bottom:8px}.advtop b{font-size:20px}
+.advtext{font-size:26px;line-height:1.8}.advtext .w{cursor:pointer;border-radius:6px}.advtext .w.heard{background:#FFF2B3}
+.advch{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:8px}.chrow{display:flex;gap:8px;align-items:center}
+.btn.choice{min-width:260px;font-size:21px;background:#F3EBFF;border-color:#9B5DE5}
+.advq{margin-top:12px;text-align:center}
+.advend{text-align:center;margin-top:12px;background:#FFFBEA;border:3px solid #F5B700;border-radius:22px;padding:16px}
+.advend .badge{font-size:64px}.advend h3{font-size:24px;margin:4px 0}.endrow{display:flex;gap:8px;justify-content:center;font-size:30px;margin:8px 0}.endrow span{opacity:.35}.endrow span.got{opacity:1}
+.bee{display:flex;flex-direction:column;align-items:center;gap:12px}.beepic{font-size:80px;display:flex;align-items:center;gap:10px}
+.slots{display:flex;gap:6px}.slot{width:46px;height:56px;border-bottom:4px solid #9AA6BD;font:700 36px var(--f-en);display:grid;place-items:center;cursor:pointer}
+.slots.ok .slot{border-color:#3CC47C;color:#1E9E5A}.slot.reveal{color:#D63B3B}.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.tile{min-width:52px;height:56px;border-radius:14px;border:3px solid #FFB627;background:#FFF6DC;font:700 30px var(--f-en);box-shadow:0 4px 0 #E09A00}
+.tile.used{opacity:.25;box-shadow:none}.tiles.words .tile{font-size:24px;padding:0 14px}
+.beehead{display:flex;gap:16px;justify-content:center;font-size:20px;flex-wrap:wrap}.timebar{height:10px;background:#EEF1F6;border-radius:99px;overflow:hidden;margin:8px 0 14px}.timebar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#FFB627,#FF6B6B);transition:width 1s linear}
+.sbuilt{min-height:54px;font:600 28px var(--f-en);text-align:center;margin:10px 0;padding:6px;border-bottom:3px dashed var(--line)}.sbuilt.ok{color:#1E9E5A;border-color:#3CC47C}
+.silly,.riddle{font:600 30px/1.5 var(--f-en);text-align:center;margin:10px auto;max-width:620px}.riddle{background:#FFF6DC;border-radius:18px;padding:14px}
 .homeplan{margin-top:14px}.planbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 14px}
 .planbar>b{font-family:var(--f-display);font-weight:400;font-size:20px;margin-right:4px}
 .pstep{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;padding:6px 14px 8px;border-radius:14px;border:2px solid var(--line);background:#fff;min-width:110px}
@@ -680,6 +708,8 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
     </div>
     <div class="sec-title"><h2>家人录音</h2><span>Family voices</span></div>
     <div class="panel" id="famRec"></div>
+    <div class="sec-title"><h2>📊 使用情况</h2><span>Usage</span></div>
+    <div class="panel" id="usageBox"></div>
     <div class="sec-title"><h2>🎁 兑换奖励设置</h2><span>Rewards</span></div>
     <div class="panel" id="shopEdit"></div>
     <div class="sec-title"><h2>📲 同步到其他设备</h2><span>Phone ⇄ iPad</span></div>
@@ -692,7 +722,7 @@ select{font:inherit;font-size:16px;padding:8px 10px;border-radius:12px;border:2p
       <div class="row"><label for="rate">朗读速度</label><input type="range" id="rate" min="0.5" max="1.1" step="0.05"><span id="rateV"></span>
         <button class="btn" id="testZh">试听中文</button><button class="btn" id="testEn">Test English</button></div>
       <div class="note" id="voiceInfo"></div>
-      <p class="note">版本 Version：<b id="appVer">2026.11.26-1940</b></p>
+      <p class="note">版本 Version：<b id="appVer">2026.11.26-1956</b></p>
       <p class="note">年级说明：一年级 = 20 以内加减、硬币、规律；二年级 = 100 以内加减、数位、钟表、乘法入门；三年级 = 1000 以内加减、乘除、分数、四舍五入；四年级 = 多位数乘除、大数、等值分数、小数、面积；五年级 = 两位数乘两位数、长除法、分数加减与比较、小数加减、因数与质数；六年级 = 运算顺序、百分数、比、带分数、三角形面积、平均数、小数乘法。汉字参照部编版一至六年级常用字，英文从 Dolch sight words 到高年级学术词汇，并有拼读和构词法（前缀、后缀、词根），数学兼顾国内人教版与加拿大 BC 省课程（可在设置里切换人民币 / 加元）。<br>
       进度保存在这台设备的浏览器里，换设备不会同步。<b>让声音更自然（免费）：</b>iPad / iPhone 打开 设置 › 辅助功能 › 朗读内容 › 声音 › 中文（中国大陆），下载「婷婷（高级）」或「莉莉（高级）」；English 里下载「Ava（高级）」或「Samantha（增强）」。下载好后回到这里选带 ★ 的声音。Windows 在 设置 › 时间和语言 › 语音 里添加中文。</p>
       <div class="row" id="parentLock"></div>
@@ -1052,13 +1082,13 @@ function runQuiz(el,gen,{lang,onDone,onFirst,total=10,onMiss,finish}){
     el.querySelector(".opts").onclick=e=>{
       const b=e.target.closest(".opt"); if(!b||st.lock)return;
       if(b.dataset.v===String(g.ans)){
-        b.classList.add("right"); st.lock=true; st.ok[st.q]=st.first;
+        b.classList.add("right"); st.lock=true; st.ok[st.q]=st.first; if(st.first) useAns(true);
         if(st.first){ const sig=(g.key||"")+"|"+g.zh+"|"+g.ans; S.dayQ=S.dayQ||[]; if(!S.dayQ.includes(sig)){ S.dayQ.push(sig); if(S.dayQ.length>400) S.dayQ.shift(); addStar(1,b); }
           else { S.revPts=(S.revPts||0)+1; if(S.revPts>=3){ S.revPts-=3; addStar(1,b); } else save(); } onFirst&&onFirst(g); }
         if(g.after) g.after();
         setTimeout(()=>{st.q++;next();},g.after?1300:850);
       }else{
-        if(st.first&&onMiss)onMiss(g); st.first=false; b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong");
+        if(st.first){ useAns(false); if(onMiss)onMiss(g); } st.first=false; b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong");
         say(L==="zh"?"再想想":"Try again",L);
       }
     };
@@ -1155,7 +1185,7 @@ $("#enBody").addEventListener("click",e=>{
 /* ================= GAMES ================= */
 const GAMESET={
  zh:[["mole","🐹","打地鼠","听字音，敲对的地鼠","#FFE9EA"],["zh","👂","听音找字","听声音，点对的字","#FFE9EA"],["piczh","🖼️","看图选字","看图片，找汉字","#FFE9EA"],["py","bā","看拼音选字","Pinyin → 字","#FFE9EA"],["opp","↔","反义词","找相反的词","#FFE9EA"]],
- en:[["balloon","🎈","Balloon Pop","Pop the word you hear","#E6EEFE"],["en","🎧","Listen & Find","Hear it, tap it","#E6EEFE"],["picen","🖼️","Picture Words","看图选英文","#E6EEFE"],["spell","✏️","Missing Letters","补字母 · Spell it","#E6EEFE"],["spellw","🔤","Spelling","看图听音，手写补字母","#E6EEFE"]],
+ en:[["bee","🐝","Spelling Bee","60 秒拼单词 · 连击 🔥","#FFF2D6"],["riddle","🕵️","Riddle Detective","Read the riddle · 猜猜我是谁","#FFF2D6"],["silly","🤪","Silly Sentences","读搞笑句子选图","#FFF2D6"],["scramble","🧩","Sentence Builder","把单词排成句子","#FFF2D6"],["balloon","🎈","Balloon Pop","Pop the word you hear","#E6EEFE"],["en","🎧","Listen & Find","Hear it, tap it","#E6EEFE"],["picen","🖼️","Picture Words","看图选英文","#E6EEFE"],["spell","✏️","Missing Letters","补字母 · Spell it","#E6EEFE"],["spellw","🔤","Spelling","看图听音，手写补字母","#E6EEFE"]],
  link:[["match","🧩","中英配对","字 ↔ 图 ↔ English","#FFF2D6"],["trio","🔢","数字三兄弟","3 ↔ 三 ↔ three","#E3F5EC"],["bimath","🧮","双语算一算","中文算式，英文答案","#E3F5EC"]]
 };
 const STAGE={zh:"#zhStage",en:"#enStage",link:"#linkStage"};
@@ -1211,7 +1241,7 @@ const genSpell=()=>{
 };
 function fixOpts(g){ if(!g.opts.includes(g.ans)){g.opts[0]=g.ans;g.opts=shuffle(g.opts);} return g; }
 function startGame(sub,type){
-  clearArena();
+  clearArena(); curGame=type; useOpen(sub==="link"?"home:games:"+type:`${sub}:games:${type}`);
   const el=$(STAGE[sub]);
   const done=sub==="link"?gameDone:null;
   if(type==="match"){startMatch(el);return;}
@@ -1219,6 +1249,10 @@ function startGame(sub,type){
   if(type==="mole"){startArena(el,"mole");return;}
   if(type==="spellw"){clearArena();spellRound(el,spellPool(),{count:8});return;}
   if(type==="balloon"){startArena(el,"balloon");return;}
+  if(type==="bee"){startBee(el);return;}
+  if(type==="scramble"){startScramble(el);return;}
+  if(type==="silly"){runQuiz(el,genSilly,{lang:()=>"en",total:8});return;}
+  if(type==="riddle"){runQuiz(el,genRiddle,{lang:()=>"en",total:8});return;}
   const gens={zh:genZh,piczh:genPicZh,picen:genPicEn,py:genPy,opp:genOpp,en:genEn,spell:()=>fixOpts(genSpell()),bimath:genBimath};
   runQuiz(el,gens[type],{lang:()=>["en","spell","picen"].includes(type)?"en":"zh",onDone:done});
 }
@@ -1359,13 +1393,109 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-game]");if
 
 /* ================= MATH ================= */
 const MODES={
- 1:[["count","数一数","Count"],["frame","十格","Ten-frame"],["add","加法","Add"],["sub","减法","Subtract"],["cmp","比大小","Compare"],["pat","找规律","Patterns"],["coin","硬币","Coins"],["shape","图形","Shapes"],["clock","整点","O'clock"],["mix","综合","Mix"]],
- 2:[["add","两位数加法","Add to 100"],["sub","两位数减法","Subtract to 100"],["place","数位","Place value"],["skip","跳着数","Skip count"],["cmp","比大小","> < ="],["time","认钟表","Time"],["coin","数硬币","Coins"],["group","乘法入门","Equal groups"],["shape","图形的边","Sides"],["word","应用题","Word problems"],["mix","综合","Mix"]],
- 3:[["add","三位数加法","Add to 1000"],["sub","三位数减法","Subtract to 1000"],["mul","乘法","Multiply"],["div","除法","Divide"],["frac","分数","Fractions"],["round","四舍五入","Rounding"],["perim","周长","Perimeter"],["time","认钟表","Time"],["money","钱币","Money"],["word","应用题","Word problems"],["mix","综合","Mix"]],
- 4:[["mul2","两位数乘一位数","2-digit × 1-digit"],["divr","除法","Division"],["place4","大数数位","Place value"],["round4","估算","Rounding"],["feq","等值分数","Equivalent fractions"],["dec","小数","Decimals"],["area","面积","Area"],["word","应用题","Word problems"],["mix","综合","Mix"]],
- 5:[["mulbig","两位数乘两位数","2-digit × 2-digit"],["longdiv","长除法","Long division"],["fadd","分数加减","Add & subtract fractions"],["fcmp","比较分数","Compare fractions"],["decadd","小数加减","Decimals + −"],["factor","因数","Factors"],["prime","质数","Prime numbers"],["word","应用题","Word problems"],["mix","综合","Mix"]],
- 6:[["order","运算顺序","Order of operations"],["pct","百分数","Percent"],["ratio","比","Ratios"],["mixed","带分数","Mixed numbers"],["tri","三角形面积","Triangle area"],["mean","平均数","Mean"],["decmul","小数乘法","Decimal ×"],["word","应用题","Word problems"],["mix","综合","Mix"]]
+ 1:[["count","数一数","Count"],["frame","十格","Ten-frame"],["add","加法","Add"],["sub","减法","Subtract"],["cmp","比大小","Compare"],["pat","找规律","Patterns"],["coin","硬币","Coins"],["shape","图形","Shapes"],["clock","整点","O'clock"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]],
+ 2:[["add","两位数加法","Add to 100"],["sub","两位数减法","Subtract to 100"],["place","数位","Place value"],["skip","跳着数","Skip count"],["cmp","比大小","> < ="],["time","认钟表","Time"],["coin","数硬币","Coins"],["group","乘法入门","Equal groups"],["shape","图形的边","Sides"],["word","应用题","Word problems"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]],
+ 3:[["add","三位数加法","Add to 1000"],["sub","三位数减法","Subtract to 1000"],["mul","乘法","Multiply"],["div","除法","Divide"],["frac","分数","Fractions"],["round","四舍五入","Rounding"],["perim","周长","Perimeter"],["time","认钟表","Time"],["money","钱币","Money"],["word","应用题","Word problems"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]],
+ 4:[["mul2","两位数乘一位数","2-digit × 1-digit"],["divr","除法","Division"],["place4","大数数位","Place value"],["round4","估算","Rounding"],["feq","等值分数","Equivalent fractions"],["dec","小数","Decimals"],["area","面积","Area"],["word","应用题","Word problems"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]],
+ 5:[["mulbig","两位数乘两位数","2-digit × 2-digit"],["longdiv","长除法","Long division"],["fadd","分数加减","Add & subtract fractions"],["fcmp","比较分数","Compare fractions"],["decadd","小数加减","Decimals + −"],["factor","因数","Factors"],["prime","质数","Prime numbers"],["word","应用题","Word problems"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]],
+ 6:[["order","运算顺序","Order of operations"],["pct","百分数","Percent"],["ratio","比","Ratios"],["mixed","带分数","Mixed numbers"],["tri","三角形面积","Triangle area"],["mean","平均数","Mean"],["decmul","小数乘法","Decimal ×"],["word","应用题","Word problems"],["obs","🔍 观察力","Observation"],["rule","🧩 规律·数独","Patterns & sudoku"],["reason","🕵️ 推理","Reasoning"],["mix","综合","Mix"]]
 };
+/* ================= 🧠 思维训练: observation, patterns & sudoku, reasoning — scaled by grade ================= */
+const TCAT={fruit:["🍎","🍌","🍇","🍓","🍑","🍐","🍒","🍉"],animal:["🐶","🐱","🐭","🐰","🦊","🐻","🐼","🐯"],vehicle:["🚗","🚌","🚲","🚀","✈️","🚂","🚜","🚤"],sea:["🐟","🐙","🦀","🐳","🐬","🦈"],weather:["☀️","🌧️","❄️","⛅","🌈","⚡"],ball:["⚽","🏀","🎾","🏈","⚾","🏐"]};
+const TCATZH={fruit:"水果",animal:"动物",vehicle:"交通工具",sea:"海洋动物",weather:"天气",ball:"球"};
+const FACES=["😀","😃","😄","😁","😆","🙂","😊","😉"];
+const tgrid=(cells,n,mark)=>`<div class="tgrid" style="grid-template-columns:repeat(${n},1fr)">${cells.map((c,i)=>`<span class="${mark===i?"mk":""}">${c}</span>`).join("")}</div>`;
+function thinkObs(G){
+  if(Math.random()<.5){ /* 找不同类 odd one out */
+    if(G<=2){ const ks=Object.keys(TCAT), a=pick(ks), b=pick(ks.filter(k=>k!==a)); const same=shuffle([...TCAT[a]]).slice(0,3), odd=pick(TCAT[b]);
+      return {zh:"哪一个和别的不是一类？",en:"Which one does not belong?",vis:"",opts:shuffle([...same,odd]),ans:odd,cls:"emo",after:()=>say(`${odd}不是${TCATZH[a]}`,"zh")}; }
+    let set,odd,why;
+    if(G<=4){ const k=pick([2,3,4,5]); set=shuffle(Array.from({length:12},(_,i)=>k*(i+2))).slice(0,3); do{odd=R(5,60);}while(odd%k===0); why=`其他都是 ${k} 的倍数`; }
+    else if(Math.random()<.5){ set=shuffle([2,3,5,7,11,13,17,19,23,29]).slice(0,3); odd=pick([9,15,21,25,27,33,35]); why="其他都是质数"; }
+    else { set=shuffle([4,9,16,25,36,49,64,81]).slice(0,3); do{odd=R(10,80);}while(Number.isInteger(Math.sqrt(odd))); why="其他都是平方数"; }
+    return {zh:"哪个数和别的不一样？",en:"Which number is the odd one out?",vis:"",opts:shuffle([...set,odd]).map(String),ans:String(odd),after:()=>say(why,"zh")};
+  }
+  /* 找不同 spot the difference */
+  const n=G<=2?3:G<=4?4:5, pool=G>=4&&Math.random()<.6?FACES:shuffle(Object.values(TCAT).flat()).slice(0,6);
+  const A=Array.from({length:n*n},()=>pick(pool)), i=R(0,n*n-1), fresh=pick(Object.values(TCAT).flat().concat(FACES).filter(x=>!A.includes(x)&&(pool===FACES?FACES.includes(x):true)))||"⭐";
+  const B=[...A]; B[i]=fresh;
+  const opts=shuffle([fresh,...shuffle([...new Set(A)]).slice(0,3)]);
+  return {zh:"左右两幅图有一个地方不一样。右边哪个东西是新换上的？",en:"Find the difference. What is new in the right picture?",
+    vis:`<div class="spotwrap"><div><small>左 Left</small>${tgrid(A,n)}</div><div><small>右 Right</small>${tgrid(B,n)}</div></div>`,opts,ans:fresh,cls:"emo",
+    after:()=>{ const g=document.querySelectorAll(".spotwrap .tgrid"); g.forEach(x=>{ const c=x.children[i]; if(c) c.classList.add("mk"); }); }};
+}
+function latin4(){ /* random valid 4×4 sudoku with 2×2 boxes */
+  const base=[[0,1,2,3],[2,3,0,1],[1,0,3,2],[3,2,1,0]];
+  const sym=shuffle([0,1,2,3]), rb=shuffle([0,1]), cb=shuffle([0,1]);
+  const rows=rb.flatMap(b=>shuffle([b*2,b*2+1])), cols=cb.flatMap(b=>shuffle([b*2,b*2+1]));
+  return rows.map(r=>cols.map(c=>sym[base[r][c]]));
+}
+function thinkRule(G){
+  if(Math.random()<.5){ /* 4×4 数独 */
+    const sol=latin4(), useNum=G>=4, ICON=useNum?["1","2","3","4"]:shuffle(["🍎","🍌","🍇","🍓","🐶","🐱","🐰","🐻"]).slice(0,4);
+    for(let tries=0;tries<200;tries++){
+      const blanks=new Set(shuffle([...Array(16).keys()]).slice(0,Math.min(10,3+G))); const q=pick([...blanks]);
+      const r=Math.floor(q/4), c=q%4, br=r-r%2, bc=c-c%2, seen=new Set();
+      for(let k=0;k<16;k++){ if(blanks.has(k)) continue; const rr=Math.floor(k/4), cc=k%4; if(rr===r||cc===c||(rr-rr%2===br&&cc-cc%2===bc)) seen.add(sol[rr][cc]); }
+      if(seen.size!==3) continue;
+      const cells=sol.flat().map((v,k)=>k===q?"❓":blanks.has(k)?"":ICON[v]);
+      const ans=ICON[sol[r][c]];
+      return {zh:"小数独：每一行、每一列、每个粗框里，四样东西都只出现一次。❓ 是什么？",en:"Mini sudoku: each row, column and box has all four once. What is ❓?",
+        vis:`<div class="sudo">${cells.map((x,k)=>`<span class="${k===q?"q":""} ${(k%4===1)?"rb":""} ${(Math.floor(k/4)===1)?"bb":""}">${x}</span>`).join("")}</div>`,opts:shuffle([...ICON]),ans,cls:useNum?"num":"emo"};
+    }
+  }
+  /* 找规律 patterns */
+  if(G<=2){ const it=shuffle(Object.values(TCAT).flat()).slice(0,3), pats=["AB","ABC","AAB","ABB","ABBC"], p=pick(pats).split("").map(ch=>it["ABC".indexOf(ch)]);
+    const seq=Array.from({length:p.length*2+1},(_,i)=>p[i%p.length]), ans=p[seq.length%p.length];
+    return {zh:"找规律：下一个是什么？",en:"What comes next?",vis:`<div class="pseq">${seq.join(" ")} ❓</div>`,opts:shuffle([...it,pick(Object.values(TCAT).flat().filter(x=>!it.includes(x)))]),ans,cls:"emo"}; }
+  let seq,ans,why;
+  const kind=pick(G<=3?["add","sub","alt","dbl"]:G<=4?["add","alt","dbl","grow"]:["dbl","grow","sq","fib","alt"]);
+  if(kind==="add"){ const a=R(1,20),d=R(2,G*3); seq=[0,1,2,3,4].map(i=>a+d*i); ans=a+d*5; why=`每次加 ${d}`; }
+  if(kind==="sub"){ const d=R(2,9),a=d*R(7,12); seq=[0,1,2,3,4].map(i=>a-d*i); ans=a-d*5; why=`每次减 ${d}`; }
+  if(kind==="alt"){ const a=R(1,10),x=R(2,6),y=R(1,5); seq=[a]; for(let i=1;i<6;i++) seq.push(seq[i-1]+(i%2?x:y)); ans=seq.pop(); why=`加 ${x}、加 ${y} 轮流`; }
+  if(kind==="dbl"){ const a=R(1,4); seq=[0,1,2,3,4].map(i=>a*2**i); ans=a*32; why="每次乘 2"; }
+  if(kind==="grow"){ const a=R(1,5); seq=[a]; for(let i=1;i<5;i++) seq.push(seq[i-1]+i); ans=seq[4]+5; why="加 1、加 2、加 3……每次多加 1"; }
+  if(kind==="sq"){ const s=R(1,4); seq=[0,1,2,3,4].map(i=>(s+i)**2); ans=(s+5)**2; why="都是平方数"; }
+  if(kind==="fib"){ seq=[1,1]; const a=R(1,3); seq=[a,a]; for(let i=2;i<6;i++) seq.push(seq[i-1]+seq[i-2]); ans=seq.pop(); why="前两个数加起来"; }
+  return {zh:"找规律：下一个数是几？",en:"What number comes next?",vis:`<div class="pseq num">${seq.join(", ")}, ❓</div>`,ans,opts:numOpts(ans,[1,2,3],1),after:()=>say(why,"zh")};
+}
+function thinkReason(G){
+  const r=Math.random();
+  if(r<.34){ /* 天平 balance */
+    const [a,b,c]=shuffle(Object.values(TCAT.fruit)).slice(0,3);
+    if(G<=2){ const k=R(2,3), m=R(2,3); return {zh:`天平：1 个 ${a} 和 ${k} 个 ${b} 一样重。${m} 个 ${a} 和几个 ${b} 一样重？`,en:`1 ${a} weighs the same as ${k} ${b}. ${m} ${a} = how many ${b}?`,
+      vis:`<div class="bal"><span>${a}</span><b>⚖️</b><span>${b.repeat(k)}</span></div>`,ans:k*m,opts:numOpts(k*m,[1,2],1)}; }
+    if(G<=4){ const k=R(2,4), j=R(2,4); return {zh:`1 个 ${a} = ${k} 个 ${b}，1 个 ${b} = ${j} 个 ${c}。1 个 ${a} = 几个 ${c}？`,en:`1 ${a} = ${k} ${b}, 1 ${b} = ${j} ${c}. 1 ${a} = ? ${c}`,
+      vis:`<div class="bal"><span>${a}</span><b>⚖️</b><span>${b.repeat(k)}</span></div><div class="bal"><span>${b}</span><b>⚖️</b><span>${c.repeat(j)}</span></div>`,ans:k*j,opts:numOpts(k*j,[1,2,3],1)}; }
+    const x=R(2,9), y=R(1,9), t=2*x+y; return {zh:`${a} + ${a} + ${b} = ${t}，${a} = ${x}。${b} 是几？`,en:`${a}+${a}+${b}=${t}, ${a}=${x}. What is ${b}?`,vis:"",ans:y,opts:numOpts(y,[1,2],0)};
+  }
+  const animals=shuffle(["🐶","🐱","🐰","🐻","🐼"]);
+  if(r<.67){ /* 排顺序 ordering */
+    const n=G<=2?3:4, who=animals.slice(0,n); /* who[0] fastest … */
+    const clues=[]; for(let i=0;i<n-1;i++) clues.push(`${who[i]} 比 ${who[i+1]} 跑得快`);
+    const askFast=Math.random()<.5, ans=askFast?who[0]:who[n-1];
+    return {zh:`${shuffle(clues).join("，")}。谁跑得最${askFast?"快":"慢"}？`,en:`Who is the ${askFast?"fastest":"slowest"}?`,vis:"",opts:shuffle([...who]),ans,cls:"emo",
+      after:()=>say(`从快到慢：${who.join("、")}`,"zh")};
+  }
+  /* 小侦探 houses */
+  const n=G<=2?3:4, who=animals.slice(0,n), colors=["🔴","🔵","🟢","🟡"].slice(0,n), names={"🔴":"红","🔵":"蓝","🟢":"绿","🟡":"黄"};
+  const sol=shuffle([...Array(n).keys()]); /* who[i] lives in colors[sol[i]] */
+  const perms=a=>a.length<=1?[a]:a.flatMap((x,i)=>perms([...a.slice(0,i),...a.slice(i+1)]).map(p=>[x,...p]));
+  const all=perms([...Array(n).keys()]); const clues=[];
+  const fits=p=>clues.every(c=>c.yes?p[c.i]===c.c:p[c.i]!==c.c);
+  const ask=R(0,n-1); let guard=0;
+  while(all.filter(fits).length>1&&guard++<200){
+    const i=R(0,n-1); if(i===ask&&Math.random()<.8) continue;
+    const yes=Math.random()<.35&&i!==ask; const c=yes?sol[i]:pick([...Array(n).keys()].filter(k=>k!==sol[i]));
+    if(clues.some(x=>x.i===i&&x.c===c)) continue; const before=all.filter(fits).length; clues.push({i,c,yes}); if(all.filter(fits).length===before) clues.pop(); /* keep only clues that help */
+  }
+  if(all.filter(fits).length!==1||clues.length>(n===3?3:5)) return thinkReason(G);
+  const txt=clues.map(c=>`${who[c.i]} ${c.yes?"住在":"不住"}${names[colors[c.c]]}房子`).join("。");
+  return {zh:`${txt}。${who[ask]} 住在哪个颜色的房子？`,en:`Read the clues. Which house does ${who[ask]} live in?`,
+    vis:`<div class="houses">${colors.map(c=>`<span>🏠<i>${c}</i></span>`).join("")}</div>`,opts:colors.map(c=>c),ans:colors[sol[ask]],cls:"emo",
+    after:()=>say(`${who.map((w,i)=>w+"住"+names[colors[sol[i]]]+"房子").join("，")}`,"zh")};
+}
+const THINK={obs:thinkObs,rule:thinkRule,reason:thinkReason};
 const OBJ=["🍎","🐟","⭐","🌸","🐞","🚗","🍓","🎈","🐥","🍪","🦋","🍩"];
 let M=null, mMode="count";
 function numOpts(ans,steps=[1],min=0){
@@ -1517,6 +1647,7 @@ function gen46(mode,G){
 function gen(mode){
   const G=S.grade, e=pick(OBJ);
   if(mode==="mix") mode=pick(MODES[G].filter(m=>m[0]!=="mix"&&m[0]!=="word")).at(0);
+  if(THINK[mode]){ const q=THINK[mode](G); q.ans=String(q.ans); q.opts=q.opts.map(String); return q; }
   if(G===1){
     const top=S.mRange;
     if(mode==="count"){const n=R(3,top);return {zh:"数一数，有几个？",en:"How many?",vis:emo(n,e),ans:n,opts:numOpts(n,[1],1)};}
@@ -1838,7 +1969,8 @@ function listCards(items,cur,lang,kind){
   return `<div class="pieces">${items.map(it=>`<button class="piece ${it.id===cur?"on":""}" data-id="${it.id}" data-kind="${kind}">${sceneSvg(it.scene)}<b>${lang==="zh"?(it.title[0]||it.title):(it.title[1]||it.title)}</b>${S.readDone.includes(kind+it.id+lang)?'<i>✓</i>':""}</button>`).join("")}</div>`;
 }
 function renderRead(lang){
-  const box=$(lang==="zh"?"#zhReadBody":"#enReadBody"); const list=storiesForGrade();
+  if(lang==="en"&&!$("#enReadMore")){ const outer=$("#enReadBody"); if(advCur){ advGo(outer,advNode); return; } renderAdvList(outer); }
+  const box=$(lang==="zh"?"#zhReadBody":"#enReadMore"); const list=storiesForGrade();
   if(!list.some(s=>s.id===storyId[lang])) storyId[lang]=list[0].id;
   const st=list.find(s=>s.id===storyId[lang]);
   const sightSet=new Set(ALLSIGHT.filter(w=>w.gr<=S.grade).map(w=>w.w.toLowerCase()));
@@ -2292,7 +2424,7 @@ const LESSON_CN={
 
 /* ================= 闯关 QUEST: levels, review, unlocks ================= */
 const SUBJ={zh:["中文","Chinese"],en:["English","英文"],math:["数学","Math"]};
-const MICON={count:"🍎",frame:"🔟",add:"➕",sub:"➖",cmp:"⚖️",pat:"🔁",coin:"🪙",shape:"🔺",clock:"🕐",place:"🔢",skip:"🦘",time:"⏰",group:"🧺",word:"📝",mul:"✖️",div:"➗",frac:"🍕",round:"🎯",perim:"📐",money:"💵"};
+const MICON={obs:"🔍",rule:"🧩",reason:"🕵️",count:"🍎",frame:"🔟",add:"➕",sub:"➖",cmp:"⚖️",pat:"🔁",coin:"🪙",shape:"🔺",clock:"🕐",place:"🔢",skip:"🦘",time:"⏰",group:"🧺",word:"📝",mul:"✖️",div:"➗",frac:"🍕",round:"🎯",perim:"📐",money:"💵"};
 const BOSSKEY=g=>["zh-boss-"+g,"en-boss-"+g,"m-boss-"+g];
 function chunkEven(a,max){const k=Math.ceil(a.length/max),sz=Math.ceil(a.length/k),o=[];for(let i=0;i<a.length;i+=sz)o.push(a.slice(i,i+sz));return o;}
 function interleave(main,extras,every){const out=[];let e=0;main.forEach((m,i)=>{out.push(m);if((i+1)%every===0&&e<extras.length)out.push(extras[e++]);});while(e<extras.length)out.push(extras[e++]);return out;}
@@ -2439,8 +2571,8 @@ function renderQuest(){
       return `<button class="examcard ${ok?"":"lock"} ${best>=90?"gold":""}" data-ex="${ex.id}"><span class="ei">${ok?"📝":"🔒"}</span><b>${GRADES[g][0]} ${ex.name}</b>
         <small>${!ok?ex.lockTip:best>=0?`最高 ${best} 分 ${rateOf(best)[0]}`:`${ex.n} 题 · 100 分 · 还没考`}</small></button>`; }).join("")}</div>`;
   }
-  html=`<div class="gbanner placebar"><b>🚩 起点</b> ${["zh","en","math"].map(k=>`${SUBJ[k][0]} ${GRADES[startOf(k)][0]}`).join(" · ")} <button class="btn" id="qPlace">测一测起点</button></div>`+html;
-  $("#qMap").innerHTML=html; $("#qPlace").onclick=()=>runPlacement(["zh","en","math"]);
+  html=`<div class="gbanner placebar"><b>🚩 起点</b> ${["zh","en","math"].map(k=>`${SUBJ[k][0]} ${GRADES[startOf(k)][0]}`).join(" · ")} <button class="btn write" id="qMulti">⚡ 连跳挑战</button><button class="btn" id="qPlace">测一测起点</button></div>`+html;
+  $("#qMap").innerHTML=html; $("#qPlace").onclick=()=>runPlacement(["zh","en","math"]); $("#qMulti").onclick=()=>multiSkip(qSubj);
   const c=$("#qMap .node.cur"); if(c) setTimeout(()=>c.scrollIntoView({block:"center",behavior:"smooth"}),60);
 }
 $("#qTabs").onclick=e=>{const b=e.target.closest("button");if(!b)return; const k=b.dataset.s; if(!planAllowed(k)){ planBlock(k,()=>{qSubj=k;renderQuest();}); return; } qSubj=k;renderQuest();};
@@ -2453,6 +2585,51 @@ $("#qMap").onclick=e=>{
   openLevel(lv);
 };
 
+/* ---------- usage analytics for parents: minutes, opens and accuracy per section ---------- */
+let curGame=null;
+function curSection(){
+  const v=location.hash.slice(1)||"home";
+  if(v==="quest"){ if(qRunning&&qRunning.exam) return "exam:"+qSubj; if(qRunning&&qRunning.type) return `quest:${qRunning.subj}:${qRunning.type}`; if(qRunning&&(qRunning.multi||qRunning.placement)) return "quest:"+qSubj+":skip"; return "quest:"+qSubj+":map"; }
+  if(v==="zh"||v==="en") return `${v}:${SUBS[v]}${curGame?":"+curGame:""}${v==="en"&&SUBS.en==="read"&&advCur?":adv":""}`;
+  if(v==="math") return "math:"+mMode;
+  if(v==="home") return curGame?"home:games:"+curGame:"home";
+  return v;
+}
+function useOpen(sec){ const L=dayLog(); L.op=L.op||{}; L.op[sec]=(L.op[sec]||0)+1; }
+function useAns(ok){ const sec=curSection(), L=dayLog(); L.ac=L.ac||{}; const a=L.ac[sec]=L.ac[sec]||[0,0]; a[1]++; if(ok) a[0]++; }
+const SUBNAME={zh:{cards:"汉字·笔顺",pinyin:"拼音",read:"阅读",poem:"古诗",games:"游戏"},en:{abc:"ABC 字母",words:"Sight Words",read:"阅读",rhyme:"儿歌",games:"游戏"}};
+const QTYPE={han:"认字",py:"拼音",words:"单词",phon:"自然拼读",abc:"字母",math:"数学",story:"故事",poem:"诗歌",boss:"Boss 关",custom:"学校生字",map:"看地图",skip:"跳关/小测"};
+function secName(sec){
+  const p=sec.split(":"), gname=t=>{ for(const k in GAMESET){ const g=GAMESET[k].find(x=>x[0]===t); if(g) return g[2]; } return t; };
+  if(p[0]==="zh"||p[0]==="en") return `${SUBJ[p[0]][0]} · ${SUBNAME[p[0]][p[1]]||p[1]}${p[2]==="adv"?" · 冒险故事":p[2]?" · "+gname(p[2]):""}`;
+  if(p[0]==="math"){ const m=Object.values(MODES).flat().find(x=>x[0]===p[1]); return `数学练习 · ${m?m[1]:p[1]}`; }
+  if(p[0]==="quest") return `闯关 · ${SUBJ[p[1]][0]} · ${QTYPE[p[2]]||p[2]}`;
+  if(p[0]==="exam") return `考试 · ${SUBJ[p[1]][0]}`;
+  if(p[0]==="home") return p[2]?`首页游戏 · ${gname(p[2])}`:"首页";
+  return {saga:"豆豆的冒险",stars:"贴纸页"}[p[0]]||sec;
+}
+function allSections(){ const out=[]; ["zh","en"].forEach(v=>Object.keys(SUBNAME[v]).forEach(s=>{ if(s!=="games") out.push(`${v}:${s}`); }));
+  out.push("en:read:adv"); GAMESET.zh.forEach(g=>out.push("zh:games:"+g[0])); GAMESET.en.forEach(g=>out.push("en:games:"+g[0])); GAMESET.link.forEach(g=>out.push("home:games:"+g[0]));
+  MODES[Math.max(1,S.grade)].filter(m=>m[0]!=="mix").forEach(m=>out.push("math:"+m[0])); ["zh","en","math"].forEach(k=>out.push(`quest:${k}:map`)); out.push("saga"); return out; }
+function renderUsage(days=7){
+  const el=$("#usageBox"); if(!el) return;
+  const ds=Array.from({length:days},(_,i)=>ymd(new Date(Date.now()-i*864e5))), sec={}, op={}, ac={}, last={}; let total=0, active=0;
+  ds.forEach(d=>{ const L=(S.log||{})[d]; if(!L) return; if(L.sec>0) active++; total+=L.sec||0;
+    for(const k in (L.sec2||{})){ sec[k]=(sec[k]||0)+L.sec2[k]; if(!last[k]||d>last[k]) last[k]=d; }
+    for(const k in (L.op||{})){ op[k]=(op[k]||0)+L.op[k]; if(!last[k]||d>last[k]) last[k]=d; }
+    for(const k in (L.ac||{})){ const a=ac[k]=ac[k]||[0,0]; a[0]+=L.ac[k][0]; a[1]+=L.ac[k][1]; } });
+  const subjOf=k=>k.startsWith("zh")||k.startsWith("quest:zh")||k.startsWith("exam:zh")||k==="saga"?"zh":k.startsWith("en")||k.startsWith("quest:en")||k.startsWith("exam:en")?"en":k.startsWith("math")||k.startsWith("quest:math")||k.startsWith("exam:math")?"math":"other";
+  const bySubj={zh:0,en:0,math:0,other:0}; for(const k in sec) bySubj[subjOf(k)]+=sec[k];
+  const keys=[...new Set([...Object.keys(sec),...Object.keys(op)])].sort((a,b)=>(sec[b]||0)-(sec[a]||0)||(op[b]||0)-(op[a]||0));
+  const maxS=Math.max(1,...keys.map(k=>sec[k]||0)), unused=allSections().filter(k=>!sec[k]&&!op[k]);
+  const mins=x=>x>=60?`${Math.round(x/60)} 分钟`:x>0?"<1 分钟":"—";
+  el.innerHTML=`<div class="row"><button class="btn ${days===7?"say":""}" data-ud="7">最近 7 天</button><button class="btn ${days===30?"say":""}" data-ud="30">最近 30 天</button></div>
+    <p class="note">一共学了 <b>${Math.round(total/60)}</b> 分钟，有 <b>${active}</b> 天打开过。按科目：${["zh","en","math","other"].map(k=>`${k==="other"?"其他":SUBJ[k][0]} ${Math.round(bySubj[k]/60)} 分钟`).join(" · ")}</p>
+    ${keys.length?`<table class="extable usage"><tr><th>板块</th><th>时间</th><th></th><th>打开</th><th>正确率</th><th>最近</th></tr>${keys.map(k=>`<tr><td>${esc(secName(k))}</td><td>${mins(sec[k]||0)}</td><td><span class="gbar"><i style="width:${Math.round((sec[k]||0)/maxS*100)}%"></i></span></td><td>${op[k]||"—"}</td><td>${ac[k]&&ac[k][1]?`${Math.round(ac[k][0]/ac[k][1]*100)}%<small> (${ac[k][1]}题)</small>`:"—"}</td><td>${(last[k]||"").slice(5)||"—"}</td></tr>`).join("")}</table>`:`<p class="note">这段时间还没有记录。从今天开始统计，过几天再来看。</p>`}
+    ${unused.length?`<h3 class="rh">这段时间没用过的 (${unused.length})</h3><div class="unused">${unused.map(k=>`<span>${esc(secName(k))}</span>`).join("")}</div>`:""}
+    <p class="note">「时间」只算真正在操作的时间；「正确率」是第一次就答对的比例。从这个版本开始记录，之前的使用没有分板块的数据。</p>`;
+  el.querySelectorAll("[data-ud]").forEach(b=>b.onclick=()=>renderUsage(+b.dataset.ud));
+}
 /* ---------- 今日学习计划: each subject gets its minutes, in order; later subjects wait until the current one is done ---------- */
 const SUBJ_VIEW={zh:"zh",en:"en",math:"math"};
 function curSubj(){ const v=location.hash.slice(1)||"home"; if(v==="zh"||v==="saga") return "zh"; if(v==="en") return "en"; if(v==="math") return "math"; if(v==="quest") return qSubj; return null; }
@@ -2556,7 +2733,7 @@ function examIntro(ex){
 }
 function runExam(ex){
   const qs=buildExam(ex); if(qs.length<5){ toast("这一段的题目还不够，先闯更多关吧"); return; }
-  location.hash="quest"; qRunning={exam:true}; stopChain(); clearArena();
+  location.hash="quest"; qRunning={exam:true}; useOpen("exam:"+ex.subj); stopChain(); clearArena();
   $("#qMap").hidden=true; $("#qTabs").hidden=true; const box=$("#qRun"); box.hidden=false; window.scrollTo(0,0);
   const ans=new Array(qs.length).fill(null), t0=Date.now(); let i=0, tick=null;
   const L=q=>q.lang||(ex.subj==="en"?"en":ex.subj==="math"?S.mLang:"zh");
@@ -2653,9 +2830,227 @@ function runPlacement(subjs,onApply){
   }
   nextSubj();
 }
+/* ================= English fun pack: Adventures (choose-your-own story), Spelling Bee, Sentence Builder, Silly Sentences, Riddles ================= */
+const enLv=()=>Math.min(5,Math.max(S.grade||1,startOf("en")));
+const hero=t=>t.replace(/\{H\}/g,enName());
+/* ---- Choose-your-own-adventure stories. Second person ("you"), the child's name is the hero. ---- */
+const ADV=[
+ {id:"dragon",icon:"🐉",title:"The Dragon Who Lost Her Fire",cover:{sky:"day",ground:"hill",items:[["🐉",200,120,80],["🔥",255,95,30]]},start:"a",nodes:{
+  a:{sc:{sky:"day",ground:"grass",mountains:1,items:[["🏡",70,160,60],["🐉",230,160,64],["🧒",150,170,46]]},t:["You are {H}. You live near a big green hill.","One morning, a little dragon sits on your fence.","She looks very sad. \"I lost my fire!\" she cries."],ch:[["Help her find it","b"],["Give her a hot drink","c"]]},
+  b:{sc:{sky:"day",ground:"hill",items:[["🐉",130,150,56],["🧒",200,165,44],["🕳️",300,170,60]]},t:["\"Where did you lose it?\" you ask.","\"In the dark cave,\" says the dragon.","\"But I am scared of the dark.\""],ch:[["Go into the cave","d"],["Find a light first","e"]]},
+  c:{sc:{sky:"indoor",ground:"floor",items:[["☕",150,150,50],["🐉",250,150,64]]},t:["You make a cup of hot cocoa.","The dragon drinks it. Glug, glug, glug!","She burps, and out comes a tiny puff of smoke!","\"More!\" she says."],ch:[["Make more cocoa","f"],["Try something hotter","g"]]},
+  d:{sc:{sky:"night",items:[["🪨",80,180,60],["👀",200,110,50],["🧒",300,175,44]]},t:["The cave is very dark. Drip, drop, drip.","Then you see two big eyes!"],ch:[["Say hello","h"],["Run back out!","i"]]},
+  e:{sc:{sky:"indoor",ground:"floor",items:[["🧦",90,170,40],["🔦",200,160,50],["🍌",300,170,40]]},t:["You look in your room for a light."],q:{type:"pick",ask:"Which one makes light?",opts:[["🔦","flashlight"],["🧦","sock"],["🍌","banana"]],ans:0,ok:"Yes! A flashlight makes light."},next:"d"},
+  f:{sc:{sky:"winter",ground:"snow",items:[["⛄",120,150,60],["🔥",200,140,44],["🐉",290,150,64]]},t:["You make ten cups of cocoa. The dragon drinks them all.","BURP! A big flame comes out!","It melts your snowman. Oops!"],end:"☕ The Cocoa Ending"},
+  g:{sc:{sky:"day",ground:"grass",items:[["🌶️",150,150,50],["🐉",250,150,70]]},t:["You find a red hot pepper. \"Eat this!\" you say.","The dragon takes a big bite.","Her face goes red. Her ears go red. Her tail goes red!"],ch:[["Wait and see…","j"]]},
+  j:{sc:{sky:"noon",ground:"hill",items:[["🐉",200,70,70],["🔥",140,80,40],["☁️",320,60,50]]},t:["WHOOSH! Fire comes out of her mouth,","and she flies up, up, up into the sky!","\"Thank you, {H}!\" she shouts."],end:"🌶️ The Spicy Ending"},
+  h:{sc:{sky:"night",items:[["🦉",200,120,70],["✨",260,150,30],["🧒",110,175,44]]},t:["\"Hello!\" you say. The eyes blink.","It is a big, friendly owl!","\"Are you looking for this?\" asks the owl. She has a tiny, glowing ball."],q:{type:"spell",w:"fire",emo:"🔥",ask:"Spell the magic word to open the ball:"},next:"k"},
+  i:{sc:{sky:"day",ground:"hill",items:[["🧒",150,170,44],["🪨",190,190,30],["🐉",280,150,64]]},t:["You run out so fast that you trip on a rock. Bump!","The little dragon laughs and laughs…","and a flame pops out! \"My fire is back!\" she says.","Laughing was the magic!"],end:"😂 The Giggle Ending"},
+  k:{sc:{sky:"dusk",ground:"hill",mountains:1,items:[["🐉",200,90,80],["🧒",205,70,34]]},t:["The ball pops open.","A warm, orange flame jumps into the dragon's mouth.","She gives you a ride on her back, high over the hill.","Best day ever!"],end:"🐉 The Dragon Ride Ending"}}},
+ {id:"pizza",icon:"🍕",title:"Space Pizza",cover:{sky:"night",items:[["🍕",170,120,64],["🚀",260,100,56],["🌙",80,60,40]]},start:"a",nodes:{
+  a:{sc:{sky:"indoor",ground:"floor",items:[["🧑‍🍳",130,150,64],["📞",250,140,46]]},t:["You are {H}, the best pizza cook in town.","Ring, ring! The phone rings.","\"Hello, this is the Moon. Can we have a pizza, please?\""],ch:[["Make a cheese pizza","b"],["Make a crazy pizza","c"]]},
+  b:{sc:{sky:"indoor",ground:"floor",items:[["🍕",200,150,70]]},t:["You make a big cheese pizza. It smells so good!","Now, how will you get to the Moon?"],ch:[["Take a rocket","d"],["Ride a giant bird","e"]]},
+  c:{sc:{sky:"indoor",ground:"floor",items:[["🍦",120,150,40],["🍬",200,150,36],["🥒",280,150,40]]},t:["You put ice cream, jelly beans and one pickle on top.","It looks very, very strange."],ch:[["Take a rocket","d"],["Ride a giant bird","e"]]},
+  d:{sc:{sky:"day",ground:"grass",items:[["🚀",200,120,90]]},t:["You jump into your rocket. Time to count down!"],q:{type:"pick",ask:"What comes next?  3, 2, …",opts:[["1","one"],["5","five"],["8","eight"]],ans:0,ok:"1… BLAST OFF!"},next:"f"},
+  e:{sc:{sky:"day",ground:"grass",items:[["🦅",200,80,70],["🌳",300,150,80],["🍕",200,150,36]]},t:["The bird flies very high…","but birds can't fly to space!","She takes you to the top of a tall tree instead.","You share the pizza with the bird. Yum!"],end:"🐦 The Bird Picnic Ending"},
+  f:{sc:{sky:"night",items:[["🌕",200,170,120],["👽",140,110,40],["👽",260,110,40],["🚀",320,70,40]]},t:["WHOOSH! Your rocket zooms past the clouds and the stars.","You land on the Moon. Bump!","Small green aliens run to you. \"PIZZA!\" they shout."],ch:[["Give them the pizza","g"],["Ask them to say please","h"]]},
+  g:{sc:{sky:"night",items:[["👽",120,120,44],["🍕",200,120,44],["👽",280,120,44],["🪨",200,180,30]]},t:["The aliens love it! They dance and dance.","They give you a shiny moon rock to say thank you."],end:"🌕 The Happy Moon Ending"},
+  h:{sc:{sky:"night",items:[["👽",150,120,50],["👽",250,120,50]]},t:["The aliens look at each other.","What is the magic word?"],q:{type:"spell",w:"please",emo:"🙏",ask:"Help the aliens spell the magic word:"},next:"i"},
+  i:{sc:{sky:"night",items:[["👽",130,120,44],["🤗",200,120,50],["👽",270,120,44],["🍕",200,175,34]]},t:["\"PLEASE!\" say the aliens. \"Please, please, PLEASE!\"","They give you a big, squishy hug.","Now you bring pizza to the Moon every Friday!"],end:"👽 The Space Pizza Shop Ending"}}},
+ {id:"door",icon:"🚪",title:"The Secret Door at School",cover:{sky:"indoor",ground:"floor",items:[["🚪",200,150,60],["🐭",250,175,30]]},start:"a",nodes:{
+  a:{sc:{sky:"indoor",ground:"floor",items:[["📚",90,150,50],["🚪",210,175,30],["🧒",300,160,50]]},t:["It is a quiet day at school.","You see a tiny door under the reading table.","You never saw it before!"],ch:[["Knock on the door","b"],["Tell your teacher","c"]]},
+  b:{sc:{sky:"indoor",ground:"floor",items:[["🐭",200,160,60],["📚",120,160,40],["👓",205,130,26]]},t:["Knock, knock! The door opens by itself.","Inside is a tiny library with tiny books.","A mouse in glasses looks up. \"Shh! This is the Mouse Library.\""],ch:[["Ask to read a book","d"],["Say sorry and leave","e"]]},
+  c:{sc:{sky:"indoor",ground:"floor",items:[["👩‍🏫",150,150,64],["🧒",260,160,50]]},t:["Your teacher looks under the table.","\"What door?\" she says. The door is gone!","After lunch, you see it again…"],ch:[["Knock on the door","b"]]},
+  d:{sc:{sky:"indoor",ground:"floor",items:[["🐭",200,160,60],["❓",260,110,40]]},t:["\"You can read one book,\" says the mouse,","\"if you can answer my riddle.\""],q:{type:"pick",ask:"I have pages, but I am not a tree. What am I?",opts:[["📖","book"],["🍎","apple"],["🐱","cat"]],ans:0,ok:"Correct! A book has pages."},next:"f"},
+  e:{sc:{sky:"indoor",ground:"floor",items:[["💌",200,150,60]]},t:["You say sorry and close the tiny door.","The next day, there is a tiny card on your desk.","It says: \"Come back soon! From, Mouse\""],end:"💌 The Polite Ending"},
+  f:{sc:{sky:"indoor",ground:"floor",items:[["🐭",150,160,56],["📘",230,150,40],["📗",290,150,40]]},t:["\"Well done!\" says the mouse. \"Pick a book.\""],ch:[["A book about dinosaurs","g"],["A book about the sea","h"]]},
+  g:{sc:{sky:"indoor",ground:"floor",items:[["🦕",200,160,60],["🍪",290,180,30],["🐭",320,170,34]]},t:["You open the book, and a tiny dinosaur jumps out!","It runs all around the classroom. Everybody laughs.","The mouse catches it with a cookie."],end:"🦕 The Tiny Dino Ending"},
+  h:{sc:{sky:"indoor",items:[["🫧",100,80,40],["🐠",200,120,40],["🐙",280,160,60],["🫧",320,60,30]]},t:["You open the book, and SPLASH!","The classroom fills with bubbles and tiny fish.","You read the whole book with a smiling octopus."],end:"🐙 The Bubble Ending"}}}
+];
+const advEnds=st=>Object.entries(st.nodes).filter(([,n])=>n.end);
+let advCur=null, advNode=null;
+function renderAdvList(box){
+  S.advEnd=S.advEnd||{}; if(!S.enNm&&hasHan(S.name||"")&&!window.pinyinPro) loadScript("pinyin-pro.js").catch(()=>{});
+  box.innerHTML=`<div class="advhead"><h2>🗺️ Choose Your Adventure</h2><p class="note">You are the hero! Read, then choose what happens next. Every story has more than one ending — can you find them all? 你来决定故事怎么走！每个故事有好几个结局，都找到吧！</p></div>
+    <div class="advlist">${ADV.map(st=>{ const found=(S.advEnd[st.id]||[]).length, all=advEnds(st).length;
+      return `<button class="advcard" data-adv="${st.id}">${sceneSvg(st.cover)}<b>${st.icon} ${esc(st.title)}</b><small>${found?`🏅 ${found} / ${all} endings found`:`${all} endings to find`}</small></button>`; }).join("")}</div>
+    <div class="sec-title" style="margin-top:18px"><h2>📚 More stories</h2><span>Short reads</span></div><div id="enReadMore"></div>`;
+  box.querySelector(".advlist").onclick=e=>{ const b=e.target.closest("[data-adv]"); if(!b) return; advCur=ADV.find(x=>x.id===b.dataset.adv); advGo(box,advCur.start); };
+}
+function advWords(text){ return hero(text).split(/(\s+)/).map(w=>/\s/.test(w)?w:`<span class="w">${esc(w)}</span>`).join(""); }
+function advGo(box,id){
+  stopChain(); const st=advCur, n=st.nodes[id]; if(id===st.start) useOpen("en:read:adv"); advNode=id;
+  box.innerHTML=`<div class="advtop"><button class="btn" id="advBack">◀ Stories</button><b>${st.icon} ${esc(st.title)}</b></div>
+    <div class="reader adv"><div class="scenebox">${sceneSvg(n.sc)}</div>
+    <div class="btnrow" style="justify-content:center"><button class="btn say" id="advRead">🔊 Read to me</button></div>
+    <div class="entext advtext">${n.t.map((s,i)=>`<span class="sent" data-i="${i}">${advWords(s)}</span> `).join("")}</div>
+    <div id="advAct"></div></div>`;
+  $("#advBack").onclick=()=>{ stopChain(); advCur=null; box.innerHTML=""; renderRead("en"); };
+  const sents=[...box.querySelectorAll(".advtext .sent")];
+  $("#advRead").onclick=()=>sayChain(sents.map((el,i)=>({el,text:hero(n.t[i]),lang:"en",pause:300})));
+  box.querySelector(".advtext").onclick=e=>{ const w=e.target.closest(".w"); if(w){ say(w.textContent.replace(/[^A-Za-z']/g,""),"en"); w.classList.add("heard"); return; } };
+  const act=$("#advAct");
+  if(n.end){
+    S.advEnd=S.advEnd||{}; const got=S.advEnd[st.id]=S.advEnd[st.id]||[]; const isNew=!got.includes(id);
+    if(isNew){ got.push(id); S.readDone=S.readDone||[]; if(!S.readDone.includes("adv"+st.id+id)) S.readDone.push("adv"+st.id+id); save(); }
+    const all=advEnds(st);
+    act.innerHTML=`<div class="advend"><div class="badge">${n.end.split(" ")[0]}</div><h3>${esc(n.end.slice(n.end.indexOf(" ")+1))}</h3>
+      <p>${isNew?"New ending! 新结局！":"You found this one before."} · 🏅 ${got.length} / ${all.length}</p>
+      <div class="endrow">${all.map(([k,x])=>`<span class="${got.includes(k)?"got":""}">${got.includes(k)?x.end.split(" ")[0]:"❔"}</span>`).join("")}</div>
+      <div class="btnrow" style="justify-content:center"><button class="btn say" id="advAgain">🔁 Try another path</button><button class="btn" id="advList">More stories</button></div></div>`;
+    if(isNew) addStar(3,act.querySelector(".badge"));
+    say(isNew?"The end! You found a new ending!":"The end!","en");
+    $("#advAgain").onclick=()=>advGo(box,st.start); $("#advList").onclick=()=>{ advCur=null; box.innerHTML=""; renderRead("en"); };
+    return;
+  }
+  if(n.q){
+    const q=n.q;
+    if(q.type==="pick"){
+      act.innerHTML=`<div class="advq"><p class="ask">${esc(q.ask)} <button class="btn" id="advQs">🔊</button></p><div class="opts">${q.opts.map((o,i)=>`<button class="opt emo" data-i="${i}">${o[0]}<small style="display:block;font-size:16px">${esc(o[1])}</small></button>`).join("")}</div></div>`;
+      $("#advQs").onclick=()=>say(q.ask,"en"); say(q.ask,"en");
+      act.querySelector(".opts").onclick=e=>{ const b=e.target.closest(".opt"); if(!b) return; if(+b.dataset.i===q.ans){ b.classList.add("right"); say(q.ok,"en"); setTimeout(()=>advGo(box,n.next),1400); } else { b.classList.add("wrong"); say("Hmm, try again!","en"); } };
+    } else {
+      act.innerHTML=`<div class="advq"><p class="ask">${esc(q.ask)}</p><div id="advSpell"></div></div>`;
+      beeBoard($("#advSpell"),q.w,q.emo,ok=>{ say(ok?`Yes! ${q.w}!`:`It is ${q.w}.`,"en"); setTimeout(()=>advGo(box,n.next),1300); });
+    }
+    return;
+  }
+  act.innerHTML=`<p class="ask" style="margin-top:10px">What do you do? 你会怎么做？</p><div class="advch">${n.ch.map((c,i)=>`<div class="chrow"><button class="btn big choice" data-i="${i}">${esc(hero(c[0]))}</button><button class="btn" data-sayc="${i}" aria-label="hear">🔊</button></div>`).join("")}</div>`;
+  act.querySelector(".advch").onclick=e=>{ const sc=e.target.closest("[data-sayc]"); if(sc){ say(hero(n.ch[+sc.dataset.sayc][0]),"en"); return; } const b=e.target.closest(".choice"); if(b) advGo(box,n.ch[+b.dataset.i][1]); };
+}
+/* ---- letter-tile speller used by the Spelling Bee and the adventures ---- */
+function beeBoard(el,word,emo,onDone,opt={}){
+  const letters=[...word.toLowerCase()], abc="abcdefghijklmnoprstuwy";
+  const decoys=Array.from({length:opt.decoys??2},()=>abc[Math.floor(Math.random()*abc.length)]);
+  const tiles=shuffle([...letters,...decoys]).map((c,i)=>({c,i,used:false}));
+  const got=[]; let miss=0, locked=false;
+  el.innerHTML=`<div class="bee"><div class="beepic">${emo}<button class="btn" data-hear>🔊</button></div><div class="slots">${letters.map((_,i)=>`<span class="slot" data-s="${i}"></span>`).join("")}</div>
+    <div class="tiles">${tiles.map(t=>`<button class="tile" data-t="${t.i}">${t.c}</button>`).join("")}</div><button class="linkbtn" data-clear>⌫ clear</button></div>`;
+  const draw=()=>{ el.querySelectorAll(".slot").forEach((s,i)=>s.textContent=got[i]?got[i].c:""); el.querySelectorAll(".tile").forEach(b=>b.classList.toggle("used",tiles[+b.dataset.t].used)); };
+  const hear=()=>say(word,"en"); el.querySelector("[data-hear]").onclick=hear; if(!opt.noAuto) hear();
+  el.querySelector("[data-clear]").onclick=()=>{ if(locked) return; got.splice(0).forEach(t=>t.used=false); draw(); };
+  el.querySelector(".slots").onclick=e=>{ const s=e.target.closest(".slot"); if(!s||locked) return; const i=+s.dataset.s; if(got[i]){ got.splice(i).forEach(t=>t.used=false); draw(); } };
+  el.querySelector(".tiles").onclick=e=>{ const b=e.target.closest(".tile"); if(!b||locked) return; const t=tiles[+b.dataset.t]; if(t.used) return;
+    t.used=true; got.push(t); draw(); say(t.c,"en");
+    if(got.length===letters.length){ const w=got.map(x=>x.c).join("");
+      if(w===letters.join("")){ locked=true; el.querySelector(".slots").classList.add("ok"); onDone(true,miss); }
+      else { miss++; el.querySelector(".slots").classList.add("shake"); setTimeout(()=>{ el.querySelector(".slots").classList.remove("shake"); if(miss>=2){ locked=true; got.splice(0).forEach(t=>t.used=false); letters.forEach((c,i)=>{ const s=el.querySelectorAll(".slot")[i]; s.textContent=c; s.classList.add("reveal"); }); onDone(false,miss); } else { got.splice(0).forEach(t=>t.used=false); draw(); } },650); } }
+  };
+}
+/* ---- 🐝 Spelling Bee: 60-second round, combos, gets harder as you go ---- */
+const BEE=[[],
+ [["cat","🐱"],["dog","🐶"],["sun","☀️"],["hat","🎩"],["pig","🐷"],["bus","🚌"],["bed","🛏️"],["cup","🥤"],["fox","🦊"],["bat","🦇"],["egg","🥚"],["map","🗺️"]],
+ [["fish","🐟"],["frog","🐸"],["ship","🚢"],["duck","🦆"],["milk","🥛"],["tree","🌳"],["star","⭐"],["cake","🎂"],["bike","🚲"],["rain","🌧️"],["moon","🌙"],["ball","⚽"]],
+ [["snake","🐍"],["train","🚆"],["cloud","☁️"],["horse","🐴"],["apple","🍎"],["lemon","🍋"],["tiger","🐯"],["zebra","🦓"],["robot","🤖"],["house","🏠"],["sheep","🐑"],["plant","🪴"]],
+ [["rabbit","🐰"],["pirate","🏴‍☠️"],["monkey","🐵"],["dragon","🐉"],["rocket","🚀"],["turtle","🐢"],["castle","🏰"],["pencil","✏️"],["garden","🌷"],["winter","❄️"],["cookie","🍪"],["spider","🕷️"]],
+ [["dinosaur","🦕"],["elephant","🐘"],["butterfly","🦋"],["umbrella","☂️"],["penguin","🐧"],["octopus","🐙"],["treasure","💰"],["library","📚"],["mountain","⛰️"],["birthday","🎂"],["volcano","🌋"],["unicorn","🦄"]]];
+function startBee(el){
+  clearArena(); let lvl=Math.min(5,enLv()), score=0, streak=0, best=S.beeBest||0, right=0, left=60, used=new Set(), timer=null, alive=true;
+  el.innerHTML=`<div class="beehead"><span>🐝 Level <b id="bLv">${lvl}</b></span><span>⭐ <b id="bSc">0</b></span><span id="bCombo"></span><span>🏆 ${best}</span></div><div class="timebar"><i id="bTime"></i></div><div id="bBoard"></div>`;
+  const tick=()=>{ if(!alive) return; left--; const t=$("#bTime"); if(!t){ alive=false; clearInterval(timer); return; } t.style.width=`${left/60*100}%`; if(left<=0) end(); };
+  const next=()=>{ if(!alive) return; let pool=BEE[lvl].filter(w=>!used.has(w[0])); if(!pool.length){ pool=BEE[lvl]; } const [w,e]=pick(pool); used.add(w);
+    beeBoard($("#bBoard"),w,e,(ok,miss)=>{ if(!alive) return;
+      if(ok){ streak++; right++; const combo=1+Math.floor(streak/3); score+=10*combo*(miss?1:2); if(!miss) addStar(1,$("#bBoard .slots"));
+        $("#bCombo").textContent=combo>1?`🔥 x${combo}`:""; if(right%3===0&&lvl<5){ lvl++; $("#bLv").textContent=lvl; toast(`Level ${lvl}! 更难的词来了`); } say(miss?w:`${w}! ${pick(["Great!","Super!","Yes!","Awesome!"])}`,"en"); }
+      else { streak=0; $("#bCombo").textContent=""; }
+      $("#bSc").textContent=score; setTimeout(next,ok?900:1600); },{decoys:lvl>=3?3:2}); };
+  const end=()=>{ alive=false; clearInterval(timer); const nb=score>best; if(nb){ S.beeBest=score; save(); }
+    el.innerHTML=`<div class="win">🐝 Time's up!</div><p class="ask">Score <b>${score}</b> · ${right} words${nb?" · 🏆 New best!":` · Best ${best}`}</p><p class="note">Spell without mistakes = double points. 3 in a row = combo 🔥</p>
+      <div class="btnrow" style="justify-content:center"><button class="btn say" data-replay>Play again</button></div>`;
+    say(nb?"New best score!":"Time's up! Great spelling!","en"); el.querySelector("[data-replay]").onclick=()=>startBee(el); };
+  timer=setInterval(tick,1000); ARENA.push(timer); next();
+}
+/* ---- 🧩 Sentence Builder: tap the words in the right order ---- */
+const SENTS=[[],
+ [["I can see a big dog.","🐶"],["The cat is on the bed.","🐱"],["I like my red hat.","🎩"],["We can run and jump.","🏃"],["The sun is hot.","☀️"],["Look at the fish!","🐟"],["My mom has a cup.","☕"],["The pig is in the mud.","🐷"]],
+ [["The frog jumps into the pond.","🐸"],["I want to play with my friend.","🧒"],["We eat cake on my birthday.","🎂"],["The bird sings in the tree.","🐦"],["Can you ride a bike?","🚲"],["She reads a book at night.","📖"],["The moon is very bright.","🌙"],["It is raining, so I need a coat.","🌧️"]],
+ [["The hungry rabbit ate three carrots.","🐰"],["My brother kicked the ball over the fence.","⚽"],["We built a snowman in the park.","⛄"],["The little turtle walked very slowly.","🐢"],["After school, we went to the library.","📚"],["The rocket flew up into space.","🚀"],["Please close the door when you leave.","🚪"],["The pirate found a box of gold.","🏴‍☠️"]],
+ [["The brave knight climbed the tall castle tower.","🏰"],["Our class planted sunflowers in the garden.","🌻"],["The penguin slid down the icy hill.","🐧"],["Grandma baked cookies for the whole family.","🍪"],["The dinosaur bones are in the museum.","🦕"],["We could hear thunder far away.","⛈️"],["The octopus hid behind a purple rock.","🐙"],["My friend and I made a secret map.","🗺️"]],
+ [["The curious kitten followed the butterfly into the garden.","🦋"],["Before bedtime, Dad always reads us a story.","📖"],["The volcano rumbled, and everyone ran away.","🌋"],["Scientists use telescopes to look at faraway stars.","🔭"],["The unicorn galloped across the rainbow bridge.","🦄"],["Although it was cold, we went to the beach.","🏖️"],["The robot cleaned the kitchen in one minute.","🤖"],["Elephants use their trunks to drink water.","🐘"]]];
+function startScramble(el){
+  clearArena(); const lvl=Math.min(5,enLv()), list=shuffle([...SENTS[lvl]]).slice(0,6); let k=0, first=0;
+  const round=()=>{ if(k>=list.length){ finishScreen(el,first,list.length,()=>startScramble(el)); say("Great reading!","en"); return; }
+    const [sent,emo]=list[k], words=sent.split(" "), order=shuffle(words.map((w,i)=>({w,i}))); let pos=0, clean=true;
+    el.innerHTML=`<p class="ask">Build the sentence! <span class="en-ask">把单词排成句子 · ${k+1}/${list.length}</span></p><div class="mvis" style="font-size:72px">${emo}</div>
+      <div class="sbuilt"></div><div class="tiles words">${order.map((o,j)=>`<button class="tile wt" data-j="${j}">${esc(o.w)}</button>`).join("")}</div>
+      <div class="btnrow" style="justify-content:center"><button class="btn" data-hint>💡 Hear it</button></div>`;
+    el.querySelector("[data-hint]").onclick=()=>{ clean=false; say(sent,"en"); };
+    el.querySelector(".tiles").onclick=e=>{ const b=e.target.closest(".tile"); if(!b||b.classList.contains("used")) return; const o=order[+b.dataset.j];
+      if(o.w===words[pos]){ b.classList.add("used"); el.querySelector(".sbuilt").insertAdjacentHTML("beforeend",`<span>${esc(o.w)}</span> `); say(o.w.replace(/[^A-Za-z']/g,""),"en"); pos++;
+        if(pos===words.length){ if(clean){ first++; addStar(1,el.querySelector(".sbuilt")); } el.querySelector(".sbuilt").classList.add("ok"); sayChain([{text:sent,lang:"en"}],()=>{ k++; setTimeout(round,500); }); } }
+      else { clean=false; b.classList.add("shake"); setTimeout(()=>b.classList.remove("shake"),500); } };
+  }; round();
+}
+/* ---- 🤪 Silly Sentences: read a funny sentence, pick the matching picture ---- */
+const SILLY={who:[["The pig","🐷"],["The cat","🐱"],["A cow","🐮"],["The frog","🐸"],["A bear","🐻"],["The duck","🦆"],["A fox","🦊"],["The dog","🐶"],["A shark","🦈"],["The monkey","🐵"]],
+  eat:[["eats pizza","🍕"],["eats a banana","🍌"],["eats a donut","🍩"],["eats ice cream","🍦"],["eats a carrot","🥕"],["eats cake","🎂"]],
+  where:[["on the bus","🚌"],["in the bath","🛁"],["on a bike","🚲"],["in a boat","⛵"],["on the moon","🌙"],["in a tree","🌳"],["in the rain","🌧️"],["on a rocket","🚀"]]};
+function genSilly(){
+  const three=enLv()>=2, a=pick(SILLY.who), b=pick(SILLY.eat), c=pick(SILLY.where);
+  const make=(x,y,z)=>three?x[1]+y[1]+z[1]:x[1]+z[1];
+  const ans=make(a,b,c), opts=new Set([ans]); let guard=0;
+  while(opts.size<(three?4:3)&&guard++<40){ const r=Math.random(); opts.add(make(r<.4?pick(SILLY.who):a, three&&r>=.4&&r<.7?pick(SILLY.eat):b, r>=.7||(!three&&r>=.4)?pick(SILLY.where):c)); }
+  const text=three?`${a[0]} ${b[0]} ${c[0]}.`:`${a[0]} is ${c[0]}.`;
+  return {zh:"读一读，选出对的图！",en:text,vis:`<div class="silly">${esc(text)}</div>`,opts:shuffle([...opts]),ans,cls:"emo",lang:"en",key:"silly",noAuto:true,
+    speak:()=>say(text,"en"),after:()=>say(text,"en")};
+}
+/* ---- 🕵️ Riddle Detective ---- */
+const RIDDLES=[["I am yellow and long. Monkeys love me.","🍌","banana"],["I am big and gray. I have a long trunk.","🐘","elephant"],["I shine in the day. I am very hot.","☀️","sun"],
+ ["I come out at night. Sometimes I look like a smile.","🌙","moon"],["I have four legs and I say woof.","🐶","dog"],["I am yellow. I take kids to school.","🚌","bus"],["You read me. I have pages and a cover.","📖","book"],
+ ["I am red and round. I grow on a tree.","🍎","apple"],["I carry my house on my back. I am very slow.","🐢","turtle"],["I go zoom to the moon. I have no wings.","🚀","rocket"],
+ ["I have eight arms and I live in the sea.","🐙","octopus"],["I am sweet and cold. I melt in the sun.","🍦","ice cream"],["I have keys, but I can't open doors. I make music.","🎹","piano"],
+ ["I fall from the clouds. Bring an umbrella!","🌧️","rain"],["I hop. My baby rides in my pocket.","🦘","kangaroo"],["I go tick tock. I tell you the time.","⏰","clock"],
+ ["I have black and white stripes. I look like a horse.","🦓","zebra"],["I am orange. Rabbits love to eat me.","🥕","carrot"],["I have a very long neck. I eat leaves from tall trees.","🦒","giraffe"],
+ ["I am a big cat. I have a mane. I roar!","🦁","lion"],["I have seven colors. You see me after the rain.","🌈","rainbow"],["I live in a hive. I make honey.","🐝","bee"],
+ ["I have a hump on my back. I live in the desert.","🐪","camel"],["I am cold and white. I fall in winter.","❄️","snow"],["I have two wheels and pedals. You ride me.","🚲","bike"]];
+function genRiddle(){
+  const r=pick(RIDDLES), opts=shuffle([r,...shuffle(RIDDLES.filter(x=>x!==r)).slice(0,3)]);
+  return {zh:"猜一猜，我是谁？",en:r[0],vis:`<div class="riddle">🕵️ ${esc(r[0])}</div>`,opts:opts.map(x=>x[1]),ans:r[1],cls:"emo",lang:"en",key:"riddle:"+r[2],noAuto:true,
+    speak:()=>say(r[0],"en"),after:()=>say(`I am ${/^[aeiou]/.test(r[2])?"an":"a"} ${r[2]}!`.replace("a ice","an ice"),"en")};
+}
+
+/* ---------- 跳关: skip what the child already knows ---------- */
+function markPassed(lv,stars){
+  const before=S.lv[lv.key]||0; S.lv[lv.key]=Math.max(before,stars);
+  if(!before){ const L=dayLog(); L.lv++; L.lvs=L.lvs||{}; L.lvs[lv.subj]=(L.lvs[lv.subj]||0)+1; S.lvAt=S.lvAt||{}; S.lvAt[lv.key]=today(); S.skipped=S.skipped||{}; S.skipped[lv.key]=1; }
+  save(); refreshTop();
+}
+const canSkip=lv=>lv&&lv.type!=="boss"&&!lv.custom&&!passed(lv)&&isOpen(lv);
+function skipTest(lv){
+  qRunning=lv; stopChain(); clearArena(); const box=$("#qRun");
+  box.innerHTML=runHead(lv,1)+`<p class="qtip">⚡ 跳关测试：5 道题，<b>答对 4 道</b>就直接过关，不用再学一遍。<br>Know it already? Get 4 of 5 right to skip.</p><div class="stage" id="skStage"></div>`; bindBack();
+  runQuiz($("#skStage"),()=>levelQ(lv),{lang:()=>lv.subj==="en"?"en":lv.subj==="math"?S.mLang:"zh",total:5,finish:n=>{
+    const ok=n>=4, next=LEVELS[lv.subj][lv.i+1];
+    if(ok){ markPassed(lv,n===5?2:1); setTimeout(checkGoals,1200); }
+    box.innerHTML=runHead(lv,1)+`<div class="result ${ok?"pass":"fail"}"><h2>${ok?"⚡ 跳关成功！":"还差一点点"}</h2><p>答对 ${n}/5 题${ok?"，这一关不用再学啦！":"，先学一学再闯关吧。"}</p>
+      <div class="btnrow" style="justify-content:center">${ok&&next&&canSkip(next)?`<button class="btn write" id="skNext">⚡ 继续跳：${esc(next.title)}</button>`:""}${ok&&next?`<button class="btn say" id="skGo">下一关 ▶</button>`:""}
+      ${!ok?`<button class="btn say" id="skLearn">学一学 ▶</button>`:""}<button class="btn" id="skMap">回地图</button></div></div>`;
+    say(ok?"跳关成功！":"再学一学吧","zh"); bindBack();
+    const a=$("#skNext"); if(a) a.onclick=()=>skipTest(next); const g=$("#skGo"); if(g) g.onclick=()=>openLevel(next);
+    const l=$("#skLearn"); if(l) l.onclick=()=>openLevel(lv); $("#skMap").onclick=closeLevel; }});
+}
+/* jump several levels at once: 2 questions per level, levels count as passed in order until the first miss */
+function multiSkip(subj){
+  const L=LEVELS[subj], startLv=currentLevel(subj), list=[]; for(let i=startLv.i;i<L.length&&list.length<5;i++){ const x=L[i]; if(x.type==="boss") break; if(!passed(x)) list.push(x); }
+  if(list.length<2){ toast("前面是 Boss 关，要认真打哦！"); return; }
+  qRunning={multi:true}; stopChain(); clearArena(); $("#qMap").hidden=true; $("#qTabs").hidden=true; const box=$("#qRun"); box.hidden=false; window.scrollTo(0,0);
+  const qs=[]; list.forEach(lv=>{ for(let k=0;k<2;k++){ const q=levelQ(lv); q.lvKey=lv.key; qs.push(q); } });
+  const ok={}; let qi=0;
+  box.innerHTML=`<div class="placehead"><button class="btn" id="msQuit">✕ 退出</button><b>⚡ 连跳挑战 · ${SUBJ[subj][0]}</b><span>${list.length} 关 × 2 题</span></div>
+    <p class="qtip">已经会的就别再学一遍啦！每关 2 道题，两道都一次答对就跳过这一关；错了就从那一关开始正常学。</p><div class="stage" id="msStage"></div>`;
+  $("#msQuit").onclick=()=>{ qRunning=null; closeLevel(); };
+  runQuiz($("#msStage"),()=>qs[qi++],{lang:()=>subj==="en"?"en":subj==="math"?S.mLang:"zh",total:qs.length,onFirst:g=>{ ok[g.lvKey]=(ok[g.lvKey]||0)+1; },finish:()=>{
+    let n=0; for(const lv of list){ if((ok[lv.key]||0)>=2){ markPassed(lv,1); n++; } else break; }
+    const stop=list[n]; setTimeout(checkGoals,1200);
+    box.innerHTML=`<div class="result ${n?"pass":"fail"}"><h2>${n?`⚡ 跳过了 ${n} 关！`:"这几关还要学一学"}</h2>
+      <p>${list.map((lv,i)=>`${i<n?"✅":i===n?"👉":"⬜"} ${esc(lv.title)}`).join("<br>")}</p>
+      <div class="btnrow" style="justify-content:center">${stop?`<button class="btn say" id="msGo">去学：${esc(stop.title)} ▶</button>`:""}<button class="btn" id="msMap">回地图</button></div></div>`;
+    say(n?`跳过了${n}关！`:"这几关我们学一学吧","zh");
+    const g=$("#msGo"); if(g) g.onclick=()=>openLevel(stop); $("#msMap").onclick=()=>{ qRunning=null; closeLevel(); }; }});
+}
 /* ---------- level runner: 学一学 → 闯关 → (写一写) ---------- */
 function openLevel(lv){
-  qRunning=lv; stopChain(); clearArena();
+  useOpen(`quest:${lv.subj}:${lv.type}`); qRunning=lv; stopChain(); clearArena();
   $("#qMap").hidden=true; $("#qTabs").hidden=true; $("#qRun").hidden=false;
   learnStep(lv); window.scrollTo(0,0);
 }
@@ -2704,9 +3099,9 @@ function learnStep(lv){
     tip=`大复习：${GRADES[lv.gr][0]}学过的内容都可能出现。12 道题，答对 9 道就过关！`;
     body=`<div class="bossart">${lv.icon}</div>`;
   }
-  box.innerHTML=runHead(lv,0)+`<p class="qtip">${tip}</p>${body}<div class="btnrow" style="justify-content:center;margin-top:16px"><button class="btn say big" id="qGo">开始闯关 ▶</button></div>`;
+  box.innerHTML=runHead(lv,0)+`<p class="qtip">${tip}</p>${body}<div class="btnrow" style="justify-content:center;margin-top:16px"><button class="btn say big" id="qGo">开始闯关 ▶</button>${canSkip(lv)?`<button class="btn write" id="qSkip">⚡ 我会了，跳关测试</button>`:""}</div>`;
   bindBack();
-  $("#qGo").onclick=()=>{stopChain();quizStep(lv);};
+  $("#qGo").onclick=()=>{stopChain();quizStep(lv);}; const sk=$("#qSkip"); if(sk) sk.onclick=()=>skipTest(lv);
   const grid=box.querySelector(".lgrid");
   if(grid) grid.onclick=e=>{const b=e.target.closest(".lcard");if(!b)return;const t=lv.items[+b.dataset.i];
     grid.querySelectorAll(".lcard").forEach(x=>x.classList.remove("seen-now")); b.classList.add("seen","seen-now");
@@ -2908,6 +3303,7 @@ let lastAct=Date.now(), sinceBreak=0, overlayOn=false;
 function dayLog(d=today()){ if(!S.log)S.log={}; return S.log[d]||(S.log[d]={sec:0,stars:0,lv:0}); }
 function pruneLog(){ const keep=new Set(Array.from({length:60},(_,i)=>ymd(new Date(Date.now()-i*864e5)))); for(const k in S.log) if(!keep.has(k)) delete S.log[k]; }
 setInterval(()=>{ if(document.hidden||overlayOn) return; if(Date.now()-lastAct>90000) return; const L=dayLog(); L.sec+=15; sinceBreak+=15;
+  const sk=curSection(); L.sec2=L.sec2||{}; L.sec2[sk]=(L.sec2[sk]||0)+15;
   const cs=curSubj(); if(cs){ const was=planCurrent(); L.subj=L.subj||{}; L.subj[cs]=(L.subj[cs]||0)+15; const now=planCurrent(); if(S.plan&&S.plan.on&&was&&was!==now) planStepDone(was,now); }
   save(); checkTime(); if(location.hash.slice(1)==="home"||location.hash==="") renderPlan(); },15000);
 function showOverlay(html,cls=""){ overlayOn=true; const o=$("#overlay"); o.className="overlay "+cls; o.innerHTML=`<div class="ovbox">${html}</div>`; o.hidden=false; return o; }
@@ -2945,7 +3341,7 @@ function renderPGate(){ const g=$("#pGate"), z=$("#parentZone"); if(!g) return;
   z.classList.toggle("locked",!parentOpen);
   if(parentOpen){ g.innerHTML=`<b>🔓 家长区已打开</b><span class="note">离开这一页或 10 分钟后自动锁上</span><button class="btn" id="pLock">锁上</button>`; $("#pLock").onclick=()=>{parentOpen=false;renderPGate();}; return; }
   g.innerHTML=`<b>🔒 家长区</b><span class="note">学习报告、每天使用时间、设置 · For parents</span><div id="pGateIn" style="flex-basis:100%"></div>`;
-  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); voiceInfo(); renderShopEdit(); });
+  pinBox($("#pGateIn"),()=>{ parentOpen=true; clearTimeout(parentT); parentT=setTimeout(()=>{parentOpen=false;renderPGate();},600000); renderPGate(); renderSettings(); renderParentLock(); renderSync(); voiceInfo(); renderShopEdit(); renderUsage(7); });
 }
 const EYE_STEPS=[["🪟","看看窗外最远的地方","Look far out the window"],["😉","慢慢眨眨眼睛，眨 10 下","Blink slowly 10 times"],["🔄","眼睛转圈圈：上、右、下、左","Roll your eyes in a circle"],["🙈","闭上眼睛，深呼吸","Close your eyes and breathe"],["🤸","站起来，伸个大懒腰","Stand up and stretch"],["🌳","再看看远处的树和天空","Look at trees and sky far away"]];
 function showBreak(){
@@ -3186,6 +3582,7 @@ function nameZhTokens(){
   return [...nm].map((c,i)=>[c,hasHan(c)?(py[i]||""):""]);
 }
 function enName(){
+  if(S.enNm) return S.enNm;
   const nm=S.name||"Star"; if(!hasHan(nm)) return nm;
   if(window.pinyinPro){ const p=pinyinPro.pinyin(nm,{toneType:"none",type:"array"}).join(""); return p.charAt(0).toUpperCase()+p.slice(1); }
   return nm;
@@ -3247,9 +3644,11 @@ function mergeState(a,b){
   m.mathDone=Math.max(a.mathDone||0,b.mathDone||0);
   m.bdayDone={...(a.bdayDone||{}),...(b.bdayDone||{})};
   const lg={...(a.log||{})}; for(const d in (b.log||{})){ const x=lg[d]||{sec:0,stars:0,lv:0}, y=b.log[d]; const mx=(p,q)=>{ const o={...(p||{})}; for(const k in (q||{})) o[k]=Math.max(o[k]||0,q[k]||0); return o; };
-    lg[d]={sec:Math.max(x.sec||0,y.sec||0),stars:Math.max(x.stars||0,y.stars||0),lv:Math.max(x.lv||0,y.lv||0),subj:mx(x.subj,y.subj),lvs:mx(x.lvs,y.lvs)}; } m.log=lg;
+    lg[d]={sec:Math.max(x.sec||0,y.sec||0),stars:Math.max(x.stars||0,y.stars||0),lv:Math.max(x.lv||0,y.lv||0),subj:mx(x.subj,y.subj),lvs:mx(x.lvs,y.lvs),sec2:mx(x.sec2,y.sec2),op:mx(x.op,y.op),ac:(()=>{ const o={...(x.ac||{})}; for(const k in (y.ac||{})) o[k]=(!o[k]||y.ac[k][1]>o[k][1])?y.ac[k]:o[k]; return o; })()}; } m.log=lg;
   m.lvAt={...(b.lvAt||{}),...(a.lvAt||{})}; for(const k in (b.lvAt||{})) if(m.lvAt[k]>b.lvAt[k]) m.lvAt[k]=b.lvAt[k];
   m.goalDone={...(a.goalDone||{}),...(b.goalDone||{})};
+  m.advEnd={...(a.advEnd||{})}; for(const k in (b.advEnd||{})) m.advEnd[k]=[...new Set([...(m.advEnd[k]||[]),...b.advEnd[k]])];
+  m.beeBest=Math.max(a.beeBest||0,b.beeBest||0);
   return m;
 }
 const progSum=st=>`${st.name||"小朋友"} · ⭐ ${st.stars||0} · 过关 ${Object.keys(st.lv||{}).filter(k=>st.lv[k]>0).length} · 认识的字 ${(st.kh||[]).length}`;
@@ -3401,7 +3800,9 @@ function renderSettings(){
     <div class="row"><label for="stBrk" style="min-width:auto">护眼提醒</label><select id="stBrk">${[0,15,20,30].map(m=>`<option value="${m}" ${(S.breakMin??20)===m?"selected":""}>${m?"每 "+m+" 分钟":"关闭"}</option>`).join("")}</select>
       <label for="stBrkS" style="min-width:auto">每次休息</label><select id="stBrkS">${[[30,"30 秒"],[60,"1 分钟"],[120,"2 分钟"],[180,"3 分钟"]].map(([v,t])=>`<option value="${v}" ${(S.breakSec||120)===v?"selected":""}>${t}</option>`).join("")}</select></div>
     <div class="row"><label for="stReg">地区 / 钱币</label><select id="stReg"><option value="cn" ${S.region==="cn"?"selected":""}>中国 · 人民币（元角）</option><option value="ca" ${S.region==="ca"?"selected":""}>加拿大 · 加元（$ ¢）</option></select></div>
+    <div class="row"><label for="stEn">英文名</label><input id="stEn" value="${esc(S.enNm||"")}" maxlength="16" placeholder="例如 Lily（不填就用拼音）" style="width:200px"><span class="note">英文故事里会用这个名字</span></div>
     <div class="row"><label for="stBd">生日（月-日）</label><input type="text" id="stBd" value="${esc(S.bday||"")}" style="width:90px" placeholder="例如 05-21"><button class="btn" id="stBdP">预览生日彩蛋</button></div>`;
+  $("#stEn").onchange=e=>{ S.enNm=e.target.value.trim(); save(); toast(S.enNm?`英文名：${S.enNm}`:"英文名用拼音"); };
   $("#stReg").onchange=e=>{S.region=e.target.value;save();toast(S.region==="cn"?"钱币题改为人民币":"Money questions now use Canadian coins");};
   $("#stLim").onchange=e=>{S.limitMin=+e.target.value;save();renderSettings();updateTimePill();};
   el.querySelectorAll("[data-st]").forEach(sel=>sel.onchange=()=>{ S.start[sel.dataset.st]=+sel.value; save(); renderGradebar(); toast(`${SUBJ[sel.dataset.st][0]}从${GRADES[+sel.value][0]}开始`); });
@@ -3438,11 +3839,11 @@ function showSub(view){
   const sub=SUBS[view];
   stopChain();
   if(view==="zh"){ if(sub==="cards")renderHan(); if(sub==="read")renderRead("zh"); if(sub==="poem")renderPoem("zh"); if(sub==="games")renderGames("zh"); }
-  if(view==="en"){ if(sub==="abc")renderAbc(); if(sub==="words")renderEn(); if(sub==="read")renderRead("en"); if(sub==="rhyme")renderPoem("en"); if(sub==="games")renderGames("en"); }
+  if(view==="en"){ if(sub==="abc")renderAbc(); if(sub==="words")renderEn(); if(sub==="read"){ if(!advCur) $("#enReadBody").innerHTML=""; renderRead("en"); } if(sub==="rhyme")renderPoem("en"); if(sub==="games")renderGames("en"); }
 }
-document.querySelectorAll(".subtabs").forEach(t=>t.onclick=e=>{const b=e.target.closest("button");if(!b)return;clearArena();SUBS[t.dataset.for]=b.dataset.sub;showSub(t.dataset.for);});
+document.querySelectorAll(".subtabs").forEach(t=>t.onclick=e=>{const b=e.target.closest("button");if(!b)return;clearArena();curGame=null;useOpen(`${t.dataset.for}:${b.dataset.sub}`);SUBS[t.dataset.for]=b.dataset.sub;showSub(t.dataset.for);});
 function route(){
-  clearArena(); stopChain();
+  clearArena(); stopChain(); curGame=null;
   const v=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"home";
   const vs=v==="zh"||v==="saga"?"zh":v==="en"?"en":v==="math"?"math":null;
   if(vs&&!overlayOn&&!planAllowed(vs)){ const c=planCurrent(); setTimeout(()=>planBlock(vs,()=>{location.hash=v;}),50); location.hash=SUBJ_VIEW[c]; return; }
